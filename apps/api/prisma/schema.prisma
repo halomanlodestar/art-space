@@ -33,7 +33,7 @@ model User {
   password    String
   name        String
   role        Role       @default(USER)
-  communityId String
+  communityId String?
   community   Community? @relation(fields: [communityId], references: [id])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

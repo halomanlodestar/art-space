@@ -7,19 +7,20 @@ import { SignUpDto } from './dto/sign-up.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('/signup')
+  async signUp(@Body() credentials: SignUpDto) {
+    console.log(credentials);
+    return await this.authService.signUp(credentials);
+  }
+
   @Post('/signin')
   async signIn(@Body() credentials: SignInDto) {
     this.authService.signIn(credentials);
   }
 
-  @Post('/signup')
-  async signUp(@Body() credentials: SignUpDto) {
-    this.authService.signUp(credentials);
-  }
-
   @Post('/signout')
   async signOut() {
-    this.authService.signOut();
+    return this.authService.signOut();
   }
 
   @Post('/refresh')
