@@ -1,11 +1,11 @@
 import {
-  Body,
   Controller,
   Delete,
+  Body,
   Get,
-  Param,
-  Patch,
   Post,
+  Patch,
+  Param,
   UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
@@ -29,11 +29,13 @@ export class PostsController {
   @Post('/')
   async createPost(@Body() body: CreatePostDto) {}
 
+  @UseGuards()
   @Patch('/:id')
   async updatePost() {
     this.postsService.updatePost();
   }
 
+  @UseGuards()
   @Delete('/:id')
   async deletePost() {
     this.postsService.deletePost();

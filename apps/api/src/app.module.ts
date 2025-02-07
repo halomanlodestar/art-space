@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
-import { CommunityModule } from './community/community.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma.service';
 import { LikesModule } from './likes/likes.module';
+import { AuthModule } from './auth/auth.module';
+import { CommunitiesModule } from './communities/communities.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -13,8 +15,10 @@ import { LikesModule } from './likes/likes.module';
     }),
     UsersModule,
     PostsModule,
-    CommunityModule,
     LikesModule,
+    AuthModule,
+    CommunitiesModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [PrismaService],
