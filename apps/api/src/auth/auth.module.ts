@@ -4,19 +4,11 @@ import { AuthController } from './auth.controller';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { LocalStrategy } from './strategies/local.strategy';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
-import authConfig from 'src/config/auth.config';
+import { SessionAndTokensModule } from 'src/session-and-tokens/session-and-tokens.module';
 
 @Module({
-  imports: [ConfigModule.forFeature(authConfig)],
+  imports: [SessionAndTokensModule],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    PrismaService,
-    UsersService,
-    LocalStrategy,
-    JwtService,
-  ],
+  providers: [AuthService, PrismaService, UsersService, LocalStrategy],
 })
 export class AuthModule {}

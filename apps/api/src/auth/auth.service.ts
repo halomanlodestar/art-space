@@ -4,29 +4,20 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { verify } from 'argon2';
-import { Session, TokenUser } from 'src/types';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import authConfig from 'src/config/auth.config';
+import { TokenUser } from 'src/types';
+import { SessionAndTokensService } from 'src/session-and-tokens/session-and-tokens.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly db: PrismaService,
     private readonly usersSerice: UsersService,
-    private readonly jwtService: JwtService,
-    @Inject(authConfig.KEY)
-    private readonly config: ConfigService<typeof authConfig>,
+    private readonly sessionTokenService: SessionAndTokensService,
   ) {}
-
-  signIn(credentials: SignInDto) {
-    throw new Error('Method not implemented.');
-  }
 
   async signUp(credentials: SignUpDto) {
     const { email, ...data } = credentials;
@@ -47,18 +38,6 @@ export class AuthService {
     return this.usersSerice.create(credentials);
   }
 
-  refresh() {
-    throw new Error('Method not implemented.');
-  }
-
-  forgotPassword() {
-    throw new Error('Method not implemented.');
-  }
-
-  resetPassword() {
-    throw new Error('Method not implemented.');
-  }
-
   async validatLocaleUser(email: string, password: string): Promise<TokenUser> {
     const user = await this.db.user.findUnique({
       where: { email },
@@ -77,15 +56,16 @@ export class AuthService {
     return user;
   }
 
-  createSession(payload: Session) {
-    return this.jwtService.sign(payload, {
-      secret: 'npm i -D @types/cookie-parser',
-    });
-  }
+  async signIn(user: TokenUser) {
+    const { accessToken, refreshToken } =
+      await this.sessionTokenService.createTokens(user.id);
 
-  getSession(session: string) {
-    return this.jwtService.verify<Session>(session, {
-      secret: 'npm i -D @types/cookie-parser',
+    const session = this.sessionTokenService.createSession({
+      user: user!,
+      accessToken,
+      refreshToken,
     });
+
+    return session;
   }
 }

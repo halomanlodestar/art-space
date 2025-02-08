@@ -7,16 +7,22 @@ import {
   UseGuards,
   Controller,
   UnauthorizedException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { MONTH } from 'src/lib/constants';
+import { SessionAndTokensService } from 'src/session-and-tokens/session-and-tokens.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly sessionAndTokenService: SessionAndTokensService,
+  ) {}
 
   @Post('/signup')
   async signUp(@Body() credentials: SignUpDto) {
@@ -28,8 +34,14 @@ export class AuthController {
   @Post('/signin')
   async signIn(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const { user } = req;
-    const session = await this.authService.createSession({ user: user! });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     const expires = new Date(Date.now() + MONTH);
+    const session = await this.authService.signIn(user);
+
     res.cookie('session', session, {
       expires,
     });
@@ -43,26 +55,12 @@ export class AuthController {
       throw new UnauthorizedException('No session found');
     }
 
-    return this.authService.getSession(session).user;
+    return await this.sessionAndTokenService.getSession(session);
   }
 
   @Post('/signout')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('session');
-  }
-
-  @Post('/refresh')
-  async refresh() {
-    this.authService.refresh();
-  }
-
-  @Post('/forgot-password')
-  async forgotPassword() {
-    this.authService.forgotPassword();
-  }
-
-  @Post('/reset-password')
-  async resetPassword() {
-    this.authService.resetPassword();
   }
 }

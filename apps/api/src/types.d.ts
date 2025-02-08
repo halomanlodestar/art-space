@@ -5,10 +5,17 @@ export interface SafeUser extends Omit<User, 'password'> {}
 export interface TokenUser
   extends Pick<User, 'id' | 'email' | 'name' | 'username'> {}
 
-export interface Session {
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface Session extends Tokens {
   user: TokenUser;
-  // accessToken: string;
-  // refreshToken: string;
+}
+
+export interface AuthJwtPayload {
+  sub: string;
 }
 
 declare global {
