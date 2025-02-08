@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
-import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { verify } from 'argon2';
 import { TokenUser } from 'src/types';
@@ -14,7 +13,6 @@ import { SessionAndTokensService } from 'src/session-and-tokens/session-and-toke
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly db: PrismaService,
     private readonly usersSerice: UsersService,
     private readonly sessionTokenService: SessionAndTokensService,
   ) {}
@@ -39,9 +37,7 @@ export class AuthService {
   }
 
   async validatLocaleUser(email: string, password: string): Promise<TokenUser> {
-    const user = await this.db.user.findUnique({
-      where: { email },
-    });
+    const user = await this.usersSerice.findByEmail(email);
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -51,6 +47,16 @@ export class AuthService {
 
     if (!passwordMatched) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
+  }
+
+  async validateJwtUser(userId: string): Promise<TokenUser> {
+    const user = await this.usersSerice.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
 
     return user;

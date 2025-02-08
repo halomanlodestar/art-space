@@ -23,6 +23,10 @@ export class UsersService {
     });
   }
 
+  findById(id: string) {
+    return this.db.user.findUnique({ where: { id } });
+  }
+
   findByEmail(email: string) {
     return this.db.user.findUnique({ where: { email } });
   }

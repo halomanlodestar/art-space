@@ -1,5 +1,9 @@
 import { Role, User } from '@prisma/client';
 
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
 export interface SafeUser extends Omit<User, 'password'> {}
 
 export interface TokenUser
