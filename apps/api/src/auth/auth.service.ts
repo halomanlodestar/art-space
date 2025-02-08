@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,13 +9,19 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { verify } from 'argon2';
-import { TokenUser } from 'src/types';
+import { Session, TokenUser } from 'src/types';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import authConfig from 'src/config/auth.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly db: PrismaService,
     private readonly usersSerice: UsersService,
+    private readonly jwtService: JwtService,
+    @Inject(authConfig.KEY)
+    private readonly config: ConfigService<typeof authConfig>,
   ) {}
 
   signIn(credentials: SignInDto) {
@@ -38,10 +45,6 @@ export class AuthService {
     }
 
     return this.usersSerice.create(credentials);
-  }
-
-  signOut() {
-    throw new Error('Method not implemented.');
   }
 
   refresh() {
@@ -72,5 +75,17 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  createSession(payload: Session) {
+    return this.jwtService.sign(payload, {
+      secret: 'npm i -D @types/cookie-parser',
+    });
+  }
+
+  getSession(session: string) {
+    return this.jwtService.verify<Session>(session, {
+      secret: 'npm i -D @types/cookie-parser',
+    });
   }
 }

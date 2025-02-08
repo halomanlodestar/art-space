@@ -1,8 +1,18 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  Controller,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard.ts/local-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { MONTH } from 'src/lib/constants';
 
 @Controller('auth')
 export class AuthController {
@@ -16,13 +26,29 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/signin')
-  async signIn(@Req() req: Request) {
-    return req.user;
+  async signIn(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const { user } = req;
+    const session = await this.authService.createSession({ user: user! });
+    const expires = new Date(Date.now() + MONTH);
+    res.cookie('session', session, {
+      expires,
+    });
+  }
+
+  @Get('/session')
+  async session(@Req() req: Request) {
+    const { session } = req.cookies;
+
+    if (!session) {
+      throw new UnauthorizedException('No session found');
+    }
+
+    return this.authService.getSession(session).user;
   }
 
   @Post('/signout')
-  async signOut() {
-    return this.authService.signOut();
+  async signOut(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('session');
   }
 
   @Post('/refresh')
