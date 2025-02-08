@@ -62,7 +62,30 @@ export class AuthService {
     return user;
   }
 
+  async validateRefreshToken(userId: string): Promise<TokenUser> {
+    const user = await this.usersSerice.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return user;
+  }
+
   async signIn(user: TokenUser) {
+    const { accessToken, refreshToken } =
+      await this.sessionTokenService.createTokens(user.id);
+
+    const session = this.sessionTokenService.createSession({
+      user: user!,
+      accessToken,
+      refreshToken,
+    });
+
+    return session;
+  }
+
+  async refreshToken(user: TokenUser) {
     const { accessToken, refreshToken } =
       await this.sessionTokenService.createTokens(user.id);
 

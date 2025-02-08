@@ -14,9 +14,9 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { MONTH } from 'src/lib/constants';
 import { SessionAndTokensService } from 'src/session-and-tokens/session-and-tokens.service';
+import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -65,9 +65,9 @@ export class AuthController {
     res.clearCookie('session');
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('protected')
-  protectedRoute(@Req() req: Request) {
-    return 'This is a protected route ' + req.user?.name;
+  @UseGuards(RefreshAuthGuard)
+  @Post('refresh')
+  async refresh(@Req() req: Request) {
+    this.authService.refreshToken(req.user!);
   }
 }
