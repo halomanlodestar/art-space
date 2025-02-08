@@ -1,8 +1,14 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
+import { verify } from 'argon2';
+import { TokenUser } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -48,5 +54,23 @@ export class AuthService {
 
   resetPassword() {
     throw new Error('Method not implemented.');
+  }
+
+  async validatLocaleUser(email: string, password: string): Promise<TokenUser> {
+    const user = await this.db.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    let passwordMatched = await verify(user.password, password);
+
+    if (!passwordMatched) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 }
