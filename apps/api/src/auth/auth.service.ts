@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
-import { Tokens } from 'src/types';
+import { AccessTokenPayload, Tokens } from 'src/types';
 import { SignUpDto } from './dto/sign-up.dto';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
@@ -61,7 +61,19 @@ export class AuthService {
     return { refreshToken, accessToken };
   }
 
-  async refreshAccessToken() {}
+  async refreshAccessToken(user: User) {
+    const { id, username } = user;
+
+    const accessToken = await this.jwtService.signAsync(
+      { id, username },
+      {
+        secret: this.configService.accessTokenSecret,
+        expiresIn: this.configService.accessTokenExpiresIn,
+      },
+    );
+
+    return { accessToken };
+  }
 
   async validateLocalUser(email: string, password: string) {
     const user = await this.usersSerice.findByEmail(email);
@@ -76,6 +88,18 @@ export class AuthService {
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid Pass');
+    }
+
+    return user;
+  }
+
+  async validateJwtUser(payload: AccessTokenPayload) {
+    const { id } = payload;
+
+    const user = await this.usersSerice.findById(id);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
 
     return user;

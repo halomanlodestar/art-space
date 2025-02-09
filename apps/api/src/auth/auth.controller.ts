@@ -2,21 +2,22 @@ import {
   Body,
   Get,
   Post,
-  Req,
   Res,
   UseGuards,
   Controller,
-  UnauthorizedException,
-  HttpCode,
-  HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
 import { MONTH } from 'src/lib/constants';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { User } from '@prisma/client';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshGuard } from './guards/refresh.guard';
+import DeviceType from 'src/decorators/device-type.decorator';
+import { omit } from 'src/lib/utils';
 
 @Controller('auth')
 export class AuthController {
@@ -32,14 +33,33 @@ export class AuthController {
   async signIn(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
+    @DeviceType() deviceType: string,
   ) {
     const tokens = await this.authService.signIn(user);
+
+    if (deviceType === 'phone') {
+      return tokens;
+    }
 
     res.cookie('refreshToken', tokens.refreshToken, {
       maxAge: MONTH,
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
     });
 
-    return tokens;
+    return { accessToken: tokens.accessToken };
+  }
+
+  @Get('prot')
+  @UseGuards(JwtAuthGuard)
+  async protected(@CurrentUser() user: User) {
+    return omit(user, ['password']);
+  }
+
+  @Post('refresh')
+  @UseGuards(RefreshGuard)
+  async refresh(@CurrentUser() user: User, @Req() req: Request) {
+    return this.authService.refreshAccessToken(user);
   }
 }

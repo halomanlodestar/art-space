@@ -6,22 +6,17 @@ type Prettify<T> = {
 
 export interface SafeUser extends Omit<User, 'password'> {}
 
-export interface TokenUser
-  extends Pick<User, 'id' | 'email' | 'name' | 'username'> {}
+export interface AccessTokenPayload {
+  id: string;
+  username: string;
+}
+
+export interface RefreshTokenPayload extends AccessTokenPayload {}
 
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
 }
-
-export interface Session extends Tokens {
-  user: TokenUser;
-}
-
-export interface AuthJwtPayload {
-  sub: string;
-}
-
 declare global {
   namespace Express {
     interface Request {
