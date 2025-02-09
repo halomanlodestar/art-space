@@ -18,6 +18,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import DeviceType from 'src/decorators/device-type.decorator';
 import { omit } from 'src/lib/utils';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -51,7 +52,17 @@ export class AuthController {
     return { accessToken: tokens.accessToken };
   }
 
-  @Get('prot')
+  @Get('signin/google')
+  @UseGuards(GoogleAuthGuard)
+  async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response) {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleCallback(@CurrentUser() user: User) {
+    return await this.authService.signIn(user);
+  }
+
+  @Get('me')
   @UseGuards(JwtAuthGuard)
   async protected(@CurrentUser() user: User) {
     return omit(user, ['password']);
@@ -59,7 +70,7 @@ export class AuthController {
 
   @Post('refresh')
   @UseGuards(RefreshGuard)
-  async refresh(@CurrentUser() user: User, @Req() req: Request) {
+  async refresh(@CurrentUser() user: User) {
     return this.authService.refreshAccessToken(user);
   }
 }

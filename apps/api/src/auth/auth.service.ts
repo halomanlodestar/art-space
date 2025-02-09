@@ -104,4 +104,23 @@ export class AuthService {
 
     return user;
   }
+
+  async signInWithGoogle(user: {
+    id: string;
+    email: string;
+    image: string;
+    name: string;
+    username: string;
+    password: string;
+  }) {
+    const { email, image, name, username, password, id } = user;
+
+    const existingUser = await this.usersSerice.findByEmail(email);
+
+    if (existingUser) {
+      return existingUser;
+    }
+
+    return this.usersSerice.create(user);
+  }
 }

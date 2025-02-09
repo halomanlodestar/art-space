@@ -9,16 +9,13 @@ export class UsersService {
   constructor(private readonly db: PrismaService) {}
 
   async create(credentials: CreateUserDto) {
-    const { email, ...data } = credentials;
-    const hashedPassword = await argon.hash(data.password);
+    const { password, ...rest } = credentials;
+    const hashedPassword = await argon.hash(password);
 
     return this.db.user.create({
       data: {
-        email,
-        name: data.name,
-        username: data.username,
         password: hashedPassword,
-        role: 'USER',
+        ...rest,
       },
     });
   }

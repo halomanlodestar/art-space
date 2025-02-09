@@ -7,6 +7,7 @@ import { LikesModule } from './likes/likes.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunitiesModule } from './communities/communities.module';
 import { CommentsModule } from './comments/comments.module';
+import { GoogleStrategy } from './auth/strategies/google.strategy';
 
 @Module({
   imports: [
