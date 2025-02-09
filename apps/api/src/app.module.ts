@@ -7,7 +7,6 @@ import { LikesModule } from './likes/likes.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunitiesModule } from './communities/communities.module';
 import { CommentsModule } from './comments/comments.module';
-import { SessionAndTokensModule } from './session-and-tokens/session-and-tokens.module';
 
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { SessionAndTokensModule } from './session-and-tokens/session-and-tokens.
     AuthModule,
     CommunitiesModule,
     CommentsModule,
-    SessionAndTokensModule,
   ],
   controllers: [],
   providers: [PrismaService],

@@ -13,61 +13,33 @@ import {
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { MONTH } from 'src/lib/constants';
-import { SessionAndTokensService } from 'src/session-and-tokens/session-and-tokens.service';
-import { RefreshAuthGuard } from './guards/refresh-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import CurrentUser from 'src/decorators/current-user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly sessionAndTokenService: SessionAndTokensService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('/signup')
-  async signUp(@Body() credentials: SignUpDto) {
-    console.log(credentials);
-    return await this.authService.signUp(credentials);
+  @Post('signup')
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return await this.authService.signUp(signUpDto);
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post('/signin')
-  async signIn(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const { user } = req;
+  @Post('signin')
+  async signIn(
+    @CurrentUser() user: User,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const tokens = await this.authService.signIn(user);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const expires = new Date(Date.now() + MONTH);
-    const session = await this.authService.signIn(user);
-
-    res.cookie('session', session, {
-      expires,
+    res.cookie('refreshToken', tokens.refreshToken, {
+      maxAge: MONTH,
+      httpOnly: true,
     });
-  }
 
-  @Get('/session')
-  async session(@Req() req: Request) {
-    const { session } = req.cookies;
-
-    if (!session) {
-      throw new UnauthorizedException('No session found');
-    }
-
-    return await this.sessionAndTokenService.getSession(session);
-  }
-
-  @Post('/signout')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async signOut(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('session');
-  }
-
-  @UseGuards(RefreshAuthGuard)
-  @Post('refresh')
-  async refresh(@Req() req: Request) {
-    this.authService.refreshToken(req.user!);
+    return tokens;
   }
 }

@@ -4,97 +4,80 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SignUpDto } from './dto/sign-up.dto';
 import { UsersService } from 'src/users/users.service';
-import { verify } from 'argon2';
-import { TokenUser } from 'src/types';
-import { SessionAndTokensService } from 'src/session-and-tokens/session-and-tokens.service';
+import argon from 'argon2';
+import { Tokens } from 'src/types';
+import { SignUpDto } from './dto/sign-up.dto';
+import { User } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import authConfig from 'src/configs/auth.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersSerice: UsersService,
-    private readonly sessionTokenService: SessionAndTokensService,
+    private readonly jwtService: JwtService,
+    @Inject(authConfig.KEY)
+    private readonly configService: ConfigType<typeof authConfig>,
   ) {}
 
-  async signUp(credentials: SignUpDto) {
-    const { email, ...data } = credentials;
+  async signUp(signUpDto: SignUpDto) {
+    const { email, username } = signUpDto;
 
-    const [emailTaken, usernameTaken] = await Promise.all([
-      this.usersSerice.findByEmail(email),
-      this.usersSerice.findByUsername(data.username),
-    ]);
+    const isEmailTaken = await this.usersSerice.findByEmail(email)!!;
+    const isUsernameTaken = await this.usersSerice.findByUsername(username)!!;
 
-    if (emailTaken) {
+    if (isEmailTaken) {
       throw new ConflictException('Email is already taken');
     }
 
-    if (usernameTaken) {
+    if (isUsernameTaken) {
       throw new ConflictException('Username is already taken');
     }
 
-    return this.usersSerice.create(credentials);
+    await this.usersSerice.create(signUpDto);
   }
 
-  async validatLocaleUser(email: string, password: string): Promise<TokenUser> {
+  async signIn(user: User): Promise<Tokens> {
+    const { id, username } = user;
+
+    const refreshToken = await this.jwtService.signAsync(
+      { id, username },
+      {
+        secret: this.configService.refreshTokenSecret,
+        expiresIn: this.configService.refreshTokenExpiresIn,
+      },
+    );
+
+    const accessToken = await this.jwtService.signAsync(
+      { id, username },
+      {
+        secret: this.configService.accessTokenSecret,
+        expiresIn: this.configService.accessTokenExpiresIn,
+      },
+    );
+
+    return { refreshToken, accessToken };
+  }
+
+  async refreshAccessToken() {}
+
+  async validateLocalUser(email: string, password: string) {
     const user = await this.usersSerice.findByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    let passwordMatched = await verify(user.password, password);
-
-    if (!passwordMatched) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    return user;
-  }
-
-  async validateJwtUser(userId: string): Promise<TokenUser> {
-    const user = await this.usersSerice.findById(userId);
-
-    if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    return user;
-  }
+    const isPasswordValid = await argon.verify(user.password, password);
 
-  async validateRefreshToken(userId: string): Promise<TokenUser> {
-    const user = await this.usersSerice.findById(userId);
+    console.log(user.password, password, isPasswordValid);
 
-    if (!user) {
-      throw new UnauthorizedException('User not found');
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid Pass');
     }
 
     return user;
-  }
-
-  async signIn(user: TokenUser) {
-    const { accessToken, refreshToken } =
-      await this.sessionTokenService.createTokens(user.id);
-
-    const session = this.sessionTokenService.createSession({
-      user: user!,
-      accessToken,
-      refreshToken,
-    });
-
-    return session;
-  }
-
-  async refreshToken(user: TokenUser) {
-    const { accessToken, refreshToken } =
-      await this.sessionTokenService.createTokens(user.id);
-
-    const session = this.sessionTokenService.createSession({
-      user: user!,
-      accessToken,
-      refreshToken,
-    });
-
-    return session;
   }
 }
