@@ -8,12 +8,4 @@ export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   title: string;
-
-  @IsNotEmpty()
-  @IsArray()
-  media?: string[];
-
-  @IsNotEmpty()
-  @IsString()
-  author: string;
 }

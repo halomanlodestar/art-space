@@ -9,7 +9,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './posts.dto';
+import { CreatePostDto } from './dto/create-posts.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import CurrentUser from 'src/decorators/current-user.decorator';
+import { SafeUser } from 'src/types.d';
 
 @Controller('posts')
 export class PostsController {
@@ -17,25 +20,30 @@ export class PostsController {
 
   @Get('/')
   async getPosts() {
-    this.postsService.getPosts();
+    return await this.postsService.getPosts();
   }
 
-  @Get('/:id')
-  async getPost(@Param('id') id: string) {
-    this.postsService.getPost(id);
+  @Get('/:slug')
+  async getPostBySlug(@Param('slug') slug: string) {
+    this.postsService.getPostBySlug(slug);
   }
 
-  @UseGuards()
+  @UseGuards(JwtAuthGuard)
   @Post('/')
-  async createPost(@Body() body: CreatePostDto) {}
+  async createPost(
+    @Body() body: CreatePostDto,
+    @CurrentUser() author: SafeUser,
+  ) {
+    return await this.postsService.createPost(author, body);
+  }
 
-  @UseGuards()
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   async updatePost() {
     this.postsService.updatePost();
   }
 
-  @UseGuards()
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async deletePost() {
     this.postsService.deletePost();

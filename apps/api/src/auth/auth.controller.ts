@@ -17,8 +17,8 @@ import { User } from '@prisma/client';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import DeviceType from 'src/decorators/device-type.decorator';
-import { omit } from 'src/lib/utils';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { SafeUser } from 'src/types.d';
 
 @Controller('auth')
 export class AuthController {
@@ -53,8 +53,8 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async protected(@CurrentUser() user: User) {
-    return omit(user, ['password']);
+  async me(@CurrentUser() user: SafeUser) {
+    return user;
   }
 
   @Post('refresh')

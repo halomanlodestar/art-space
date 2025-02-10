@@ -26,5 +26,6 @@ import googleOauthConfig from 'src/configs/google-oauth.config';
     RefreshStrategy,
     GoogleStrategy,
   ],
+  exports: [JwtStrategy],
 })
 export class AuthModule {}

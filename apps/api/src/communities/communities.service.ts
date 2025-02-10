@@ -1,11 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
+import { SafeUser } from 'src/types';
+import { PrismaService } from 'src/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { generateSlug } from 'src/lib/slug';
 
 @Injectable()
 export class CommunitiesService {
-  create(createCommunityDto: CreateCommunityDto) {
-    return 'This action adds a new community';
+  constructor(private readonly db: PrismaService) {}
+
+  async create(createCommunityDto: CreateCommunityDto, creator: SafeUser) {
+    const { id: creatorId, role } = creator;
+
+    if (!creatorId) {
+      throw new Error('Unauthorized');
+    }
+
+    if (role !== 'COMMUNITY_ADMIN') {
+      throw new Error('You must be an admin to perform this action');
+    }
+
+    try {
+      return await this.db.community.create({
+        data: {
+          banner: '',
+          slug: generateSlug(createCommunityDto.name, false),
+          description: createCommunityDto.description,
+          name: createCommunityDto.name,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ConflictException('Community already exists');
+      }
+
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   findAll() {
