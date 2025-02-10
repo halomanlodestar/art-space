@@ -6,6 +6,7 @@ import {
   Post,
   Patch,
   Param,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-posts.dto';
@@ -14,8 +15,11 @@ import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Public } from 'src/decorators/public.decorator';
 import { Post as IPost } from '@prisma/client';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('posts')
+@CacheTTL(5000)
+@UseInterceptors(CacheInterceptor)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

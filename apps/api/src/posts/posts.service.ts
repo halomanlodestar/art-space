@@ -25,8 +25,8 @@ export class PostsService {
     return this.db.post.findUnique({ where: { id } });
   }
 
-  getPostBySlug(slug: string) {
-    const post = this.db.post.findUnique({ where: { slug } });
+  async getPostBySlug(slug: string) {
+    const post = await this.db.post.findUnique({ where: { slug } });
 
     if (!post) throw new NotFoundException('Post not found');
 
