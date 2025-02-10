@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
@@ -43,12 +44,20 @@ export class CommunitiesService {
     }
   }
 
-  findAll() {
-    return `This action returns all communities`;
+  async findAll() {
+    return await this.db.community.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} community`;
+  async findOne(id: string) {
+    const community = await this.db.community.findUnique({
+      where: { id },
+    });
+
+    if (!community) {
+      throw new NotFoundException('Community not found');
+    }
+
+    return community;
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {

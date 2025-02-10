@@ -13,6 +13,7 @@ import { UpdateCommunityDto } from './dto/update-community.dto';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('communities')
 export class CommunitiesController {
@@ -27,14 +28,16 @@ export class CommunitiesController {
     return await this.communitiesService.create(createCommunityDto, creator);
   }
 
+  @Public()
   @Get()
-  findAll() {
-    return this.communitiesService.findAll();
+  async findAll() {
+    return await this.communitiesService.findAll();
   }
 
+  @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.communitiesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.communitiesService.findOne(id);
   }
 
   @Patch(':id')
