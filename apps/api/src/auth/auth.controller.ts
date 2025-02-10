@@ -1,24 +1,15 @@
-import {
-  Body,
-  Get,
-  Post,
-  Res,
-  UseGuards,
-  Controller,
-  Req,
-} from '@nestjs/common';
+import { Body, Get, Post, Res, UseGuards, Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
-import { MONTH } from 'src/lib/constants';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { User } from '@prisma/client';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
-import DeviceType from 'src/decorators/device-type.decorator';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { SafeUser } from 'src/types.d';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -29,22 +20,21 @@ export class AuthController {
     return await this.authService.signUp(signUpDto);
   }
 
+  @Public()
   @UseGuards(LocalAuthGuard)
   @Post('signin')
-  async signIn(
-    @CurrentUser() user: User,
-    @Res({ passthrough: true }) res: Response,
-    @DeviceType() deviceType: string,
-  ) {
+  async signIn(@CurrentUser() user: User) {
     const tokens = await this.authService.signIn(user);
 
     return tokens;
   }
 
+  @Public()
   @Get('signin/google')
   @UseGuards(GoogleAuthGuard)
   async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response) {}
 
+  @Public()
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@CurrentUser() user: User) {

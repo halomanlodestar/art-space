@@ -4,6 +4,9 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
+  findByPostId(postId: string) {
+    return 'This action returns all comments by post id ' + postId;
+  }
   create(createCommentDto: CreateCommentDto) {
     return 'This action adds a new comment';
   }
