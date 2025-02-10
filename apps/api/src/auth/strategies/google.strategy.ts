@@ -38,8 +38,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       password: 'authenticating with google',
     };
 
-    console.log(userData);
-
     const user = await this.authService.signInWithGoogle(userData);
     done(null, user);
   }

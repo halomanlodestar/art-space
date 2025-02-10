@@ -38,18 +38,7 @@ export class AuthController {
   ) {
     const tokens = await this.authService.signIn(user);
 
-    if (deviceType === 'phone') {
-      return tokens;
-    }
-
-    res.cookie('refreshToken', tokens.refreshToken, {
-      maxAge: MONTH,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-    });
-
-    return { accessToken: tokens.accessToken };
+    return tokens;
   }
 
   @Get('signin/google')

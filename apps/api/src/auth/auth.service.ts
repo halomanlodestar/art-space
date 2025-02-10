@@ -8,7 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
 import { AccessTokenPayload, Tokens } from 'src/types';
 import { SignUpDto } from './dto/sign-up.dto';
-import { User } from '@prisma/client';
+import { CredentialProvider, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import authConfig from 'src/configs/auth.config';
@@ -84,10 +84,14 @@ export class AuthService {
 
     const isPasswordValid = await argon.verify(user.password, password);
 
-    console.log(user.password, password, isPasswordValid);
-
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid Pass');
+    }
+
+    if (user.provider !== CredentialProvider.EMAIL) {
+      throw new UnauthorizedException(
+        'User is authenticated with another provider',
+      );
     }
 
     return user;
@@ -113,14 +117,20 @@ export class AuthService {
     username: string;
     password: string;
   }) {
-    const { email, image, name, username, password, id } = user;
+    const { email } = user;
 
     const existingUser = await this.usersSerice.findByEmail(email);
 
     if (existingUser) {
+      if (existingUser.provider !== CredentialProvider.GOOGLE) {
+        throw new UnauthorizedException(
+          'User is authenticated with another provider',
+        );
+      }
+
       return existingUser;
     }
 
-    return this.usersSerice.create(user);
+    return this.usersSerice.create(user, 'GOOGLE');
   }
 }

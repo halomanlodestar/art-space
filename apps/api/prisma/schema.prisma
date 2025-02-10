@@ -25,18 +25,24 @@ enum MediaType {
   VIDEO
 }
 
+enum CredentialProvider {
+  EMAIL
+  GOOGLE
+}
+
 model User {
-  id          String     @id @default(cuid())
-  username    String     @unique
-  email       String     @unique
+  id          String             @id @default(cuid())
+  username    String             @unique
+  email       String             @unique
   image       String?
   password    String
   name        String
-  role        Role       @default(USER)
+  provider    CredentialProvider @default(EMAIL)
+  role        Role               @default(USER)
   communityId String?
-  community   Community? @relation(fields: [communityId], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  community   Community?         @relation(fields: [communityId], references: [id])
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   Post        Post[]
   Like        Like[]
   Comment     Comment[]
