@@ -6,20 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { CommunitiesService } from './communities.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('communities')
 export class CommunitiesController {
   constructor(private readonly communitiesService: CommunitiesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('COMMUNITY_ADMIN')
   @Post()
   async create(
     @Body() createCommunityDto: CreateCommunityDto,
