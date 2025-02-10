@@ -13,6 +13,7 @@ import { CreatePostDto } from './dto/create-posts.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('posts')
 export class PostsController {
@@ -28,7 +29,7 @@ export class PostsController {
     this.postsService.getPostBySlug(slug);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('COMMUNITY_ADMIN', 'COMMUNITY_CREATOR')
   @Post('/')
   async createPost(
     @Body() body: CreatePostDto,

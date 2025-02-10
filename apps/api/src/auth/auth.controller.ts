@@ -15,6 +15,7 @@ import { Public } from 'src/decorators/public.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     return await this.authService.signUp(signUpDto);
@@ -47,6 +48,7 @@ export class AuthController {
     return user;
   }
 
+  @Public()
   @Post('refresh')
   @UseGuards(RefreshGuard)
   async refresh(@CurrentUser() user: User) {
