@@ -22,16 +22,35 @@ export class UsersService {
     });
   }
 
-  findById(id: string) {
-    return this.db.user.findUnique({ where: { id } });
+  async findById(id: string) {
+    return await this.db.user.findUnique({ where: { id } });
   }
 
-  findByEmail(email: string) {
-    return this.db.user.findUnique({ where: { email } });
+  async findByEmail(email: string) {
+    return await this.db.user.findUnique({ where: { email } });
   }
 
-  findByUsername(username: string) {
-    return this.db.user.findUnique({ where: { username } });
+  async findByUsername(username: string) {
+    return await this.db.user.findUnique({
+      where: { username },
+      include: {
+        community: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            image: true,
+          },
+        },
+      },
+      omit: {
+        id: true,
+        email: true,
+        communityId: true,
+        password: true,
+        provider: true,
+      },
+    });
   }
 
   updateUser(data: UpdateUserDto) {}

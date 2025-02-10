@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePostDto } from './dto/create-posts.dto';
 import { SafeUser } from 'src/types';
@@ -22,7 +26,11 @@ export class PostsService {
   }
 
   getPostBySlug(slug: string) {
-    return this.db.post.findUnique({ where: { slug } });
+    const post = this.db.post.findUnique({ where: { slug } });
+
+    if (!post) throw new NotFoundException('Post not found');
+
+    return post;
   }
 
   async createPost(author: SafeUser, body: CreatePostDto) {

@@ -6,27 +6,29 @@ import {
   Post,
   Patch,
   Param,
-  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-posts.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Public } from 'src/decorators/public.decorator';
+import { Post as IPost } from '@prisma/client';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Public()
   @Get('/')
-  async getPosts() {
+  async getPosts(): Promise<IPost[]> {
     return await this.postsService.getPosts();
   }
 
+  @Public()
   @Get('/:slug')
-  async getPostBySlug(@Param('slug') slug: string) {
-    this.postsService.getPostBySlug(slug);
+  async getPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
+    return await this.postsService.getPostBySlug(slug);
   }
 
   @Roles('COMMUNITY_ADMIN', 'COMMUNITY_CREATOR')
@@ -38,15 +40,13 @@ export class PostsController {
     return await this.postsService.createPost(author, body);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   async updatePost() {
-    this.postsService.updatePost();
+    return this.postsService.updatePost();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async deletePost() {
-    this.postsService.deletePost();
+    return this.postsService.deletePost();
   }
 }
