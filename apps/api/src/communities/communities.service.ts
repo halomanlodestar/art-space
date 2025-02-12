@@ -1,70 +1,62 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 import { SafeUser } from 'src/types';
-import { PrismaService } from 'src/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { generateSlug } from 'src/lib/slug';
+import { CommunitiesRepository } from 'src/repositories/communities.repository';
+import {
+  NotFoundError,
+  UnauthorizedError,
+  ForbiddenError,
+  InternalServerError,
+  ConflictError,
+} from '../errors/InternalError';
 
 @Injectable()
 export class CommunitiesService {
-  constructor(private readonly db: PrismaService) {}
+  constructor(private readonly communityRepository: CommunitiesRepository) {}
 
   async create(createCommunityDto: CreateCommunityDto, creator: SafeUser) {
     const { id: creatorId, role } = creator;
 
     if (!creatorId) {
-      throw new Error('Unauthorized');
+      throw new UnauthorizedError('Unauthorized');
     }
 
     if (role !== 'COMMUNITY_ADMIN') {
-      throw new Error('You must be an admin to perform this action');
+      throw new ForbiddenError('You must be an admin to perform this action');
     }
 
     try {
-      return await this.db.community.create({
-        data: {
-          banner: '',
-          slug: generateSlug(createCommunityDto.name, false),
-          description: createCommunityDto.description,
-          name: createCommunityDto.name,
-        },
-      });
+      return await this.communityRepository.create(creator, createCommunityDto);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ConflictException('Community already exists');
+        throw new ConflictError('Community already exists');
       }
 
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerError(error.message);
     }
   }
 
   async findAll() {
-    return await this.db.community.findMany();
+    return await this.communityRepository.getAll();
   }
 
   async findOne(id: string) {
-    const community = await this.db.community.findUnique({
-      where: { id },
-    });
+    const community = await this.communityRepository.getById(id);
 
     if (!community) {
-      throw new NotFoundException('Community not found');
+      throw new NotFoundError('Community not found');
     }
 
     return community;
   }
 
-  update(id: number, updateCommunityDto: UpdateCommunityDto) {
-    return `This action updates a #${id} community`;
+  async update(id: string, updateCommunityDto: UpdateCommunityDto) {
+    return await this.communityRepository.update(id, updateCommunityDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} community`;
+  async remove(id: string) {
+    return await this.communityRepository.delete(id);
   }
 }

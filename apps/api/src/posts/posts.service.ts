@@ -1,65 +1,74 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { PostsRepository } from './../repositories/posts.repository';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePostDto } from './dto/create-posts.dto';
 import { SafeUser } from 'src/types';
 import { generateSlug } from 'src/lib/slug';
-import { Role } from '@prisma/client';
+import { ForbiddenError, NotFoundError } from 'src/errors/InternalError';
+import { Post, Prisma } from '@prisma/client';
+import { UpdatePostsDto } from './dto/update-posts.dto';
 
 @Injectable()
 export class PostsService {
-  private readonly createPostRoles: Role[] = [
-    'COMMUNITY_CREATOR',
-    'COMMUNITY_ADMIN',
-  ];
-  constructor(private readonly db: PrismaService) {}
+  constructor(private readonly postsRepository: PostsRepository) {}
 
   async getPosts() {
-    return await this.db.post.findMany();
+    return await this.postsRepository.getAll();
   }
 
-  getPost(id: string) {
-    return this.db.post.findUnique({ where: { id } });
+  async getPostById(id: string) {
+    return await this.postsRepository.getById(id);
   }
 
   async getPostBySlug(slug: string) {
-    const post = await this.db.post.findUnique({ where: { slug } });
+    const post = await this.postsRepository.getBySlug(slug);
 
-    if (!post) throw new NotFoundException('Post not found');
+    if (!post) throw new NotFoundError('Post not found');
 
     return post;
   }
 
+  async getPostsByCommunityId(id: string): Promise<Post[]> {
+    return await this.postsRepository.getByCommunityId(id);
+  }
+
   async createPost(author: SafeUser, body: CreatePostDto) {
-    if (!author) {
-      throw new UnauthorizedException('Unauthorized');
+    const { communityId } = author;
+
+    if (!communityId) {
+      throw new ForbiddenError('You must be a member of a community to post');
     }
 
-    const { id: authorId, communityId, role } = author;
-
-    if (!communityId || !this.createPostRoles.includes(role)) {
-      throw new UnauthorizedException(
-        'You must be a creator to perform this action',
-      );
-    }
-
-    return await this.db.post.create({
-      data: {
-        authorId,
-        communityId,
-        slug: generateSlug(body.title),
-        ...body,
-      },
+    return await this.postsRepository.create(author, {
+      ...body,
     });
   }
 
-  deletePost() {
-    throw new Error('Method not implemented.');
+  async deletePost(id: string, authorId: string) {
+    const post = await this.postsRepository.getById(id);
+
+    if (!post) throw new NotFoundError('Post not found');
+
+    if (post.authorId !== authorId) {
+      throw new ForbiddenError(
+        'You do not have permission to delete this post',
+      );
+    }
+
+    return this.postsRepository.delete(id);
   }
-  updatePost() {
-    throw new Error('Method not implemented.');
+
+  async updatePost(id: string, data: UpdatePostsDto, authorId: string) {
+    const post = await this.postsRepository.getById(id);
+
+    if (!post) throw new NotFoundError('Post not found');
+
+    if (post.authorId !== authorId) {
+      throw new ForbiddenError(
+        'You do not have permission to update this post',
+      );
+    }
+
+    return this.postsRepository.update(id, data);
   }
 }

@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
 import { AccessTokenPayload, Tokens } from 'src/types';
@@ -12,6 +7,13 @@ import { CredentialProvider, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import authConfig from 'src/configs/auth.config';
+import {
+  EmailTakenError,
+  UsernameTakenError,
+  UserNotFoundError,
+  InvalidPasswordError,
+  AuthProviderError,
+} from 'src/errors/InternalError';
 
 @Injectable()
 export class AuthService {
@@ -29,11 +31,11 @@ export class AuthService {
     const isUsernameTaken = await this.usersSerice.findByUsername(username)!!;
 
     if (isEmailTaken) {
-      throw new ConflictException('Email is already taken');
+      throw new EmailTakenError();
     }
 
     if (isUsernameTaken) {
-      throw new ConflictException('Username is already taken');
+      throw new UsernameTakenError();
     }
 
     await this.usersSerice.create(signUpDto);
@@ -79,19 +81,17 @@ export class AuthService {
     const user = await this.usersSerice.findByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UserNotFoundError();
     }
 
     const isPasswordValid = await argon.verify(user.password, password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid Pass');
+      throw new InvalidPasswordError();
     }
 
     if (user.provider !== CredentialProvider.EMAIL) {
-      throw new UnauthorizedException(
-        'User is authenticated with another provider',
-      );
+      throw new AuthProviderError();
     }
 
     return user;
@@ -103,7 +103,7 @@ export class AuthService {
     const user = await this.usersSerice.findById(id);
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UserNotFoundError();
     }
 
     return user;
@@ -123,9 +123,7 @@ export class AuthService {
 
     if (existingUser) {
       if (existingUser.provider !== CredentialProvider.GOOGLE) {
-        throw new UnauthorizedException(
-          'User is authenticated with another provider',
-        );
+        throw new AuthProviderError();
       }
 
       return existingUser;

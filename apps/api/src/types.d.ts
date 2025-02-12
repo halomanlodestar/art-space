@@ -7,6 +7,10 @@ type Prettify<T> = {
 
 export interface SafeUser extends Omit<User, 'password'> {}
 
+export type NotNullRec<T> = {
+  [P in keyof T]: NonNullable<T[P]>;
+};
+
 export interface AccessTokenPayload {
   id: string;
   username: string;
@@ -25,4 +29,11 @@ declare global {
       user?: TokenUser;
     }
   }
+}
+
+export enum RoleEnum {
+  SUDO = 5,
+  COMMUNITY_ADMIN = 3,
+  COMMUNITY_CREATOR = 2,
+  USER = 1,
 }

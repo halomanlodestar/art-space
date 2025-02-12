@@ -17,6 +17,7 @@ enum Role {
   USER
   COMMUNITY_CREATOR
   COMMUNITY_ADMIN
+  SUDO
 }
 
 enum MediaType {
@@ -31,34 +32,39 @@ enum CredentialProvider {
 }
 
 model User {
-  id          String             @id @default(cuid())
-  username    String             @unique
-  email       String             @unique
-  image       String?
-  password    String
-  name        String
-  provider    CredentialProvider @default(EMAIL)
-  role        Role               @default(USER)
-  communityId String?
-  community   Community?         @relation(fields: [communityId], references: [id])
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  Post        Post[]
-  Like        Like[]
-  Comment     Comment[]
+  id                 String             @id @default(cuid())
+  username           String             @unique
+  email              String             @unique
+  image              String?
+  password           String
+  name               String
+  provider           CredentialProvider @default(EMAIL)
+  role               Role               @default(USER)
+  communityId        String?
+  community          Community?         @relation(fields: [communityId], references: [id])
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  Post               Post[]
+  Like               Like[]
+  Comment            Comment[]
+  createdCommunities Community[]        @relation("createdCommunities")
+  follows            CommunityFollow[]
 }
 
 model Community {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
+  id          String            @id @default(cuid())
+  createdById String
+  createdBy   User              @relation(fields: [createdById], references: [id], map: "createdCommunities", name: "createdCommunities")
+  name        String            @unique
+  slug        String            @unique
   description String
   image       String?
   banner      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   members     User[]
   posts       Post[]
+  follows     CommunityFollow[]
 }
 
 model Media {
@@ -111,4 +117,16 @@ model Comment {
   updatedAt DateTime  @updatedAt
   Like      Like[]
   Comment   Comment[] @relation("CommentToComment")
+}
+
+model CommunityFollow {
+  id          String    @id @default(cuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([communityId, userId])
 }

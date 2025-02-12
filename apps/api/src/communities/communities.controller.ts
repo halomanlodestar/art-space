@@ -19,7 +19,7 @@ import { Public } from 'src/decorators/public.decorator';
 export class CommunitiesController {
   constructor(private readonly communitiesService: CommunitiesService) {}
 
-  @Roles('COMMUNITY_ADMIN')
+  @Roles('SUDO')
   @Post()
   async create(
     @Body() createCommunityDto: CreateCommunityDto,
@@ -29,27 +29,29 @@ export class CommunitiesController {
   }
 
   @Public()
-  @Get()
+  @Get('/')
   async findAll() {
     return await this.communitiesService.findAll();
   }
 
   @Public()
-  @Get(':id')
+  @Get('/:id')
   async findOne(@Param('id') id: string) {
     return await this.communitiesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
+  @Roles('COMMUNITY_ADMIN')
+  @Patch('/:id')
+  async update(
     @Param('id') id: string,
     @Body() updateCommunityDto: UpdateCommunityDto,
   ) {
-    return this.communitiesService.update(+id, updateCommunityDto);
+    return await this.communitiesService.update(id, updateCommunityDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.communitiesService.remove(+id);
+  @Roles('SUDO')
+  @Delete('/:id')
+  async remove(@Param('id') id: string) {
+    return await this.communitiesService.remove(id);
   }
 }
