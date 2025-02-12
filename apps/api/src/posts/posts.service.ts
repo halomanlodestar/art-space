@@ -1,11 +1,9 @@
 import { PostsRepository } from './../repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 import { CreatePostDto } from './dto/create-posts.dto';
 import { SafeUser } from 'src/types';
-import { generateSlug } from 'src/lib/slug';
 import { ForbiddenError, NotFoundError } from 'src/errors/InternalError';
-import { Post, Prisma } from '@prisma/client';
+import { Post } from '@prisma/client';
 import { UpdatePostsDto } from './dto/update-posts.dto';
 
 @Injectable()

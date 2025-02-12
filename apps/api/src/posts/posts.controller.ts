@@ -15,7 +15,7 @@ import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Public } from 'src/decorators/public.decorator';
-import { Post as IPost, Role } from '@prisma/client';
+import { Post as IPost } from '@prisma/client';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 import { UpdatePostsDto } from './dto/update-posts.dto';
