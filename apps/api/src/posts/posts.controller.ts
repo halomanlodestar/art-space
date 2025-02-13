@@ -8,6 +8,7 @@ import {
   Param,
   UseInterceptors,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-posts.dto';
@@ -34,7 +35,7 @@ export class PostsController {
   }
 
   @Public()
-  @Get('/:slug')
+  @Get('search/:slug')
   async getPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
     return await this.postsService.getPostBySlug(slug);
   }
@@ -43,6 +44,26 @@ export class PostsController {
   @Get('/:id')
   async getPostsByCommunityId(@Param('id') id: string): Promise<IPost[]> {
     return await this.postsService.getPostsByCommunityId(id);
+  }
+
+  @Public()
+  @Get('latest')
+  async getLatestPosts(
+    @Query('skip', {
+      transform: (value) => parseInt(value),
+    })
+    skip?: number,
+    @Query('take', {
+      transform: (value) => parseInt(value),
+    })
+    take?: number,
+  ): Promise<IPost[]> {
+    return await this.postsService.getLatestPosts(skip, take);
+  }
+
+  @Get('/liked')
+  async getLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {
+    return await this.postsService.getLikedPosts(user.id);
   }
 
   @Roles('COMMUNITY_CREATOR')

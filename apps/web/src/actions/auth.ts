@@ -1,26 +1,21 @@
 /** @format */
 
-import { signUpSchema } from "@/components/SignUpForm";
-import { API_URL } from "@/lib/constants";
+"use server";
+import { signInSchema, signUpSchema } from "@/schemas/auth";
 import { z } from "zod";
+import {AuthApi} from "@/lib/api-client"
 
-export const signUp = async (data: z.infer<typeof signUpSchema>) => {
-	signUpSchema.parse(data);
-	console.log(data);
-	const body = JSON.stringify(data);
+export const getToken = () => {};
 
-	const response = await fetch(`${API_URL}/auth/signup`, {
-		headers: {
-			"Content-Type": "application/json",
-		},
-		method: "POST",
-		body,
-	});
+export const signIn = async (formData: z.infer<typeof signInSchema>) => {
+	const data = signInSchema.parse(formData);
+	const authApi = new AuthApi()
 
-	if (response.ok) {
-		return true;
-	} else {
-		const { message } = await response.json();
-		throw new Error(message);
-	}
+	
+};
+
+export const signUp = async (formData: z.infer<typeof signUpSchema>) => {
+	const data = signUpSchema.parse(formData);
+
+	api.;
 };

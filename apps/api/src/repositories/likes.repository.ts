@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, Like } from '@prisma/client';
+import { CreateLikeDto } from 'src/likes/dto/create-like.dto';
 
 @Injectable()
 export class LikesRepository {
@@ -15,11 +16,16 @@ export class LikesRepository {
     });
   }
 
-  async createLike(like: Prisma.LikeCreateInput): Promise<Like> {
-    return this.db.like.create({ data: like });
+  async create(userId: string, postId: string): Promise<Like> {
+    return this.db.like.create({
+      data: {
+        postId,
+        userId,
+      },
+    });
   }
 
-  async deleteLike(userId: string, postId: string): Promise<void> {
+  async delete(userId: string, postId: string): Promise<void> {
     await this.db.like.deleteMany({ where: { userId, postId } });
   }
 

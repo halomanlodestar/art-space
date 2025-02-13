@@ -12,15 +12,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { signInSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const signInSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8),
-});
 
 export function SignInForm() {
 	const form = useForm<z.infer<typeof signInSchema>>({

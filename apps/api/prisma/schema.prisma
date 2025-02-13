@@ -87,9 +87,9 @@ model Post {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   communityId String
-  Community   Community @relation(fields: [communityId], references: [id])
-  Like        Like[]
-  Comment     Comment[]
+  community   Community @relation(fields: [communityId], references: [id])
+  likes       Like[]
+  comments    Comment[]
 }
 
 model Like {
@@ -115,8 +115,8 @@ model Comment {
   parent    Comment?  @relation(fields: [parentId], references: [id], name: "CommentToComment")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Like      Like[]
-  Comment   Comment[] @relation("CommentToComment")
+  likes     Like[]
+  comments  Comment[] @relation("CommentToComment")
 }
 
 model CommunityFollow {

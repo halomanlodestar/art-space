@@ -3,7 +3,7 @@ import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import authConfig from 'src/configs/auth.config';
-import { AccessTokenPayload } from 'src/types';
+import { AccessTokenPayload } from 'src/types.d';
 import { AuthService } from '../auth.service';
 
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {

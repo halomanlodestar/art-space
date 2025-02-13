@@ -15,17 +15,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { signUpSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-export const signUpSchema = z.object({
-	username: z.string().min(3),
-	name: z.string().min(3),
-	email: z.string().email(),
-	password: z.string().min(8),
-});
 
 export function SignUpForm() {
 	const form = useForm<z.infer<typeof signUpSchema>>({

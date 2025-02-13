@@ -1,8 +1,8 @@
 import { generateSlug } from 'src/lib/slug';
 import { CreatePostDto } from 'src/posts/dto/create-posts.dto';
 import { PrismaService } from 'src/prisma.service';
-import { NotNullRec, SafeUser } from 'src/types';
-import { Prisma } from '@prisma/client';
+import { NotNullRec, SafeUser } from 'src/types.d';
+import { Post, Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -23,7 +23,10 @@ export class PostsRepository {
     });
   }
 
-  async getById(id: string, options?: Prisma.PostFindUniqueArgs) {
+  async getById(
+    id: string,
+    options?: Omit<Prisma.PostFindUniqueArgs, 'where'>,
+  ) {
     return await this.db.post.findUnique({ where: { id }, ...options });
   }
 
@@ -38,8 +41,23 @@ export class PostsRepository {
     return await this.db.post.findUnique({ where: { id }, ...options });
   }
 
-  async getBySlug(slug: string, options?: Prisma.PostFindUniqueArgs) {
+  async getBySlug(
+    slug: string,
+    options?: Omit<Prisma.PostFindUniqueArgs, 'where'>,
+  ) {
     return await this.db.post.findUnique({ where: { slug }, ...options });
+  }
+
+  async getLikedPosts(id: string): Promise<Post[]> {
+    return await this.db.post.findMany({
+      where: {
+        likes: {
+          some: {
+            userId: id,
+          },
+        },
+      },
+    });
   }
 
   async create(author: SafeUser, body: CreatePostDto) {

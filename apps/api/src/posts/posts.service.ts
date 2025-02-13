@@ -1,7 +1,7 @@
 import { PostsRepository } from './../repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-posts.dto';
-import { SafeUser } from 'src/types';
+import { SafeUser } from 'src/types.d';
 import { ForbiddenError, NotFoundError } from 'src/errors/InternalError';
 import { Post } from '@prisma/client';
 import { UpdatePostsDto } from './dto/update-posts.dto';
@@ -10,16 +10,43 @@ import { UpdatePostsDto } from './dto/update-posts.dto';
 export class PostsService {
   constructor(private readonly postsRepository: PostsRepository) {}
 
+  private readonly postsListSelections = {
+    slug: true,
+    title: true,
+    createdAt: true,
+    description: true,
+    media: true,
+    author: {
+      select: {
+        name: true,
+        image: true,
+        username: true,
+      },
+    },
+    community: {
+      select: {
+        name: true,
+        slug: true,
+      },
+    },
+  };
+
   async getPosts() {
-    return await this.postsRepository.getAll();
+    return await this.postsRepository.getAll({
+      select: this.postsListSelections,
+    });
   }
 
   async getPostById(id: string) {
-    return await this.postsRepository.getById(id);
+    return await this.postsRepository.getById(id, {
+      select: this.postsListSelections,
+    });
   }
 
   async getPostBySlug(slug: string) {
-    const post = await this.postsRepository.getBySlug(slug);
+    const post = await this.postsRepository.getBySlug(slug, {
+      select: this.postsListSelections,
+    });
 
     if (!post) throw new NotFoundError('Post not found');
 
@@ -27,7 +54,22 @@ export class PostsService {
   }
 
   async getPostsByCommunityId(id: string): Promise<Post[]> {
-    return await this.postsRepository.getByCommunityId(id);
+    return await this.postsRepository.getByCommunityId(id, {
+      select: this.postsListSelections,
+    });
+  }
+
+  async getLikedPosts(id: string): Promise<Post[]> {
+    return await this.postsRepository.getLikedPosts(id);
+  }
+
+  async getLatestPosts(skip = 0, take = 10): Promise<Post[]> {
+    return await this.postsRepository.getAll({
+      orderBy: { createdAt: 'desc' },
+      select: this.postsListSelections,
+      skip,
+      take,
+    });
   }
 
   async createPost(author: SafeUser, body: CreatePostDto) {

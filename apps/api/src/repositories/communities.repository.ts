@@ -1,7 +1,7 @@
 import { generateSlug } from 'src/lib/slug';
 import { CreateCommunityDto } from 'src/communities/dto/create-community.dto';
 import { PrismaService } from 'src/prisma.service';
-import { NotNullRec, SafeUser } from 'src/types';
+import { NotNullRec, SafeUser } from 'src/types.d';
 import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 

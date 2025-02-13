@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
-import { SafeUser } from 'src/types';
+import { SafeUser } from 'src/types.d';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CommunitiesRepository } from 'src/repositories/communities.repository';
 import {
