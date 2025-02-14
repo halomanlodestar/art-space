@@ -10,7 +10,9 @@ import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { SafeUser } from 'src/types.d';
 import { Public } from 'src/decorators/public.decorator';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -24,6 +26,9 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('signin')
+  @ApiBody({
+    type: SignUpDto,
+  })
   async signIn(@CurrentUser() user: User) {
     const tokens = await this.authService.signIn(user);
 

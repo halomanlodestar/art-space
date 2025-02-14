@@ -14,7 +14,9 @@ import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Public } from 'src/decorators/public.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('communities')
 @Controller('communities')
 export class CommunitiesController {
   constructor(private readonly communitiesService: CommunitiesService) {}

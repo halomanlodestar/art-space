@@ -1,4 +1,5 @@
 /** @format */
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { signIn } from "@/actions/auth";
 
 export function SignInForm() {
 	const form = useForm<z.infer<typeof signInSchema>>({
@@ -27,8 +29,8 @@ export function SignInForm() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof signInSchema>) {
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof signInSchema>) {
+		await signIn(values);
 	}
 
 	return (

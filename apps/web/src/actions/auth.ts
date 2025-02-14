@@ -1,21 +1,22 @@
 /** @format */
 
 "use server";
+
+import AuthClient from "@art-space/openapi/auth";
+
 import { signInSchema, signUpSchema } from "@/schemas/auth";
-import { z } from "zod";
-import {AuthApi} from "@/lib/api-client"
+import { date, z } from "zod";
 
-export const getToken = () => {};
+export const getToken = async () => {};
 
-export const signIn = async (formData: z.infer<typeof signInSchema>) => {
-	const data = signInSchema.parse(formData);
-	const authApi = new AuthApi()
+export const signIn = async (values: z.infer<typeof signInSchema>) => {
+	const data = signInSchema.parse(values);
 
-	
+	const res = await AuthClient.authControllerSignIn({
+		data,
+	});
+
+	console.log(res);
 };
 
-export const signUp = async (formData: z.infer<typeof signUpSchema>) => {
-	const data = signUpSchema.parse(formData);
-
-	api.;
-};
+export const signUp = async (values: z.infer<typeof signUpSchema>) => {};
