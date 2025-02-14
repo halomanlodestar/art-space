@@ -20,7 +20,11 @@ import { Post as IPost } from '@prisma/client';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 import { UpdatePostsDto } from './dto/update-posts.dto';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
+import { PostEntity } from './entities/post.entity';
 
+@ApiTags('posts')
 @Controller('posts')
 @UseFilters(HttpExceptionFilter)
 @CacheTTL(5000)
@@ -30,25 +34,29 @@ export class PostsController {
 
   @Public()
   @Get('/')
-  async getPosts(): Promise<IPost[]> {
+  @ApiResponseType(Array<PostEntity>)
+  async getAllPosts(): Promise<IPost[]> {
     return await this.postsService.getPosts();
   }
 
   @Public()
   @Get('search/:slug')
-  async getPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
+  @ApiResponseType(PostEntity)
+  async findPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
     return await this.postsService.getPostBySlug(slug);
   }
 
   @Public()
   @Get('/:id')
-  async getPostsByCommunityId(@Param('id') id: string): Promise<IPost[]> {
+  @ApiResponseType(Array<PostEntity>)
+  async getPostsByCommunity(@Param('id') id: string): Promise<IPost[]> {
     return await this.postsService.getPostsByCommunityId(id);
   }
 
   @Public()
   @Get('latest')
-  async getLatestPosts(
+  @ApiResponseType(Array<PostEntity>)
+  async fetchLatestPosts(
     @Query('skip', {
       transform: (value) => parseInt(value),
     })
@@ -62,13 +70,15 @@ export class PostsController {
   }
 
   @Get('/liked')
-  async getLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {
+  @ApiResponseType(Array<PostEntity>)
+  async getUserLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {
     return await this.postsService.getLikedPosts(user.id);
   }
 
   @Roles('COMMUNITY_CREATOR')
   @Post('/')
-  async createPost(
+  @ApiResponseType(PostEntity)
+  async createNewPost(
     @Body() body: CreatePostDto,
     @CurrentUser() author: SafeUser,
   ) {
@@ -77,6 +87,7 @@ export class PostsController {
 
   @Roles('COMMUNITY_CREATOR')
   @Patch('/:id')
+  @ApiResponseType(PostEntity)
   async updatePost(
     @Param('id') id: string,
     @Body() body: UpdatePostsDto,
@@ -87,6 +98,7 @@ export class PostsController {
 
   @Roles('COMMUNITY_CREATOR')
   @Delete('/:id')
+  @ApiResponseType(PostEntity)
   async deletePost(@Param('id') id: string, @CurrentUser() author: SafeUser) {
     return this.postsService.deletePost(id, author.id);
   }

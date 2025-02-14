@@ -10,7 +10,11 @@ import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { SafeUser } from 'src/types.d';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
+import { SignInResponseDto } from './dto/sign-in.dto';
+import { MeResponseDto } from './dto/me.dto';
+import { RefreshResponseDto } from './dto/refresh.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -29,6 +33,7 @@ export class AuthController {
   @ApiBody({
     type: SignUpDto,
   })
+  @ApiResponseType(SignInResponseDto)
   async signIn(@CurrentUser() user: User) {
     const tokens = await this.authService.signIn(user);
 
@@ -49,14 +54,16 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async me(@CurrentUser() user: SafeUser) {
+  @ApiResponseType(MeResponseDto)
+  async getCurrentUser(@CurrentUser() user: SafeUser) {
     return user;
   }
 
   @Public()
   @Post('refresh')
   @UseGuards(RefreshGuard)
-  async refresh(@CurrentUser() user: User) {
+  @ApiResponseType(RefreshResponseDto)
+  async refreshAccessToken(@CurrentUser() user: User) {
     return this.authService.refreshAccessToken(user);
   }
 }

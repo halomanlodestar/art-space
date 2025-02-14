@@ -14,7 +14,9 @@ import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
+import { CommunityEntity } from './entities/community.entity';
 
 @ApiTags('communities')
 @Controller('communities')
@@ -23,7 +25,8 @@ export class CommunitiesController {
 
   @Roles('SUDO')
   @Post()
-  async create(
+  @ApiResponseType(CommunityEntity)
+  async createCommunity(
     @Body() createCommunityDto: CreateCommunityDto,
     @CurrentUser() creator: SafeUser,
   ) {
@@ -32,19 +35,22 @@ export class CommunitiesController {
 
   @Public()
   @Get('/')
-  async findAll() {
+  @ApiResponseType(Array<CommunityEntity>)
+  async findAllCommunities() {
     return await this.communitiesService.findAll();
   }
 
   @Public()
   @Get('/:id')
-  async findOne(@Param('id') id: string) {
+  @ApiResponseType(CommunityEntity)
+  async findCommunityById(@Param('id') id: string) {
     return await this.communitiesService.findOne(id);
   }
 
   @Roles('COMMUNITY_ADMIN')
   @Patch('/:id')
-  async update(
+  @ApiResponseType(CommunityEntity)
+  async updateCommunity(
     @Param('id') id: string,
     @Body() updateCommunityDto: UpdateCommunityDto,
   ) {
@@ -53,7 +59,8 @@ export class CommunitiesController {
 
   @Roles('SUDO')
   @Delete('/:id')
-  async remove(@Param('id') id: string) {
+  @ApiResponseType(CommunityEntity)
+  async deleteCommunity(@Param('id') id: string) {
     return await this.communitiesService.remove(id);
   }
 }

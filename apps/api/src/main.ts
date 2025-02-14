@@ -16,7 +16,11 @@ async function bootstrap() {
     .addTag('nestjs')
     .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  const documentFactory = () =>
+    SwaggerModule.createDocument(app, config, {
+      operationIdFactory: (controllerKey: string, methodKey: string) =>
+        methodKey,
+    });
 
   await SwaggerModule.loadPluginMetadata(metadata);
   SwaggerModule.setup('api', app, documentFactory);

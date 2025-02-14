@@ -2,6 +2,9 @@
 	"name": "@art-space/openapi",
 	"version": "1.0.0",
 	"private": true,
+	"scripts": {
+		"generate": "npx @nestjs/swagger plugin && npx openapi-generator-cli generate -i .openapi.json -g typescript-axios -o ."
+	},
 	"exports": {
 		".": "./src/index.ts",
 		"./auth": "./src/clients/auth.ts",
@@ -12,5 +15,9 @@
 	},
 	"dependencies": {
 		"typescript": "latest"
+	},
+	"devDependencies": {
+		"@nestjs/swagger": "^11.0.3",
+		"@openapitools/openapi-generator-cli": "^2.16.3"
 	}
 }

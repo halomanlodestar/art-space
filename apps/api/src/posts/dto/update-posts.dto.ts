@@ -1,11 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreatePostDto } from './create-posts.dto';
 
-export class UpdatePostsDto {
-  @IsString()
-  @IsNotEmpty()
-  title: string;
-
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-}
+export class UpdatePostsDto extends PartialType(CreatePostDto) {}

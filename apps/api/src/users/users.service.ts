@@ -1,38 +1,35 @@
+import { UsersRepository } from './../repositories/users.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { PrismaService } from 'src/prisma.service';
 import argon from 'argon2';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CredentialProvider } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly db: PrismaService) {}
+  constructor(private readonly userRepository: UsersRepository) {}
 
   async create(credentials: CreateUserDto, provider?: CredentialProvider) {
     const { password, ...rest } = credentials;
     const hashedPassword = await argon.hash(password);
 
-    return this.db.user.create({
-      data: {
-        provider,
-        password: hashedPassword,
-        ...rest,
-      },
+    return this.userRepository.create({
+      provider,
+      password: hashedPassword,
+      ...rest,
     });
   }
 
   async findById(id: string) {
-    return await this.db.user.findUnique({ where: { id } });
+    return await this.userRepository.findById(id);
   }
 
   async findByEmail(email: string) {
-    return await this.db.user.findUnique({ where: { email } });
+    return await this.userRepository.findByEmail(email);
   }
 
   async findByUsername(username: string) {
-    return await this.db.user.findUnique({
-      where: { username },
+    return await this.userRepository.findByUsername(username, {
       include: {
         community: {
           select: {
@@ -53,5 +50,11 @@ export class UsersService {
     });
   }
 
-  updateUser(data: UpdateUserDto) {}
+  async update(username: string, data: UpdateUserDto) {
+    return this.userRepository.update(username, data);
+  }
+
+  async delete(id: string) {
+    return this.userRepository.delete(id);
+  }
 }
