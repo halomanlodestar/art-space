@@ -1,4 +1,4 @@
-import { $Enums } from '@prisma/client';
+import { $Enums } from '@art-space/database';
 import { SafeUser } from 'src/types';
 
 export class MeResponseDto implements SafeUser {

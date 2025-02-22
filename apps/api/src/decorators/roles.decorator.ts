@@ -1,5 +1,5 @@
+import { Role } from '@art-space/database';
 import { SetMetadata } from '@nestjs/common';
-import { Role } from '@prisma/client';
 
 export const ROLES_KEY = 'ROLES';
 export const Roles = (minRequiredRole: Role) =>
