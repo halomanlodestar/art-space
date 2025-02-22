@@ -1,8 +1,8 @@
+import { PrismaModule } from '@art-space/database';
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrismaService } from './prisma.service';
+import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunitiesModule } from './communities/communities.module';
@@ -21,6 +21,7 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
     CacheModule.register({
       isGlobal: true,
     }),
+    PrismaModule,
     UsersModule,
     PostsModule,
     LikesModule,
@@ -30,7 +31,6 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
   ],
   controllers: [],
   providers: [
-    PrismaService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

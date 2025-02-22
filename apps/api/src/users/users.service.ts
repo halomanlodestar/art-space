@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import argon from 'argon2';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CredentialProvider } from '@prisma/client';
+import { CredentialProvider } from '@art-space/database';
 
 @Injectable()
 export class UsersService {
