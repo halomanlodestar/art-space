@@ -1,6 +1,5 @@
-import { Prisma, User } from '@art-space/database';
+import { Prisma, PrismaService, User } from '@art-space/database';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class UsersRepository {

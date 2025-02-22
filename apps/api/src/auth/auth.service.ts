@@ -3,7 +3,6 @@ import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
 import { AccessTokenPayload, Tokens } from 'src/types';
 import { SignUpDto } from './dto/sign-up.dto';
-import { CredentialProvider, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import authConfig from 'src/configs/auth.config';
@@ -14,6 +13,7 @@ import {
   InvalidPasswordError,
   AuthProviderError,
 } from 'src/errors/InternalError';
+import { CredentialProvider, User } from '@art-space/database';
 
 @Injectable()
 export class AuthService {

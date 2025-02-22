@@ -1,9 +1,8 @@
 import { generateSlug } from 'src/lib/slug';
 import { CreatePostDto } from 'src/posts/dto/create-posts.dto';
-import { PrismaService } from 'src/prisma.service';
 import { NotNullRec, SafeUser } from 'src/types.d';
 import { Injectable } from '@nestjs/common';
-import { Post, Prisma } from '@art-space/database';
+import { Post, Prisma, PrismaService } from '@art-space/database';
 
 @Injectable()
 export class PostsRepository {

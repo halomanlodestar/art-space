@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-posts.dto';
 import { SafeUser } from 'src/types.d';
 import { ForbiddenError, NotFoundError } from 'src/errors/InternalError';
-import { Post } from '@prisma/client';
 import { UpdatePostsDto } from './dto/update-posts.dto';
+import { Post } from '@art-space/database';
 
 @Injectable()
 export class PostsService {
