@@ -14,7 +14,7 @@ import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { CommunityEntity } from './entities/community.entity';
 

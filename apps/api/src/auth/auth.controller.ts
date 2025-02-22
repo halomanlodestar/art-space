@@ -4,17 +4,17 @@ import { Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import CurrentUser from 'src/decorators/current-user.decorator';
-import { User } from '@prisma/client';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { SafeUser } from 'src/types.d';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { SignInResponseDto } from './dto/sign-in.dto';
 import { MeResponseDto } from './dto/me.dto';
 import { RefreshResponseDto } from './dto/refresh.dto';
+import { User } from '@art-space/database';
 
 @ApiTags('auth')
 @Controller('auth')

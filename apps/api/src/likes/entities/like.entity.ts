@@ -1,4 +1,4 @@
-import { Like } from '@prisma/client';
+import { Like } from '@art-space/database';
 
 export class LikeEntity implements Like {
   id: string;

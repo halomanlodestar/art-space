@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Post } from '@art-space/database';
 
 export class PostEntity implements Post {
   id: string;

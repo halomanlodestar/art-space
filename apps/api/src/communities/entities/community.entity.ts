@@ -1,4 +1,4 @@
-import { Community as ICommunity } from '@prisma/client';
+import { Community as ICommunity } from '@art-space/database';
 
 export class CommunityEntity implements ICommunity {
   name: string;
