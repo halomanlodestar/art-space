@@ -1,0 +1,19 @@
+{
+	"jsc": {
+		"target": "es2022",
+		"parser": {
+			"syntax": "typescript",
+			"tsx": false,
+			"decorators": true
+		},
+		"transform": {
+			"legacyDecorator": true,
+			"decoratorMetadata": true
+		},
+		"keepClassNames": true
+	},
+	"module": {
+		"type": "commonjs"
+	},
+	"minify": false
+}

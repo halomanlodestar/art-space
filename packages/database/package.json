@@ -1,6 +1,7 @@
 {
 	"name": "@art-space/database",
 	"version": "0.0.1",
+	"type": "commonjs",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
@@ -11,8 +12,10 @@
 		}
 	},
 	"scripts": {
-		"db:generate": "prisma generate",
-		"compile": "tsc"
+		"db:generate": "prisma generate && tsc",
+		"db:migrate": "prisma migrate dev",
+		"db:studio": "prisma studio",
+		"build": "npm run db:generate"
 	},
 	"dependencies": {
 		"@nestjs/common": "^11.0.1",

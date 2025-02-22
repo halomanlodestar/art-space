@@ -8,6 +8,8 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"declaration": true,
+		"target": "ES2022",
+		"module": "CommonJS",
 		"emitDeclarationOnly": false,
 		"strict": true
 	},
