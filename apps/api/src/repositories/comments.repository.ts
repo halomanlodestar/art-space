@@ -1,6 +1,5 @@
-import { Prisma } from '@art-space/database';
+import { Prisma, PrismaService, Comment } from '@art-space/database';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class CommentsRepository {
   constructor(private readonly db: PrismaService) {}
