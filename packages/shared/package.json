@@ -1,0 +1,21 @@
+{
+	"name": "@art-space/shared",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "tsc",
+		"lint": "eslint --ext .ts .",
+		"check-types": "tsc --noEmit",
+		"dev": "tsc --watch"
+	},
+	"dependencies": {
+		"typescript": "latest",
+		"@art-space/database": "*"
+	},
+	"devDependencies": {
+		"@types/node": "latest",
+		"eslint": "latest",
+		"eslint-config-prettier": "latest",
+		"eslint-plugin-prettier": "latest",
+		"prettier": "latest"
+	}
+}
