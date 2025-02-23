@@ -13,7 +13,7 @@ import {
   InvalidPasswordError,
   AuthProviderError,
 } from 'src/errors/InternalError';
-import { CredentialProvider, User } from '@art-space/database';
+import { CredentialProvider, SafeUser } from '@art-space/shared/types';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +41,7 @@ export class AuthService {
     await this.usersSerice.create(signUpDto);
   }
 
-  async signIn(user: User): Promise<Tokens> {
+  async signIn(user: SafeUser): Promise<Tokens> {
     const { id, username } = user;
 
     const refreshToken = await this.jwtService.signAsync(
@@ -63,7 +63,7 @@ export class AuthService {
     return { refreshToken, accessToken };
   }
 
-  async refreshAccessToken(user: User) {
+  async refreshAccessToken(user: SafeUser): Promise<{ accessToken: string }> {
     const { id, username } = user;
 
     const accessToken = await this.jwtService.signAsync(

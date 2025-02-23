@@ -7,14 +7,13 @@ import CurrentUser from 'src/decorators/current-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { SafeUser } from 'src/types.d';
 import { Public } from 'src/decorators/public.decorator';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { SignInResponseDto } from './dto/sign-in.dto';
-import { MeResponseDto } from './dto/me.dto';
 import { RefreshResponseDto } from './dto/refresh.dto';
-import { User } from '@art-space/database';
+import { SafeUser } from '@art-space/shared/types';
+import { SafeUserDto } from 'src/users/dto/safe-user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -34,7 +33,7 @@ export class AuthController {
     type: SignUpDto,
   })
   @ApiResponseType(SignInResponseDto)
-  async signIn(@CurrentUser() user: User) {
+  async signIn(@CurrentUser() user: SafeUser) {
     const tokens = await this.authService.signIn(user);
 
     return tokens;
@@ -43,18 +42,18 @@ export class AuthController {
   @Public()
   @Get('signin/google')
   @UseGuards(GoogleAuthGuard)
-  async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response) {}
+  async signInWithGoogle(@CurrentUser() user: SafeUser, @Res() res: Response) {}
 
   @Public()
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(@CurrentUser() user: User) {
+  async googleCallback(@CurrentUser() user: SafeUser) {
     return await this.authService.signIn(user);
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  @ApiResponseType(MeResponseDto)
+  @ApiResponseType(SafeUserDto)
   async getCurrentUser(@CurrentUser() user: SafeUser) {
     return user;
   }
@@ -63,7 +62,7 @@ export class AuthController {
   @Post('refresh')
   @UseGuards(RefreshGuard)
   @ApiResponseType(RefreshResponseDto)
-  async refreshAccessToken(@CurrentUser() user: User) {
+  async refreshAccessToken(@CurrentUser() user: SafeUser) {
     return this.authService.refreshAccessToken(user);
   }
 }

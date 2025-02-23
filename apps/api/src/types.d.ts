@@ -1,4 +1,3 @@
-import { Role, User } from '@prisma/client';
 import { Profile } from 'passport-google-oauth20';
 
 type Prettify<T> = {
@@ -29,11 +28,4 @@ declare global {
       user?: TokenUser;
     }
   }
-}
-
-export enum RoleEnum {
-  SUDO = 5,
-  COMMUNITY_ADMIN = 3,
-  COMMUNITY_CREATOR = 2,
-  USER = 1,
 }

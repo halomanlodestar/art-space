@@ -1,6 +1,14 @@
 {
 	"name": "@art-space/shared",
 	"version": "1.0.0",
+	"type": "commonjs",
+	"exports": {
+		"./types": {
+			"import": "./dist/types/index.js",
+			"require": "./dist/types/index.js",
+			"types": "./dist/types/index.d.ts"
+		}
+	},
 	"scripts": {
 		"build": "tsc",
 		"lint": "eslint --ext .ts .",

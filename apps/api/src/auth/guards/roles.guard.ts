@@ -1,7 +1,7 @@
 import { Reflector } from '@nestjs/core';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { RoleEnum, SafeUser } from 'src/types.d';
+import { RoleEnum, SafeUser } from '@art-space/shared/types';
 import { Role } from '@art-space/database';
 
 @Injectable()
@@ -29,6 +29,6 @@ export class RolesGuard implements CanActivate {
       userRoleWeight,
     );
 
-    return userRoleWeight >= RoleEnum[requiredRoleWeight];
+    return RoleEnum[userRoleWeight] >= RoleEnum[requiredRoleWeight];
   }
 }
