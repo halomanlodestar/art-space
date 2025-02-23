@@ -37,9 +37,9 @@ export interface PostWithMetadata
 
 export { MediaType, Role, CredentialProvider } from "@art-space/database";
 
-export enum RoleEnum {
-	SUDO = 5,
-	COMMUNITY_ADMIN = 3,
-	COMMUNITY_CREATOR = 2,
-	USER = 1,
-}
+export const RoleEnum = Object.freeze({
+	SUDO: 5,
+	COMMUNITY_ADMIN: 3,
+	COMMUNITY_CREATOR: 2,
+	USER: 1,
+});
