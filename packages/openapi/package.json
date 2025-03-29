@@ -8,11 +8,7 @@
 	},
 	"exports": {
 		".": "./src/index.ts",
-		"./auth": "./src/clients/auth.ts",
-		"./users": "./src/clients/users.ts",
-		"./communitites": "./src/clients/communities.ts",
-		"./posts": "./src/clients/posts.ts",
-		"./likes": "./src/clients/likes.ts"
+		"./client": "./src/client.ts"
 	},
 	"dependencies": {
 		"typescript": "latest"
