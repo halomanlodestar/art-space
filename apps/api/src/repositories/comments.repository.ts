@@ -13,8 +13,24 @@ export class CommentsRepository {
     });
   }
 
-  async createComment(comment: Prisma.CommentCreateInput): Promise<Comment> {
-    return this.db.comment.create({ data: comment });
+  async findById(id: string): Promise<Comment | null> {
+    return this.db.comment.findUnique({ where: { id } });
+  }
+
+  async findAllCommentsByPostId(postId: string): Promise<Comment[]> {
+    return this.db.comment.findMany({
+      where: {
+        postId,
+      },
+    });
+  }
+
+  async createComment<T extends Prisma.CommentCreateManyInput>(
+    comment: T,
+  ): Promise<Comment> {
+    return this.db.comment.create({
+      data: comment,
+    });
   }
 
   async deleteComment(userId: string, postId: string): Promise<void> {

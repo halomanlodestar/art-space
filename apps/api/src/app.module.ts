@@ -6,12 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunitiesModule } from './communities/communities.module';
-import { CommentsModule } from './comments/comments.module';
 import { APP_GUARD, APP_FILTER } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { CacheModule } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [

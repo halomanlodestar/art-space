@@ -1,4 +1,4 @@
-import { PostsRepository } from './../repositories/posts.repository';
+import { PostsRepository } from '../repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-posts.dto';
 import { SafeUser } from 'src/types.d';

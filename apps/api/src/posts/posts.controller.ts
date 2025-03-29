@@ -23,6 +23,7 @@ import { UpdatePostsDto } from './dto/update-posts.dto';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { PostEntity } from './entities/post.entity';
+import { CommentsService } from '../comments/comments.service';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -30,7 +31,10 @@ import { PostEntity } from './entities/post.entity';
 @CacheTTL(5000)
 @UseInterceptors(CacheInterceptor)
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly commentsService: CommentsService,
+  ) {}
 
   @Public()
   @Get('/')
@@ -101,5 +105,20 @@ export class PostsController {
   @ApiResponseType(PostEntity)
   async deletePost(@Param('id') id: string, @CurrentUser() author: SafeUser) {
     return this.postsService.deletePost(id, author.id);
+  }
+
+  @Public()
+  @Get('/:id/comments')
+  async getPostComments(@Param('id') id: string) {
+    return await this.commentsService.getCommentsByPostId(id);
+  }
+
+  @Post(':id/comments')
+  async createComment(
+    @Param('id') id: string,
+    @Body('content') content: string,
+    @CurrentUser() user: SafeUser,
+  ) {
+    return await this.commentsService.createComment(id, content, user.id);
   }
 }

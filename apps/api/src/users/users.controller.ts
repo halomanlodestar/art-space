@@ -11,7 +11,7 @@ import { Public } from 'src/decorators/public.decorator';
 import CurrentUser from 'src/decorators/current-user.decorator';
 import { SafeUser } from 'src/types.d';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { UserEntity } from './entities/user.entity';
 
