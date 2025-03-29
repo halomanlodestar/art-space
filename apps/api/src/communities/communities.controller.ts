@@ -40,14 +40,14 @@ export class CommunitiesController {
 
   @Public()
   @Get(':id/posts')
-  @ApiResponseType(Array<PostEntity>, true)
+  @ApiResponseType(PostEntity, true)
   async getPostsByCommunity(@Param('id') id: string) {
     return await this.postsService.getPostsByCommunityId(id);
   }
 
   @Public()
   @Get('/')
-  @ApiResponseType(Array<CommunityEntity>, true)
+  @ApiResponseType(CommunityEntity, true)
   async findAllCommunities() {
     return await this.communitiesService.findAll();
   }

@@ -39,7 +39,7 @@ export class PostsController {
 
   @Public()
   @Get('/')
-  @ApiResponseType(Array<PostEntity>, true)
+  @ApiResponseType(PostEntity, true)
   async getAllPosts(): Promise<IPost[]> {
     return await this.postsService.getPosts();
   }
@@ -53,14 +53,14 @@ export class PostsController {
 
   // @Public()
   // @Get('/:id')
-  // @ApiResponseType(Array<PostEntity>, true)
+  // @ApiResponseType(PostEntity, true)
   // async getPostsByCommunity(@Param('id') id: string): Promise<IPost[]> {
   //   return await this.postsService.getPostsByCommunityId(id);
   // }
 
   @Public()
   @Get('latest')
-  @ApiResponseType(Array<PostEntity>, true)
+  @ApiResponseType(PostEntity, true)
   async fetchLatestPosts(
     @Query('skip', {
       transform: (value) => parseInt(value),
@@ -75,7 +75,7 @@ export class PostsController {
   }
 
   @Get('/liked')
-  @ApiResponseType(Array<PostEntity>, true)
+  @ApiResponseType(PostEntity, true)
   async getUserLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {
     return await this.postsService.getLikedPosts(user.id);
   }
@@ -110,7 +110,7 @@ export class PostsController {
 
   @Public()
   @Get('/:id/comments')
-  @ApiResponseType(Array<CommentEntity>, true)
+  @ApiResponseType(CommentEntity, true)
   async getPostComments(@Param('id') id: string) {
     return await this.commentsService.getCommentsByPostId(id);
   }
