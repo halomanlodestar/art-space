@@ -10,7 +10,8 @@
           "classValidatorShim": false,
           "introspectComments": true
         }
-      }
+      },
+      "@nestjs/swagger/plugin"
     ]
   }
 }

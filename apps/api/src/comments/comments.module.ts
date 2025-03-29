@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
+import { CommentsRepository } from '../repositories/comments.repository';
 
 @Module({
-  providers: [CommentsService]
+  imports: [],
+  providers: [CommentsService, CommentsRepository],
+  exports: [CommentsService],
 })
 export class CommentsModule {}

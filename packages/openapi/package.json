@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"openapi:generate": "npx @nestjs/swagger plugin && npx openapi-generator-cli generate -i .openapi.json -g typescript-axios -o ."
+		"fetch": "curl -X GET \"http://localhost:8000/api-json\" -H \"accept: application/json\" -o openapi.json",
+		"openapi:generate": "npx openapi-generator-cli generate -i openapi.json -g typescript-axios -o ."
 	},
 	"exports": {
 		".": "./src/index.ts",
@@ -18,6 +19,6 @@
 	},
 	"devDependencies": {
 		"@nestjs/swagger": "^11.0.3",
-		"@openapitools/openapi-generator-cli": "^2.16.3"
+		"@openapitools/openapi-generator-cli": "^2.18.4"
 	}
 }
