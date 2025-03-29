@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"fetch": "curl -X GET \"http://localhost:8000/api-json\" -H \"accept: application/json\" -o openapi.json",
-		"openapi:generate": "npx openapi-generator-cli generate -i openapi.json -g typescript-axios -o ."
+		"openapi:generate": "npx openapi-generator-cli generate -i openapi.json -g typescript-axios -o ./src --skip-validate-spec"
 	},
 	"exports": {
 		".": "./src/index.ts",

@@ -17,11 +17,16 @@ import { Public } from 'src/decorators/public.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { CommunityEntity } from './entities/community.entity';
+import { PostsService } from '../posts/posts.service';
+import { PostEntity } from '../posts/entities/post.entity';
 
 @ApiTags('communities')
 @Controller('communities')
 export class CommunitiesController {
-  constructor(private readonly communitiesService: CommunitiesService) {}
+  constructor(
+    private readonly communitiesService: CommunitiesService,
+    private readonly postsService: PostsService,
+  ) {}
 
   @Roles('SUDO')
   @Post()
@@ -34,8 +39,15 @@ export class CommunitiesController {
   }
 
   @Public()
+  @Get(':id/posts')
+  @ApiResponseType(Array<PostEntity>, true)
+  async getPostsByCommunity(@Param('id') id: string) {
+    return await this.postsService.getPostsByCommunityId(id);
+  }
+
+  @Public()
   @Get('/')
-  @ApiResponseType(Array<CommunityEntity>)
+  @ApiResponseType(Array<CommunityEntity>, true)
   async findAllCommunities() {
     return await this.communitiesService.findAll();
   }

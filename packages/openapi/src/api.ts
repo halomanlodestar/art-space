@@ -26,6 +26,116 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CommentEntity
+ */
+export interface CommentEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'parentId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'postId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'authorId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentEntity
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface CommunityEntity
+ */
+export interface CommunityEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'createdById': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'slug': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'image': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'banner': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommunityEntity
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateCommunityDto
  */
 export interface CreateCommunityDto {
@@ -64,21 +174,199 @@ export interface CreatePostDto {
 /**
  * 
  * @export
- * @interface SignInDto
+ * @interface LikeEntity
  */
-export interface SignInDto {
+export interface LikeEntity {
     /**
      * 
      * @type {string}
-     * @memberof SignInDto
+     * @memberof LikeEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LikeEntity
+     */
+    'userId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LikeEntity
+     */
+    'postId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LikeEntity
+     */
+    'commentId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LikeEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LikeEntity
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface PostEntity
+ */
+export interface PostEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'slug': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'authorId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostEntity
+     */
+    'communityId': string;
+}
+/**
+ * 
+ * @export
+ * @interface RefreshResponseDto
+ */
+export interface RefreshResponseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RefreshResponseDto
+     */
+    'accessToken': string;
+}
+/**
+ * 
+ * @export
+ * @interface SafeUserDto
+ */
+export interface SafeUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
      */
     'email': string;
     /**
      * 
      * @type {string}
-     * @memberof SignInDto
+     * @memberof SafeUserDto
      */
-    'password': string;
+    'image': string | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof SafeUserDto
+     */
+    'provider': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof SafeUserDto
+     */
+    'role': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'communityId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface SignInResponseDto
+ */
+export interface SignInResponseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SignInResponseDto
+     */
+    'accessToken': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SignInResponseDto
+     */
+    'refreshToken': string;
 }
 /**
  * 
@@ -148,6 +436,73 @@ export interface UpdatePostsDto {
      * @memberof UpdatePostsDto
      */
     'title'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserEntity
+ */
+export interface UserEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'image': string | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof UserEntity
+     */
+    'provider': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof UserEntity
+     */
+    'role': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'communityId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    'updatedAt': string;
 }
 
 /**
@@ -245,13 +600,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {SignInDto} signInDto 
+         * @param {SignUpDto} signUpDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signIn: async (signInDto: SignInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'signInDto' is not null or undefined
-            assertParamExists('signIn', 'signInDto', signInDto)
+        signIn: async (signUpDto: SignUpDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'signUpDto' is not null or undefined
+            assertParamExists('signIn', 'signUpDto', signUpDto)
             const localVarPath = `/auth/signin`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -271,7 +626,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(signInDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(signUpDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -387,12 +742,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {SignInDto} signInDto 
+         * @param {SignUpDto} signUpDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.signIn(signInDto, options);
+        async signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signIn(signUpDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.signIn']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -456,12 +811,12 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {SignInDto} signInDto 
+         * @param {SignUpDto} signUpDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.signIn(signInDto, options).then((request) => request(axios, basePath));
+        signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.signIn(signUpDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -522,13 +877,13 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
-     * @param {SignInDto} signInDto 
+     * @param {SignUpDto} signUpDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).signIn(signInDto, options).then((request) => request(this.axios, this.basePath));
+    public signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).signIn(signUpDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -550,381 +905,6 @@ export class AuthApi extends BaseAPI {
      */
     public signUp(signUpDto: SignUpDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).signUp(signUpDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * CommentsApi - axios parameter creator
- * @export
- */
-export const CommentsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createComment: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('createComment', 'body', body)
-            const localVarPath = `/comments`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteComment: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('deleteComment', 'id', id)
-            const localVarPath = `/comments/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findCommentById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('findCommentById', 'id', id)
-            const localVarPath = `/comments/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findCommentsByPostId: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('findCommentsByPostId', 'id', id)
-            const localVarPath = `/comments/post/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateComment: async (id: string, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('updateComment', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateComment', 'body', body)
-            const localVarPath = `/comments/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * CommentsApi - functional programming interface
- * @export
- */
-export const CommentsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CommentsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createComment(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createComment(body, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CommentsApi.createComment']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteComment(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteComment(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CommentsApi.deleteComment']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findCommentById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findCommentById(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CommentsApi.findCommentById']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findCommentsByPostId(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findCommentsByPostId(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CommentsApi.findCommentsByPostId']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateComment(id: string, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateComment(id, body, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CommentsApi.updateComment']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * CommentsApi - factory interface
- * @export
- */
-export const CommentsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CommentsApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createComment(body: object, options?: RawAxiosRequestConfig): AxiosPromise<string> {
-            return localVarFp.createComment(body, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteComment(id: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
-            return localVarFp.deleteComment(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findCommentById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
-            return localVarFp.findCommentById(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findCommentsByPostId(id: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
-            return localVarFp.findCommentsByPostId(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateComment(id: string, body: object, options?: RawAxiosRequestConfig): AxiosPromise<string> {
-            return localVarFp.updateComment(id, body, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * CommentsApi - object-oriented interface
- * @export
- * @class CommentsApi
- * @extends {BaseAPI}
- */
-export class CommentsApi extends BaseAPI {
-    /**
-     * 
-     * @param {object} body 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentsApi
-     */
-    public createComment(body: object, options?: RawAxiosRequestConfig) {
-        return CommentsApiFp(this.configuration).createComment(body, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentsApi
-     */
-    public deleteComment(id: string, options?: RawAxiosRequestConfig) {
-        return CommentsApiFp(this.configuration).deleteComment(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentsApi
-     */
-    public findCommentById(id: string, options?: RawAxiosRequestConfig) {
-        return CommentsApiFp(this.configuration).findCommentById(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentsApi
-     */
-    public findCommentsByPostId(id: string, options?: RawAxiosRequestConfig) {
-        return CommentsApiFp(this.configuration).findCommentsByPostId(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {object} body 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentsApi
-     */
-    public updateComment(id: string, body: object, options?: RawAxiosRequestConfig) {
-        return CommentsApiFp(this.configuration).updateComment(id, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1410,6 +1390,39 @@ export const PostsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createComment: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createComment', 'id', id)
+            const localVarPath = `/posts/{id}/comments`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {CreatePostDto} createPostDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1587,6 +1600,39 @@ export const PostsApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getPostComments: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getPostComments', 'id', id)
+            const localVarPath = `/posts/{id}/comments`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPostsByCommunity: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getPostsByCommunity', 'id', id)
@@ -1694,6 +1740,18 @@ export const PostsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createComment(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createComment(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostsApi.createComment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {CreatePostDto} createPostDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1758,6 +1816,18 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getPostComments(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPostComments(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostsApi.getPostComments']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getPostsByCommunity(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPostsByCommunity(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -1798,6 +1868,15 @@ export const PostsApiFp = function(configuration?: Configuration) {
 export const PostsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PostsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createComment(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.createComment(id, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {CreatePostDto} createPostDto 
@@ -1849,6 +1928,15 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getPostComments(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getPostComments(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPostsByCommunity(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getPostsByCommunity(id, options).then((request) => request(axios, basePath));
         },
@@ -1880,6 +1968,17 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class PostsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public createComment(id: string, options?: RawAxiosRequestConfig) {
+        return PostsApiFp(this.configuration).createComment(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {CreatePostDto} createPostDto 
@@ -1933,6 +2032,17 @@ export class PostsApi extends BaseAPI {
      */
     public getAllPosts(options?: RawAxiosRequestConfig) {
         return PostsApiFp(this.configuration).getAllPosts(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public getPostComments(id: string, options?: RawAxiosRequestConfig) {
+        return PostsApiFp(this.configuration).getPostComments(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -24,6 +24,7 @@ import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { PostEntity } from './entities/post.entity';
 import { CommentsService } from '../comments/comments.service';
+import { CommentEntity } from '../comments/comment.entity';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -38,28 +39,28 @@ export class PostsController {
 
   @Public()
   @Get('/')
-  @ApiResponseType(Array<PostEntity>)
+  @ApiResponseType(Array<PostEntity>, true)
   async getAllPosts(): Promise<IPost[]> {
     return await this.postsService.getPosts();
   }
 
   @Public()
-  @Get('search/:slug')
+  @Get(':slug')
   @ApiResponseType(PostEntity)
   async findPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
     return await this.postsService.getPostBySlug(slug);
   }
 
-  @Public()
-  @Get('/:id')
-  @ApiResponseType(Array<PostEntity>)
-  async getPostsByCommunity(@Param('id') id: string): Promise<IPost[]> {
-    return await this.postsService.getPostsByCommunityId(id);
-  }
+  // @Public()
+  // @Get('/:id')
+  // @ApiResponseType(Array<PostEntity>, true)
+  // async getPostsByCommunity(@Param('id') id: string): Promise<IPost[]> {
+  //   return await this.postsService.getPostsByCommunityId(id);
+  // }
 
   @Public()
   @Get('latest')
-  @ApiResponseType(Array<PostEntity>)
+  @ApiResponseType(Array<PostEntity>, true)
   async fetchLatestPosts(
     @Query('skip', {
       transform: (value) => parseInt(value),
@@ -74,7 +75,7 @@ export class PostsController {
   }
 
   @Get('/liked')
-  @ApiResponseType(Array<PostEntity>)
+  @ApiResponseType(Array<PostEntity>, true)
   async getUserLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {
     return await this.postsService.getLikedPosts(user.id);
   }
@@ -90,7 +91,7 @@ export class PostsController {
   }
 
   @Roles('COMMUNITY_CREATOR')
-  @Patch('/:id')
+  @Patch(':id')
   @ApiResponseType(PostEntity)
   async updatePost(
     @Param('id') id: string,
@@ -101,7 +102,7 @@ export class PostsController {
   }
 
   @Roles('COMMUNITY_CREATOR')
-  @Delete('/:id')
+  @Delete(':id')
   @ApiResponseType(PostEntity)
   async deletePost(@Param('id') id: string, @CurrentUser() author: SafeUser) {
     return this.postsService.deletePost(id, author.id);
@@ -109,11 +110,13 @@ export class PostsController {
 
   @Public()
   @Get('/:id/comments')
+  @ApiResponseType(Array<CommentEntity>, true)
   async getPostComments(@Param('id') id: string) {
     return await this.commentsService.getCommentsByPostId(id);
   }
 
   @Post(':id/comments')
+  @ApiResponseType(CommentEntity)
   async createComment(
     @Param('id') id: string,
     @Body('content') content: string,
