@@ -1,5 +1,7 @@
 import { createClient } from "@art-space/openapi/client";
 import React from "react";
+import { notFound } from "next/navigation";
+import { AxiosError } from "axios";
 
 interface PageProps {
   params: Promise<{
@@ -12,7 +14,17 @@ const PostPage = async ({ params }: PageProps) => {
 
   const client = createClient();
 
-  client.posts.getPostBySlug();
+  let post;
+
+  try {
+    post = await client.posts.getPostBySlug(slug);
+    console.log(post.data);
+  } catch (e) {
+    if (e) {
+      const axiosError = e as AxiosError;
+      if (axiosError.status === 404) notFound();
+    }
+  }
 
   return <div></div>;
 };

@@ -1,4 +1,4 @@
-import { Body, Get, Post, Res, UseGuards, Controller } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -34,9 +34,7 @@ export class AuthController {
   })
   @ApiResponseType(SignInResponseDto)
   async signIn(@CurrentUser() user: SafeUser) {
-    const tokens = await this.authService.signIn(user);
-
-    return tokens;
+    return await this.authService.signIn(user);
   }
 
   @Public()
