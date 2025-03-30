@@ -1,14 +1,11 @@
 "use server";
 
-import { createClient } from "@art-space/openapi/client";
-import { cookies } from "next/headers";
 import { SignInSchema } from "@/schemas/auth-schemas";
 import { AxiosError } from "axios";
 import { createSession } from "@/actions/session";
+import { client } from "@art-space/openapi/client";
 
 export const signIn = async (credentials: SignInSchema) => {
-  const client = createClient();
-
   try {
     const { data } = await client.auth.signIn(credentials);
 

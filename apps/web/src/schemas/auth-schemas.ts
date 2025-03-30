@@ -1,19 +1,16 @@
-/** @format */
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-export const signUpSchema = z.object({
-  name: z.string().min(3),
-  username: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(8),
-});
 
 export const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-export type SignUpSchema = z.infer<typeof signUpSchema>;
+export const signUpSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string().min(1),
+  username: z.string().min(1),
+});
+
 export type SignInSchema = z.infer<typeof signInSchema>;
+export type SignUpSchema = z.infer<typeof signUpSchema>;
