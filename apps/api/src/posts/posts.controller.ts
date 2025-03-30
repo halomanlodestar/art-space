@@ -20,7 +20,7 @@ import { Post as IPost } from '@art-space/database';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 import { UpdatePostsDto } from './dto/update-posts.dto';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { PostEntity } from './entities/post.entity';
 import { CommentsService } from '../comments/comments.service';
@@ -41,22 +41,22 @@ export class PostsController {
   @Get('/')
   @ApiResponseType(PostEntity, true)
   async getAllPosts(): Promise<IPost[]> {
-    return await this.postsService.getPosts();
-  }
-
-  @Public()
-  @Get(':slug')
-  @ApiResponseType(PostEntity)
-  async findPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
-    return await this.postsService.getPostBySlug(slug);
+    return this.postsService.getPosts();
   }
 
   // @Public()
-  // @Get('/:id')
-  // @ApiResponseType(PostEntity, true)
-  // async getPostsByCommunity(@Param('id') id: string): Promise<IPost[]> {
-  //   return await this.postsService.getPostsByCommunityId(id);
+  // @Get(':slug')
+  // @ApiResponseType(PostEntity)
+  // async findPostBySlug(@Param('slug') slug: string): Promise<IPost | null> {
+  //   return await this.postsService.getPostBySlug(slug);
   // }
+
+  @Public()
+  @Get('/:slug')
+  @ApiResponseType(PostEntity)
+  async getPostBySlug(@Param('slug') slug: string): Promise<IPost> {
+    return await this.postsService.getPostBySlug(slug);
+  }
 
   @Public()
   @Get('latest')

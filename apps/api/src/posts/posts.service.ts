@@ -32,7 +32,7 @@ export class PostsService {
   };
 
   async getPosts() {
-    return await this.postsRepository.getAll({
+    return this.postsRepository.getAll({
       select: this.postsListSelections,
     });
   }
@@ -54,7 +54,7 @@ export class PostsService {
   }
 
   async getPostsByCommunityId(id: string): Promise<Post[]> {
-    return await this.postsRepository.getByCommunityId(id, {
+    return this.postsRepository.getByCommunityId(id, {
       select: this.postsListSelections,
     });
   }
@@ -64,7 +64,7 @@ export class PostsService {
   }
 
   async getLatestPosts(skip = 0, take = 10): Promise<Post[]> {
-    return await this.postsRepository.getAll({
+    return this.postsRepository.getAll({
       orderBy: { createdAt: 'desc' },
       select: this.postsListSelections,
       skip,

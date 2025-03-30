@@ -1599,15 +1599,11 @@ export const PostsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findPostBySlug: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'slug' is not null or undefined
-            assertParamExists('findPostBySlug', 'slug', slug)
-            const localVarPath = `/posts/{slug}`
-                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+        getAllPosts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/posts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1632,11 +1628,15 @@ export const PostsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllPosts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/posts`;
+        getPostBySlug: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getPostBySlug', 'slug', slug)
+            const localVarPath = `/posts/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1821,18 +1821,6 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} slug 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findPostBySlug(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findPostBySlug(slug, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PostsApi.findPostBySlug']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1840,6 +1828,18 @@ export const PostsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPosts(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostsApi.getAllPosts']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPostBySlug(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPostBySlug(slug, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostsApi.getPostBySlug']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1927,20 +1927,20 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @param {string} slug 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findPostBySlug(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.findPostBySlug(slug, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getAllPosts(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getAllPosts(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPostBySlug(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getPostBySlug(slug, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2026,23 +2026,23 @@ export class PostsApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} slug 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PostsApi
-     */
-    public findPostBySlug(slug: string, options?: RawAxiosRequestConfig) {
-        return PostsApiFp(this.configuration).findPostBySlug(slug, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
     public getAllPosts(options?: RawAxiosRequestConfig) {
         return PostsApiFp(this.configuration).getAllPosts(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} slug 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public getPostBySlug(slug: string, options?: RawAxiosRequestConfig) {
+        return PostsApiFp(this.configuration).getPostBySlug(slug, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

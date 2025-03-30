@@ -9,14 +9,14 @@ export class PostsRepository {
   constructor(private readonly db: PrismaService) {}
 
   async getAll(options?: Prisma.PostFindManyArgs) {
-    return await this.db.post.findMany(options);
+    return this.db.post.findMany(options);
   }
 
   async getByCommunityId(
     communityId: string,
     options?: Prisma.PostFindManyArgs,
   ) {
-    return await this.db.post.findMany({
+    return this.db.post.findMany({
       where: { communityId },
       ...options,
     });
@@ -26,29 +26,17 @@ export class PostsRepository {
     id: string,
     options?: Omit<Prisma.PostFindUniqueArgs, 'where'>,
   ) {
-    return await this.db.post.findUnique({ where: { id }, ...options });
+    return this.db.post.findUnique({ where: { id }, ...options });
   }
-
-  async getByAuthorId(authorId: string, options?: Prisma.PostFindManyArgs) {
-    return await this.db.post.findMany({
-      where: { authorId },
-      ...options,
-    });
-  }
-
-  async getPost(id: string, options?: Prisma.PostFindUniqueArgs) {
-    return await this.db.post.findUnique({ where: { id }, ...options });
-  }
-
   async getBySlug(
     slug: string,
     options?: Omit<Prisma.PostFindUniqueArgs, 'where'>,
   ) {
-    return await this.db.post.findUnique({ where: { slug }, ...options });
+    return this.db.post.findUnique({ where: { slug }, ...options });
   }
 
   async getLikedPosts(id: string): Promise<Post[]> {
-    return await this.db.post.findMany({
+    return this.db.post.findMany({
       where: {
         likes: {
           some: {
@@ -62,7 +50,7 @@ export class PostsRepository {
   async create(author: SafeUser, body: CreatePostDto) {
     const { id: authorId, communityId } = author as NotNullRec<SafeUser>;
 
-    return await this.db.post.create({
+    return this.db.post.create({
       data: {
         ...body,
         authorId,
@@ -73,10 +61,10 @@ export class PostsRepository {
   }
 
   async delete(id: string) {
-    return await this.db.post.delete({ where: { id } });
+    return this.db.post.delete({ where: { id } });
   }
 
   async update(id: string, data: Prisma.PostUpdateInput) {
-    return await this.db.post.update({ where: { id }, data });
+    return this.db.post.update({ where: { id }, data });
   }
 }

@@ -20,6 +20,14 @@
 		"db:generate": {
 			"dependsOn": ["^db:generate"],
 			"inputs": ["prisma/schema.prisma"]
+		},
+		"openapi:fetch": {
+			"dependsOn": ["^openapi:fetch"],
+			"inputs": ["openapi.json"]
+		},
+		"openapi:generate": {
+			"dependsOn": ["^openapi:fetch", "^openapi:generate"],
+			"inputs": ["openapi.json"]
 		}
 	}
 }
