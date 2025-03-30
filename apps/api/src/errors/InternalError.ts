@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 
 class InternalError extends Error {
   constructor(message: string) {
@@ -62,6 +62,12 @@ class UserNotFoundError extends HttpException {
   }
 }
 
+class InvalidCredentialsError extends NotFoundException {
+  constructor() {
+    super('Invalid credentials');
+  }
+}
+
 class InvalidPasswordError extends HttpException {
   constructor() {
     super('Invalid password', HttpStatus.UNAUTHORIZED);
@@ -89,4 +95,5 @@ export {
   UserNotFoundError,
   InvalidPasswordError,
   AuthProviderError,
+  InvalidCredentialsError,
 };

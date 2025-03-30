@@ -1,10 +1,8 @@
-/** @format */
+@import "tailwindcss"; /** @format */
 /*---break--- */
 @plugin "tailwindcss-animate";
 /*---break--- */
 @custom-variant dark (&:is(.dark *));
-
-@import "tailwindcss";
 
 /*---break--- */
 

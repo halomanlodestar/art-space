@@ -10,8 +10,8 @@ import {
   EmailTakenError,
   UsernameTakenError,
   UserNotFoundError,
-  InvalidPasswordError,
   AuthProviderError,
+  InvalidCredentialsError,
 } from 'src/errors/InternalError';
 import { CredentialProvider, SafeUser } from '@art-space/shared/types';
 
@@ -81,13 +81,13 @@ export class AuthService {
     const user = await this.usersSerice.findByEmail(email);
 
     if (!user) {
-      throw new UserNotFoundError();
+      throw new InvalidCredentialsError();
     }
 
     const isPasswordValid = await argon.verify(user.password, password);
 
     if (!isPasswordValid) {
-      throw new InvalidPasswordError();
+      throw new InvalidCredentialsError();
     }
 
     if (user.provider !== CredentialProvider.EMAIL) {

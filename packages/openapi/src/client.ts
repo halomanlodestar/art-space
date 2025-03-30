@@ -12,17 +12,14 @@ import { Configuration } from "./configuration";
 
 const API_BASE_URL = "http://localhost:8000"; // Change for production
 
-export const createClient = (accessToken?: string) => {
-  const config = new Configuration({
-    basePath: API_BASE_URL,
-    accessToken: accessToken ? `Bearer ${accessToken}` : undefined, // Auth Header
-  });
+const config = new Configuration({
+  basePath: API_BASE_URL,
+});
 
-  return {
-    auth: new AuthApi(config),
-    users: new UsersApi(config),
-    posts: new PostsApi(config),
-    communities: new CommunitiesApi(config),
-    likes: new LikesApi(config),
-  };
+export const client = {
+  auth: new AuthApi(config),
+  users: new UsersApi(config),
+  posts: new PostsApi(config),
+  communities: new CommunitiesApi(config),
+  likes: new LikesApi(config),
 };

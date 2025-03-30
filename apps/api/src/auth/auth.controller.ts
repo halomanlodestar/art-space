@@ -8,9 +8,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
-import { SignInResponseDto } from './dto/sign-in.dto';
+import { SignInDto, SignInResponseDto } from './dto/sign-in.dto';
 import { RefreshResponseDto } from './dto/refresh.dto';
 import { SafeUser } from '@art-space/shared/types';
 import { SafeUserDto } from 'src/users/dto/safe-user.dto';
@@ -29,11 +29,8 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('signin')
-  @ApiBody({
-    type: SignUpDto,
-  })
   @ApiResponseType(SignInResponseDto)
-  async signIn(@CurrentUser() user: SafeUser) {
+  async signIn(@CurrentUser() user: SafeUser, @Body() _signInDto: SignInDto) {
     return await this.authService.signIn(user);
   }
 
@@ -45,8 +42,12 @@ export class AuthController {
   @Public()
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(@CurrentUser() user: SafeUser) {
-    return await this.authService.signIn(user);
+  async googleCallback(@CurrentUser() user: SafeUser, @Res() res: Response) {
+    const { refreshToken, accessToken } = await this.authService.signIn(user);
+
+    res.redirect(
+      `http://localhost:3000/api/auth/google/callback?access_token=${accessToken}&refresh_token=${refreshToken}`,
+    );
   }
 
   @Get('me')

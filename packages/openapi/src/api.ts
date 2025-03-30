@@ -352,6 +352,25 @@ export interface SafeUserDto {
 /**
  * 
  * @export
+ * @interface SignInDto
+ */
+export interface SignInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SignInDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SignInDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
  * @interface SignInResponseDto
  */
 export interface SignInResponseDto {
@@ -600,13 +619,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {SignUpDto} signUpDto 
+         * @param {SignInDto} signInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signIn: async (signUpDto: SignUpDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'signUpDto' is not null or undefined
-            assertParamExists('signIn', 'signUpDto', signUpDto)
+        signIn: async (signInDto: SignInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'signInDto' is not null or undefined
+            assertParamExists('signIn', 'signInDto', signInDto)
             const localVarPath = `/auth/signin`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -626,7 +645,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(signUpDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(signInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -742,12 +761,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {SignUpDto} signUpDto 
+         * @param {SignInDto} signInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.signIn(signUpDto, options);
+        async signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signIn(signInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.signIn']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -811,12 +830,12 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {SignUpDto} signUpDto 
+         * @param {SignInDto} signInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.signIn(signUpDto, options).then((request) => request(axios, basePath));
+        signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.signIn(signInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -877,13 +896,13 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
-     * @param {SignUpDto} signUpDto 
+     * @param {SignInDto} signInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public signIn(signUpDto: SignUpDto, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).signIn(signUpDto, options).then((request) => request(this.axios, this.basePath));
+    public signIn(signInDto: SignInDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).signIn(signInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
