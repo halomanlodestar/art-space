@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
-import { AccessTokenPayload, Tokens } from 'src/types';
+import { AccessTokenPayload, SessionPayload, Tokens } from 'src/types';
 import { SignUpDto } from './dto/sign-up.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
@@ -41,8 +41,8 @@ export class AuthService {
     await this.usersSerice.create(signUpDto);
   }
 
-  async signIn(user: SafeUser): Promise<Tokens> {
-    const { id, username } = user;
+  async signIn(user: SafeUser): Promise<SessionPayload> {
+    const { id, username, email, name, role, image, communityId } = user;
 
     const refreshToken = await this.jwtService.signAsync(
       { id, username },
@@ -60,7 +60,11 @@ export class AuthService {
       },
     );
 
-    return { refreshToken, accessToken };
+    return {
+      refreshToken,
+      accessToken,
+      user: { id, username, email, name, role },
+    };
   }
 
   async refreshAccessToken(user: SafeUser): Promise<{ accessToken: string }> {

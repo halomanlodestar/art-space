@@ -119,4 +119,16 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .container-x {
+    @apply px-4 md:px-8 lg:px-16 xl:px-24;
+  }
+
+  .container-y {
+    @apply py-4 md:py-8 lg:py-16;
+  }
+
+  .h-page {
+    @apply min-h-[calc(100vh-4rem)];
+  }
 }

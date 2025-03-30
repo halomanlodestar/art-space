@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 const AuthPage = () => {
   return (
@@ -14,9 +13,6 @@ const AuthPage = () => {
       </div>
       <Card className={"w-full"}>
         <CardContent className={"w-full flex flex-col gap-y-4"}>
-          <Button className={"cursor-pointer"} asChild>
-            <Link href={"/auth/email"}>Sign in with Email</Link>
-          </Button>
           <Button className={"cursor-pointer bg-blue-500 text-white"} asChild>
             <a href={"http://localhost:8000/auth/signin/google"}>
               Sign in with Google

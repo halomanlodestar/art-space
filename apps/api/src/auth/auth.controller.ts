@@ -43,10 +43,14 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@CurrentUser() user: SafeUser, @Res() res: Response) {
-    const { refreshToken, accessToken } = await this.authService.signIn(user);
+    const {
+      refreshToken,
+      accessToken,
+      user: signInUser,
+    } = await this.authService.signIn(user);
 
     res.redirect(
-      `http://localhost:3000/api/auth/google/callback?access_token=${accessToken}&refresh_token=${refreshToken}`,
+      `http://localhost:3000/api/auth/google/callback?access_token=${accessToken}&refresh_token=${refreshToken}&user=${JSON.stringify(signInUser)}`,
     );
   }
 
