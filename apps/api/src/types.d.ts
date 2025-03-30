@@ -20,7 +20,7 @@ export interface SessionPayload extends Tokens {
 }
 
 export interface TokenUser
-  extends Pick<SafeUser, 'id' | 'username' | 'email' | 'name' | 'role'> {}
+  extends Omit<SafeUser, 'updatedAt' | 'createdAt' | 'provider'> {}
 
 export interface Tokens {
   accessToken: string;

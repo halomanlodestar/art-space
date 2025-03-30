@@ -7,5 +7,7 @@ export type SessionPayload = {
     email: string;
     name: string;
     role: string;
+    image: string;
+    communityId: string;
   };
 };

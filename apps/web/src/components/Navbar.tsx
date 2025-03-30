@@ -1,6 +1,11 @@
 import React from "react";
+import { getSession } from "@/actions/session";
+import Image from "next/image";
+import CreatePost from "@/components/CreatePost";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const { user } = await getSession();
+
   return (
     <header
       className={
@@ -8,7 +13,16 @@ const Navbar = () => {
       }
     >
       <nav>Logo</nav>
-      <nav></nav>
+      <nav className={"flex items-center gap-4"}>
+        <CreatePost />
+        <Image
+          src={user.image}
+          alt={user.name}
+          width={32}
+          height={32}
+          className={"rounded-full"}
+        />
+      </nav>
     </header>
   );
 };
