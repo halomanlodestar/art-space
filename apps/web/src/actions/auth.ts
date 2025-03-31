@@ -3,11 +3,12 @@
 import { SignInSchema } from "@/schemas/auth-schemas";
 import { AxiosError } from "axios";
 import { createSession } from "@/actions/session";
-import { client } from "@art-space/openapi/client";
 import { SessionPayload } from "@/types";
+import { api } from "@/lib/api";
 
 export const signIn = async (credentials: SignInSchema) => {
   try {
+    const client = await api();
     const { data } = await client.auth.signIn(credentials);
 
     const sessionPayload = data as SessionPayload;

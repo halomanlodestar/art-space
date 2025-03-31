@@ -20,6 +20,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   }
 
   async validate(payload: AccessTokenPayload) {
+    console.log('payload', payload);
     return this.authService.validateJwtUser(payload);
   }
 }

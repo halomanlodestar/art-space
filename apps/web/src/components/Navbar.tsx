@@ -13,16 +13,18 @@ const Navbar = async () => {
       }
     >
       <nav>Logo</nav>
-      <nav className={"flex items-center gap-4"}>
-        <CreatePost />
-        <Image
-          src={user.image}
-          alt={user.name}
-          width={32}
-          height={32}
-          className={"rounded-full"}
-        />
-      </nav>
+      {user && (
+        <nav className={"flex items-center gap-4"}>
+          <CreatePost />
+          <Image
+            src={user.image}
+            alt={user.name}
+            width={32}
+            height={32}
+            className={"rounded-full"}
+          />
+        </nav>
+      )}
     </header>
   );
 };

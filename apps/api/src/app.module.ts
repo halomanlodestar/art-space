@@ -1,17 +1,18 @@
 import { PrismaModule } from '@art-space/database';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunitiesModule } from './communities/communities.module';
-import { APP_GUARD, APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { CacheModule } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { CommentsModule } from './comments/comments.module';
+import { BearerMiddleware } from './middlewares/auth.middleware';
 
 @Module({
   imports: [
@@ -45,4 +46,11 @@ import { CommentsModule } from './comments/comments.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(BearerMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}

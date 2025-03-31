@@ -1,24 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import argon from 'argon2';
-import { AccessTokenPayload, SessionPayload, Tokens } from 'src/types';
+import { AccessTokenPayload, SessionPayload, TokenUser } from 'src/types';
 import { SignUpDto } from './dto/sign-up.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import authConfig from 'src/configs/auth.config';
 import {
+  AuthProviderError,
   EmailTakenError,
+  InvalidCredentialsError,
   UsernameTakenError,
   UserNotFoundError,
-  AuthProviderError,
-  InvalidCredentialsError,
 } from 'src/errors/InternalError';
 import { CredentialProvider, SafeUser } from '@art-space/shared/types';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersSerice: UsersService,
+    private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     @Inject(authConfig.KEY)
     private readonly configService: ConfigType<typeof authConfig>,
@@ -27,8 +27,8 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto) {
     const { email, username } = signUpDto;
 
-    const isEmailTaken = await this.usersSerice.findByEmail(email)!!;
-    const isUsernameTaken = await this.usersSerice.findByUsername(username)!!;
+    const isEmailTaken = await this.usersService.findByEmail(email)!!;
+    const isUsernameTaken = await this.usersService.findByUsername(username)!!;
 
     if (isEmailTaken) {
       throw new EmailTakenError();
@@ -38,7 +38,7 @@ export class AuthService {
       throw new UsernameTakenError();
     }
 
-    await this.usersSerice.create(signUpDto);
+    await this.usersService.create(signUpDto);
   }
 
   async signIn(user: SafeUser): Promise<SessionPayload> {
@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   async validateLocalUser(email: string, password: string) {
-    const user = await this.usersSerice.findByEmail(email);
+    const user = await this.usersService.findByEmail(email);
 
     if (!user) {
       throw new InvalidCredentialsError();
@@ -104,7 +104,7 @@ export class AuthService {
   async validateJwtUser(payload: AccessTokenPayload) {
     const { id } = payload;
 
-    const user = await this.usersSerice.findById(id);
+    const user = await this.usersService.findById(id);
 
     if (!user) {
       throw new UserNotFoundError();
@@ -123,7 +123,7 @@ export class AuthService {
   }) {
     const { email } = user;
 
-    const existingUser = await this.usersSerice.findByEmail(email);
+    const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
       if (existingUser.provider !== CredentialProvider.GOOGLE) {
@@ -133,6 +133,27 @@ export class AuthService {
       return existingUser;
     }
 
-    return this.usersSerice.create(user, 'GOOGLE');
+    return this.usersService.create(user, 'GOOGLE');
+  }
+
+  async validateToken(authHeader: string) {
+    const token = authHeader.split(' ')[1];
+
+    try {
+      const { id, username } = this.jwtService.verify<AccessTokenPayload>(
+        token,
+        {
+          secret: this.configService.accessTokenSecret,
+        },
+      );
+
+      return (await this.usersService.findById(id)) as TokenUser;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return undefined;
+      }
+
+      throw error;
+    }
   }
 }

@@ -532,10 +532,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCurrentUser: async (authorization?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -550,6 +551,9 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -590,10 +594,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refreshAccessToken: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        refreshAccessToken: async (authorization?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/refresh`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -608,6 +613,9 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -728,11 +736,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrentUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(options);
+        async getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(authorization, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -742,7 +751,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async googleCallback(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async googleCallback(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.googleCallback(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.googleCallback']?.[localVarOperationServerIndex]?.url;
@@ -750,11 +759,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async refreshAccessToken(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.refreshAccessToken(options);
+        async refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refreshAccessToken(authorization, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.refreshAccessToken']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -806,27 +816,29 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser(options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.getCurrentUser(options).then((request) => request(axios, basePath));
+        getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.getCurrentUser(authorization, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        googleCallback(options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        googleCallback(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.googleCallback(options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} [authorization] Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refreshAccessToken(options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.refreshAccessToken(options).then((request) => request(axios, basePath));
+        refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.refreshAccessToken(authorization, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -866,12 +878,13 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
 export class AuthApi extends BaseAPI {
     /**
      * 
+     * @param {string} [authorization] Bearer token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public getCurrentUser(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).getCurrentUser(options).then((request) => request(this.axios, this.basePath));
+    public getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).getCurrentUser(authorization, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -886,12 +899,13 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} [authorization] Bearer token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public refreshAccessToken(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).refreshAccessToken(options).then((request) => request(this.axios, this.basePath));
+    public refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).refreshAccessToken(authorization, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -8,12 +8,13 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeaders, ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { SignInDto, SignInResponseDto } from './dto/sign-in.dto';
 import { RefreshResponseDto } from './dto/refresh.dto';
 import { SafeUser } from '@art-space/shared/types';
 import { SafeUserDto } from 'src/users/dto/safe-user.dto';
+import { ApiAuth } from '../decorators/auth-header.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,6 +57,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
+  @ApiAuth()
   @ApiResponseType(SafeUserDto)
   async getCurrentUser(@CurrentUser() user: SafeUser) {
     return user;
@@ -64,6 +66,7 @@ export class AuthController {
   @Public()
   @Post('refresh')
   @UseGuards(RefreshGuard)
+  @ApiAuth()
   @ApiResponseType(RefreshResponseDto)
   async refreshAccessToken(@CurrentUser() user: SafeUser) {
     return this.authService.refreshAccessToken(user);

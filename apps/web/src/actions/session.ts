@@ -38,7 +38,11 @@ export const getSession = async () => {
   const sessionCookie = cookieStore.get("session");
 
   if (!sessionCookie) {
-    redirect("/auth");
+    return {
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+    };
   }
 
   try {

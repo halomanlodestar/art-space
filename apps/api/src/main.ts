@@ -10,6 +10,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Art Space')
+    .addBearerAuth()
     .setDescription('This api is for the Art Space project')
     .setVersion('1.0')
     .addTag('nestjs')
