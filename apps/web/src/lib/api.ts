@@ -1,36 +1,36 @@
-import { getSession } from "@/actions/session";
-import axios from "axios";
 import {
   AuthApi,
   CommunitiesApi,
-  Configuration,
   LikesApi,
+  Configuration,
   PostsApi,
   UsersApi,
 } from "@art-space/openapi";
+import axios from "axios";
 
-export const api = async () => {
-  const { accessToken } = await getSession();
+const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const axiosInstance = axios.create();
+if (!apiBaseURL) {
+  throw new Error("NEXT_PUBLIC_API_URL is not defined");
+}
 
-  axiosInstance.interceptors.request.use((config) => {
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
+// ✅ Create a single axios instance
+const apiClient = axios.create({
+  baseURL: apiBaseURL,
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+});
 
-    return config;
-  });
+const apiConfig = new Configuration({
+  basePath: apiBaseURL,
+});
 
-  const config = new Configuration({
-    basePath: process.env.NEXT_PUBLIC_API_URL,
-  });
-
-  return {
-    auth: new AuthApi(config, undefined, axiosInstance),
-    users: new UsersApi(config, undefined, axiosInstance),
-    posts: new PostsApi(config, undefined, axiosInstance),
-    communities: new CommunitiesApi(config, undefined, axiosInstance),
-    likes: new LikesApi(config, undefined, axiosInstance),
-  };
+// ✅ Export the API client
+export const api = {
+  auth: new AuthApi(apiConfig, undefined, apiClient),
+  users: new UsersApi(apiConfig, undefined, apiClient),
+  posts: new PostsApi(apiConfig, undefined, apiClient),
+  likes: new LikesApi(apiConfig, undefined, apiClient),
+  communities: new CommunitiesApi(apiConfig, undefined, apiClient),
 };

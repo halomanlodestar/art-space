@@ -14,6 +14,21 @@ import Image from "next/image";
 const CreatePost = async () => {
   const { user } = await getSession();
 
+  if (!user) {
+    return (
+      <Dialog>
+        <DialogTrigger>
+          <PlusCircle size={32} className={"cursor-pointer"} />
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>You need to login</DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   if (!user.communityId) {
     return (
       <Dialog>

@@ -1,14 +1,20 @@
+"use client";
+
 import React from "react";
-import { getSession } from "@/actions/session";
 import { api } from "@/lib/api";
+import { mockPosts } from "@/mock/posts";
+import Post from "@/components/Post";
 
-const Posts = async () => {
-  const client = await api();
-  const { data } = await client.posts.getAllPosts();
+const Posts = () => {
+  const user = api.auth.getCurrentUser();
 
-  console.log(data);
-
-  return <div></div>;
+  return (
+    <div>
+      {mockPosts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+    </div>
+  );
 };
 
 export default Posts;

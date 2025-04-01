@@ -1,7 +1,10 @@
 import { getSession } from "@/actions/session";
+import HomeFeed from "@/components/HomeFeed";
 
 export default async function Home() {
-  console.log(await getSession());
-
-  return <div className={"h-page"}></div>;
+  return (
+    <div className={"h-page"}>
+      <HomeFeed />
+    </div>
+  );
 }

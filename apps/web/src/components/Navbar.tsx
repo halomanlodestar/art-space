@@ -1,7 +1,7 @@
 import React from "react";
 import { getSession } from "@/actions/session";
-import Image from "next/image";
 import CreatePost from "@/components/CreatePost";
+import Image from "next/image";
 
 const Navbar = async () => {
   const { user } = await getSession();
@@ -18,9 +18,9 @@ const Navbar = async () => {
           <CreatePost />
           <Image
             src={user.image}
-            alt={user.name}
-            width={32}
-            height={32}
+            alt={user.username}
+            width={36}
+            height={36}
             className={"rounded-full"}
           />
         </nav>

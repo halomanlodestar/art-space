@@ -8,8 +8,7 @@ import { api } from "@/lib/api";
 
 export const signIn = async (credentials: SignInSchema) => {
   try {
-    const client = await api();
-    const { data } = await client.auth.signIn(credentials);
+    const { data } = await api.auth.signIn(credentials);
 
     const sessionPayload = data as SessionPayload;
 
