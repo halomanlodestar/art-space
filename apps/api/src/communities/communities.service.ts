@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 import { SafeUser } from 'src/types.d';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CommunitiesRepository } from 'src/repositories/communities.repository';
+import {Prisma} from "@art-space/database"
 import {
   NotFoundError,
   UnauthorizedError,
@@ -30,7 +30,7 @@ export class CommunitiesService {
     try {
       return await this.communityRepository.create(creator, createCommunityDto);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictError('Community already exists');
       }
 

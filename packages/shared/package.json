@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"typescript": "latest",
-		"@art-space/database": "*"
+		"@art-space/database": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/node": "latest",

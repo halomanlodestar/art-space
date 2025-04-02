@@ -21,8 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@art-space/database": "0.0.1",
-    "@art-space/shared": "*",
+    "@art-space/database": "workspace:*",
+    "@art-space/shared": "workspace:*",
     "@nestjs/cache-manager": "^3.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",

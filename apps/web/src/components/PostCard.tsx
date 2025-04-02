@@ -5,29 +5,24 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 
-interface PostProps {
+interface PostCardProps {
   post: IPost;
 }
 
-const Post = ({ post }: PostProps) => {
+const PostCard = ({ post: { author, ...post } }: PostCardProps) => {
   return (
     <div className={"flex flex-col justify-center"}>
-      <Link
-        href={`/users/${post.author.username}`}
-        className={"flex space-x-4 p-4"}
-      >
+      <Link href={`/users/${author.username}`} className={"flex space-x-4 p-4"}>
         <Image
-          src={post.author.image}
-          alt={post.author.name}
+          src={author.image}
+          alt={author.name}
           className={"rounded-full"}
           width={36}
           height={36}
         />
         <div className={"flex flex-col justify-center"}>
-          <span className={"text-gray-500 text-sm"}>{post.author.name}</span>
-          <span className={"text-gray-400 text-xs"}>
-            @{post.author.username}
-          </span>
+          <span className={"text-gray-500 text-sm"}>{author.name}</span>
+          <span className={"text-gray-400 text-xs"}>@{author.username}</span>
         </div>
       </Link>
 
@@ -60,4 +55,4 @@ const Post = ({ post }: PostProps) => {
   );
 };
 
-export default Post;
+export default PostCard;
