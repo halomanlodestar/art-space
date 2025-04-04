@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model CommunityMember
+ * 
+ */
+export type CommunityMember = $Result.DefaultSelection<Prisma.$CommunityMemberPayload>
+/**
  * Model Community
  * 
  */
@@ -48,6 +53,31 @@ export type Comment = $Result.DefaultSelection<Prisma.$CommentPayload>
  * 
  */
 export type CommunityFollow = $Result.DefaultSelection<Prisma.$CommunityFollowPayload>
+/**
+ * Model Badge
+ * 
+ */
+export type Badge = $Result.DefaultSelection<Prisma.$BadgePayload>
+/**
+ * Model PostBadges
+ * 
+ */
+export type PostBadges = $Result.DefaultSelection<Prisma.$PostBadgesPayload>
+/**
+ * Model UserBadges
+ * 
+ */
+export type UserBadges = $Result.DefaultSelection<Prisma.$UserBadgesPayload>
+/**
+ * Model Portfolio
+ * 
+ */
+export type Portfolio = $Result.DefaultSelection<Prisma.$PortfolioPayload>
+/**
+ * Model Event
+ * 
+ */
+export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
 
 /**
  * Enums
@@ -130,7 +160,7 @@ export class PrismaClient<
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
 
   /**
    * Connect with the database
@@ -214,9 +244,9 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs, $Utils.Call<Prisma.TypeMapCb, {
+  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
     extArgs: ExtArgs
-  }>, ClientOptions>
+  }>>
 
       /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -227,6 +257,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.communityMember`: Exposes CRUD operations for the **CommunityMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CommunityMembers
+    * const communityMembers = await prisma.communityMember.findMany()
+    * ```
+    */
+  get communityMember(): Prisma.CommunityMemberDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.community`: Exposes CRUD operations for the **Community** model.
@@ -287,6 +327,56 @@ export class PrismaClient<
     * ```
     */
   get communityFollow(): Prisma.CommunityFollowDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.badge`: Exposes CRUD operations for the **Badge** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Badges
+    * const badges = await prisma.badge.findMany()
+    * ```
+    */
+  get badge(): Prisma.BadgeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.postBadges`: Exposes CRUD operations for the **PostBadges** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PostBadges
+    * const postBadges = await prisma.postBadges.findMany()
+    * ```
+    */
+  get postBadges(): Prisma.PostBadgesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userBadges`: Exposes CRUD operations for the **UserBadges** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserBadges
+    * const userBadges = await prisma.userBadges.findMany()
+    * ```
+    */
+  get userBadges(): Prisma.UserBadgesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.portfolio`: Exposes CRUD operations for the **Portfolio** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Portfolios
+    * const portfolios = await prisma.portfolio.findMany()
+    * ```
+    */
+  get portfolio(): Prisma.PortfolioDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.event`: Exposes CRUD operations for the **Event** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Events
+    * const events = await prisma.event.findMany()
+    * ```
+    */
+  get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -345,8 +435,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.4.1
-   * Query Engine version: a9055b89e58b4b5bfb59600785423b1db3d0e75d
+   * Prisma Client JS version: 6.5.0
+   * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
    */
   export type PrismaVersion = {
     client: string
@@ -613,7 +703,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -728,12 +818,18 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    CommunityMember: 'CommunityMember',
     Community: 'Community',
     Media: 'Media',
     Post: 'Post',
     Like: 'Like',
     Comment: 'Comment',
-    CommunityFollow: 'CommunityFollow'
+    CommunityFollow: 'CommunityFollow',
+    Badge: 'Badge',
+    PostBadges: 'PostBadges',
+    UserBadges: 'UserBadges',
+    Portfolio: 'Portfolio',
+    Event: 'Event'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -743,13 +839,16 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.InternalArgs, clientOptions: PrismaClientOptions }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], this['params']['clientOptions']>
+  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
+  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
+    globalOmitOptions: {
+      omit: GlobalOmitOptions
+    }
     meta: {
-      modelProps: "user" | "community" | "media" | "post" | "like" | "comment" | "communityFollow"
+      modelProps: "user" | "communityMember" | "community" | "media" | "post" | "like" | "comment" | "communityFollow" | "badge" | "postBadges" | "userBadges" | "portfolio" | "event"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -824,6 +923,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      CommunityMember: {
+        payload: Prisma.$CommunityMemberPayload<ExtArgs>
+        fields: Prisma.CommunityMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CommunityMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CommunityMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.CommunityMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CommunityMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          findMany: {
+            args: Prisma.CommunityMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>[]
+          }
+          create: {
+            args: Prisma.CommunityMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          createMany: {
+            args: Prisma.CommunityMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CommunityMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.CommunityMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          update: {
+            args: Prisma.CommunityMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.CommunityMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CommunityMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CommunityMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.CommunityMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunityMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.CommunityMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCommunityMember>
+          }
+          groupBy: {
+            args: Prisma.CommunityMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CommunityMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CommunityMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<CommunityMemberCountAggregateOutputType> | number
           }
         }
       }
@@ -1271,6 +1444,376 @@ export namespace Prisma {
           }
         }
       }
+      Badge: {
+        payload: Prisma.$BadgePayload<ExtArgs>
+        fields: Prisma.BadgeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BadgeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BadgeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          findFirst: {
+            args: Prisma.BadgeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BadgeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          findMany: {
+            args: Prisma.BadgeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>[]
+          }
+          create: {
+            args: Prisma.BadgeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          createMany: {
+            args: Prisma.BadgeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BadgeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>[]
+          }
+          delete: {
+            args: Prisma.BadgeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          update: {
+            args: Prisma.BadgeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          deleteMany: {
+            args: Prisma.BadgeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BadgeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BadgeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>[]
+          }
+          upsert: {
+            args: Prisma.BadgeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BadgePayload>
+          }
+          aggregate: {
+            args: Prisma.BadgeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBadge>
+          }
+          groupBy: {
+            args: Prisma.BadgeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BadgeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BadgeCountArgs<ExtArgs>
+            result: $Utils.Optional<BadgeCountAggregateOutputType> | number
+          }
+        }
+      }
+      PostBadges: {
+        payload: Prisma.$PostBadgesPayload<ExtArgs>
+        fields: Prisma.PostBadgesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PostBadgesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PostBadgesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          findFirst: {
+            args: Prisma.PostBadgesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PostBadgesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          findMany: {
+            args: Prisma.PostBadgesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>[]
+          }
+          create: {
+            args: Prisma.PostBadgesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          createMany: {
+            args: Prisma.PostBadgesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PostBadgesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>[]
+          }
+          delete: {
+            args: Prisma.PostBadgesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          update: {
+            args: Prisma.PostBadgesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          deleteMany: {
+            args: Prisma.PostBadgesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PostBadgesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PostBadgesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>[]
+          }
+          upsert: {
+            args: Prisma.PostBadgesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostBadgesPayload>
+          }
+          aggregate: {
+            args: Prisma.PostBadgesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePostBadges>
+          }
+          groupBy: {
+            args: Prisma.PostBadgesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PostBadgesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PostBadgesCountArgs<ExtArgs>
+            result: $Utils.Optional<PostBadgesCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserBadges: {
+        payload: Prisma.$UserBadgesPayload<ExtArgs>
+        fields: Prisma.UserBadgesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserBadgesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserBadgesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          findFirst: {
+            args: Prisma.UserBadgesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserBadgesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          findMany: {
+            args: Prisma.UserBadgesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>[]
+          }
+          create: {
+            args: Prisma.UserBadgesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          createMany: {
+            args: Prisma.UserBadgesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserBadgesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>[]
+          }
+          delete: {
+            args: Prisma.UserBadgesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          update: {
+            args: Prisma.UserBadgesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserBadgesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserBadgesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserBadgesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserBadgesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBadgesPayload>
+          }
+          aggregate: {
+            args: Prisma.UserBadgesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserBadges>
+          }
+          groupBy: {
+            args: Prisma.UserBadgesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserBadgesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserBadgesCountArgs<ExtArgs>
+            result: $Utils.Optional<UserBadgesCountAggregateOutputType> | number
+          }
+        }
+      }
+      Portfolio: {
+        payload: Prisma.$PortfolioPayload<ExtArgs>
+        fields: Prisma.PortfolioFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PortfolioFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PortfolioFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          findFirst: {
+            args: Prisma.PortfolioFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PortfolioFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          findMany: {
+            args: Prisma.PortfolioFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>[]
+          }
+          create: {
+            args: Prisma.PortfolioCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          createMany: {
+            args: Prisma.PortfolioCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PortfolioCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>[]
+          }
+          delete: {
+            args: Prisma.PortfolioDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          update: {
+            args: Prisma.PortfolioUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          deleteMany: {
+            args: Prisma.PortfolioDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PortfolioUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PortfolioUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>[]
+          }
+          upsert: {
+            args: Prisma.PortfolioUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioPayload>
+          }
+          aggregate: {
+            args: Prisma.PortfolioAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePortfolio>
+          }
+          groupBy: {
+            args: Prisma.PortfolioGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PortfolioGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PortfolioCountArgs<ExtArgs>
+            result: $Utils.Optional<PortfolioCountAggregateOutputType> | number
+          }
+        }
+      }
+      Event: {
+        payload: Prisma.$EventPayload<ExtArgs>
+        fields: Prisma.EventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          findFirst: {
+            args: Prisma.EventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          findMany: {
+            args: Prisma.EventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
+          }
+          create: {
+            args: Prisma.EventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          createMany: {
+            args: Prisma.EventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
+          }
+          delete: {
+            args: Prisma.EventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          update: {
+            args: Prisma.EventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          deleteMany: {
+            args: Prisma.EventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
+          }
+          upsert: {
+            args: Prisma.EventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          aggregate: {
+            args: Prisma.EventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvent>
+          }
+          groupBy: {
+            args: Prisma.EventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EventCountArgs<ExtArgs>
+            result: $Utils.Optional<EventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1356,12 +1899,18 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    communityMember?: CommunityMemberOmit
     community?: CommunityOmit
     media?: MediaOmit
     post?: PostOmit
     like?: LikeOmit
     comment?: CommentOmit
     communityFollow?: CommunityFollowOmit
+    badge?: BadgeOmit
+    postBadges?: PostBadgesOmit
+    userBadges?: UserBadgesOmit
+    portfolio?: PortfolioOmit
+    event?: EventOmit
   }
 
   /* Types for Logging */
@@ -1456,19 +2005,25 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    Post: number
-    Like: number
-    Comment: number
+    posts: number
+    likes: number
+    comments: number
     createdCommunities: number
     follows: number
+    userBadges: number
+    eventsWon: number
+    memberOf: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Post?: boolean | UserCountOutputTypeCountPostArgs
-    Like?: boolean | UserCountOutputTypeCountLikeArgs
-    Comment?: boolean | UserCountOutputTypeCountCommentArgs
+    posts?: boolean | UserCountOutputTypeCountPostsArgs
+    likes?: boolean | UserCountOutputTypeCountLikesArgs
+    comments?: boolean | UserCountOutputTypeCountCommentsArgs
     createdCommunities?: boolean | UserCountOutputTypeCountCreatedCommunitiesArgs
     follows?: boolean | UserCountOutputTypeCountFollowsArgs
+    userBadges?: boolean | UserCountOutputTypeCountUserBadgesArgs
+    eventsWon?: boolean | UserCountOutputTypeCountEventsWonArgs
+    memberOf?: boolean | UserCountOutputTypeCountMemberOfArgs
   }
 
   // Custom InputTypes
@@ -1485,21 +2040,21 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountLikeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LikeWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountCommentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommentWhereInput
   }
 
@@ -1517,21 +2072,44 @@ export namespace Prisma {
     where?: CommunityFollowWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUserBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserBadgesWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventsWonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMemberOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunityMemberWhereInput
+  }
+
 
   /**
    * Count Type CommunityCountOutputType
    */
 
   export type CommunityCountOutputType = {
-    members: number
     posts: number
-    follows: number
+    followers: number
+    events: number
+    communityMembers: number
   }
 
   export type CommunityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    members?: boolean | CommunityCountOutputTypeCountMembersArgs
     posts?: boolean | CommunityCountOutputTypeCountPostsArgs
-    follows?: boolean | CommunityCountOutputTypeCountFollowsArgs
+    followers?: boolean | CommunityCountOutputTypeCountFollowersArgs
+    events?: boolean | CommunityCountOutputTypeCountEventsArgs
+    communityMembers?: boolean | CommunityCountOutputTypeCountCommunityMembersArgs
   }
 
   // Custom InputTypes
@@ -1548,13 +2126,6 @@ export namespace Prisma {
   /**
    * CommunityCountOutputType without action
    */
-  export type CommunityCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-  }
-
-  /**
-   * CommunityCountOutputType without action
-   */
   export type CommunityCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
   }
@@ -1562,39 +2133,22 @@ export namespace Prisma {
   /**
    * CommunityCountOutputType without action
    */
-  export type CommunityCountOutputTypeCountFollowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommunityCountOutputTypeCountFollowersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommunityFollowWhereInput
   }
 
-
   /**
-   * Count Type MediaCountOutputType
+   * CommunityCountOutputType without action
    */
-
-  export type MediaCountOutputType = {
-    Post: number
-  }
-
-  export type MediaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Post?: boolean | MediaCountOutputTypeCountPostArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * MediaCountOutputType without action
-   */
-  export type MediaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MediaCountOutputType
-     */
-    select?: MediaCountOutputTypeSelect<ExtArgs> | null
+  export type CommunityCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
   }
 
   /**
-   * MediaCountOutputType without action
+   * CommunityCountOutputType without action
    */
-  export type MediaCountOutputTypeCountPostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
+  export type CommunityCountOutputTypeCountCommunityMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunityMemberWhereInput
   }
 
 
@@ -1606,12 +2160,14 @@ export namespace Prisma {
     media: number
     likes: number
     comments: number
+    postBadges: number
   }
 
   export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | PostCountOutputTypeCountMediaArgs
     likes?: boolean | PostCountOutputTypeCountLikesArgs
     comments?: boolean | PostCountOutputTypeCountCommentsArgs
+    postBadges?: boolean | PostCountOutputTypeCountPostBadgesArgs
   }
 
   // Custom InputTypes
@@ -1644,6 +2200,13 @@ export namespace Prisma {
    */
   export type PostCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommentWhereInput
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountPostBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostBadgesWhereInput
   }
 
 
@@ -1688,6 +2251,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BadgeCountOutputType
+   */
+
+  export type BadgeCountOutputType = {
+    postBadges: number
+    userBadges: number
+  }
+
+  export type BadgeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postBadges?: boolean | BadgeCountOutputTypeCountPostBadgesArgs
+    userBadges?: boolean | BadgeCountOutputTypeCountUserBadgesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BadgeCountOutputType without action
+   */
+  export type BadgeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BadgeCountOutputType
+     */
+    select?: BadgeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BadgeCountOutputType without action
+   */
+  export type BadgeCountOutputTypeCountPostBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostBadgesWhereInput
+  }
+
+  /**
+   * BadgeCountOutputType without action
+   */
+  export type BadgeCountOutputTypeCountUserBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserBadgesWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1710,9 +2313,9 @@ export namespace Prisma {
     name: string | null
     provider: $Enums.CredentialProvider | null
     role: $Enums.Role | null
-    communityId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    portfolioId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1724,9 +2327,9 @@ export namespace Prisma {
     name: string | null
     provider: $Enums.CredentialProvider | null
     role: $Enums.Role | null
-    communityId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    portfolioId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1738,9 +2341,9 @@ export namespace Prisma {
     name: number
     provider: number
     role: number
-    communityId: number
     createdAt: number
     updatedAt: number
+    portfolioId: number
     _all: number
   }
 
@@ -1754,9 +2357,9 @@ export namespace Prisma {
     name?: true
     provider?: true
     role?: true
-    communityId?: true
     createdAt?: true
     updatedAt?: true
+    portfolioId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1768,9 +2371,9 @@ export namespace Prisma {
     name?: true
     provider?: true
     role?: true
-    communityId?: true
     createdAt?: true
     updatedAt?: true
+    portfolioId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1782,9 +2385,9 @@ export namespace Prisma {
     name?: true
     provider?: true
     role?: true
-    communityId?: true
     createdAt?: true
     updatedAt?: true
+    portfolioId?: true
     _all?: true
   }
 
@@ -1869,9 +2472,9 @@ export namespace Prisma {
     name: string
     provider: $Enums.CredentialProvider
     role: $Enums.Role
-    communityId: string | null
     createdAt: Date
     updatedAt: Date
+    portfolioId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1900,15 +2503,18 @@ export namespace Prisma {
     name?: boolean
     provider?: boolean
     role?: boolean
-    communityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    community?: boolean | User$communityArgs<ExtArgs>
-    Post?: boolean | User$PostArgs<ExtArgs>
-    Like?: boolean | User$LikeArgs<ExtArgs>
-    Comment?: boolean | User$CommentArgs<ExtArgs>
+    portfolioId?: boolean
+    posts?: boolean | User$postsArgs<ExtArgs>
+    likes?: boolean | User$likesArgs<ExtArgs>
+    comments?: boolean | User$commentsArgs<ExtArgs>
     createdCommunities?: boolean | User$createdCommunitiesArgs<ExtArgs>
     follows?: boolean | User$followsArgs<ExtArgs>
+    userBadges?: boolean | User$userBadgesArgs<ExtArgs>
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
+    eventsWon?: boolean | User$eventsWonArgs<ExtArgs>
+    memberOf?: boolean | User$memberOfArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1921,10 +2527,10 @@ export namespace Prisma {
     name?: boolean
     provider?: boolean
     role?: boolean
-    communityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    community?: boolean | User$communityArgs<ExtArgs>
+    portfolioId?: boolean
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1936,10 +2542,10 @@ export namespace Prisma {
     name?: boolean
     provider?: boolean
     role?: boolean
-    communityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    community?: boolean | User$communityArgs<ExtArgs>
+    portfolioId?: boolean
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1951,37 +2557,43 @@ export namespace Prisma {
     name?: boolean
     provider?: boolean
     role?: boolean
-    communityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    portfolioId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "image" | "password" | "name" | "provider" | "role" | "communityId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "image" | "password" | "name" | "provider" | "role" | "createdAt" | "updatedAt" | "portfolioId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    community?: boolean | User$communityArgs<ExtArgs>
-    Post?: boolean | User$PostArgs<ExtArgs>
-    Like?: boolean | User$LikeArgs<ExtArgs>
-    Comment?: boolean | User$CommentArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
+    likes?: boolean | User$likesArgs<ExtArgs>
+    comments?: boolean | User$commentsArgs<ExtArgs>
     createdCommunities?: boolean | User$createdCommunitiesArgs<ExtArgs>
     follows?: boolean | User$followsArgs<ExtArgs>
+    userBadges?: boolean | User$userBadgesArgs<ExtArgs>
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
+    eventsWon?: boolean | User$eventsWonArgs<ExtArgs>
+    memberOf?: boolean | User$memberOfArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    community?: boolean | User$communityArgs<ExtArgs>
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
   }
   export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    community?: boolean | User$communityArgs<ExtArgs>
+    portfolio?: boolean | User$portfolioArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      community: Prisma.$CommunityPayload<ExtArgs> | null
-      Post: Prisma.$PostPayload<ExtArgs>[]
-      Like: Prisma.$LikePayload<ExtArgs>[]
-      Comment: Prisma.$CommentPayload<ExtArgs>[]
+      posts: Prisma.$PostPayload<ExtArgs>[]
+      likes: Prisma.$LikePayload<ExtArgs>[]
+      comments: Prisma.$CommentPayload<ExtArgs>[]
       createdCommunities: Prisma.$CommunityPayload<ExtArgs>[]
       follows: Prisma.$CommunityFollowPayload<ExtArgs>[]
+      userBadges: Prisma.$UserBadgesPayload<ExtArgs>[]
+      portfolio: Prisma.$PortfolioPayload<ExtArgs> | null
+      eventsWon: Prisma.$EventPayload<ExtArgs>[]
+      memberOf: Prisma.$CommunityMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1992,9 +2604,9 @@ export namespace Prisma {
       name: string
       provider: $Enums.CredentialProvider
       role: $Enums.Role
-      communityId: string | null
       createdAt: Date
       updatedAt: Date
+      portfolioId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2006,7 +2618,7 @@ export namespace Prisma {
       select?: UserCountAggregateInputType | true
     }
 
-  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
      * Find zero or one User that matches the filter.
@@ -2019,7 +2631,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one User that matches the filter or throw an error with `error.code='P2025'`
@@ -2033,7 +2645,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first User that matches the filter.
@@ -2048,7 +2660,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first User that matches the filter or
@@ -2064,7 +2676,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Users that matches the filter.
@@ -2082,7 +2694,7 @@ export namespace Prisma {
      * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a User.
@@ -2096,7 +2708,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Users.
@@ -2134,7 +2746,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a User.
@@ -2148,7 +2760,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one User.
@@ -2165,7 +2777,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Users.
@@ -2228,7 +2840,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one User.
@@ -2247,7 +2859,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -2387,14 +2999,17 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    community<T extends User$communityArgs<ExtArgs> = {}>(args?: Subset<T, User$communityArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
-    Post<T extends User$PostArgs<ExtArgs> = {}>(args?: Subset<T, User$PostArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    Like<T extends User$LikeArgs<ExtArgs> = {}>(args?: Subset<T, User$LikeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    Comment<T extends User$CommentArgs<ExtArgs> = {}>(args?: Subset<T, User$CommentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    createdCommunities<T extends User$createdCommunitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCommunitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    follows<T extends User$followsArgs<ExtArgs> = {}>(args?: Subset<T, User$followsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    likes<T extends User$likesArgs<ExtArgs> = {}>(args?: Subset<T, User$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdCommunities<T extends User$createdCommunitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCommunitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    follows<T extends User$followsArgs<ExtArgs> = {}>(args?: Subset<T, User$followsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userBadges<T extends User$userBadgesArgs<ExtArgs> = {}>(args?: Subset<T, User$userBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    portfolio<T extends User$portfolioArgs<ExtArgs> = {}>(args?: Subset<T, User$portfolioArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    eventsWon<T extends User$eventsWonArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsWonArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    memberOf<T extends User$memberOfArgs<ExtArgs> = {}>(args?: Subset<T, User$memberOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2432,9 +3047,9 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly provider: FieldRef<"User", 'CredentialProvider'>
     readonly role: FieldRef<"User", 'Role'>
-    readonly communityId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly portfolioId: FieldRef<"User", 'String'>
   }
     
 
@@ -2831,28 +3446,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.community
+   * User.posts
    */
-  export type User$communityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Community
-     */
-    select?: CommunitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Community
-     */
-    omit?: CommunityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CommunityInclude<ExtArgs> | null
-    where?: CommunityWhereInput
-  }
-
-  /**
-   * User.Post
-   */
-  export type User$PostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Post
      */
@@ -2874,9 +3470,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.Like
+   * User.likes
    */
-  export type User$LikeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Like
      */
@@ -2898,9 +3494,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.Comment
+   * User.comments
    */
-  export type User$CommentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Comment
      */
@@ -2970,6 +3566,97 @@ export namespace Prisma {
   }
 
   /**
+   * User.userBadges
+   */
+  export type User$userBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    where?: UserBadgesWhereInput
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    cursor?: UserBadgesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserBadgesScalarFieldEnum | UserBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * User.portfolio
+   */
+  export type User$portfolioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    where?: PortfolioWhereInput
+  }
+
+  /**
+   * User.eventsWon
+   */
+  export type User$eventsWonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * User.memberOf
+   */
+  export type User$memberOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    where?: CommunityMemberWhereInput
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    cursor?: CommunityMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2985,6 +3672,1085 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CommunityMember
+   */
+
+  export type AggregateCommunityMember = {
+    _count: CommunityMemberCountAggregateOutputType | null
+    _min: CommunityMemberMinAggregateOutputType | null
+    _max: CommunityMemberMaxAggregateOutputType | null
+  }
+
+  export type CommunityMemberMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    communityId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    role: $Enums.Role | null
+  }
+
+  export type CommunityMemberMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    communityId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    role: $Enums.Role | null
+  }
+
+  export type CommunityMemberCountAggregateOutputType = {
+    id: number
+    userId: number
+    communityId: number
+    createdAt: number
+    updatedAt: number
+    role: number
+    _all: number
+  }
+
+
+  export type CommunityMemberMinAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+  }
+
+  export type CommunityMemberMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+  }
+
+  export type CommunityMemberCountAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+    _all?: true
+  }
+
+  export type CommunityMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommunityMember to aggregate.
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunityMembers to fetch.
+     */
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CommunityMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunityMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunityMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CommunityMembers
+    **/
+    _count?: true | CommunityMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CommunityMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CommunityMemberMaxAggregateInputType
+  }
+
+  export type GetCommunityMemberAggregateType<T extends CommunityMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateCommunityMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCommunityMember[P]>
+      : GetScalarType<T[P], AggregateCommunityMember[P]>
+  }
+
+
+
+
+  export type CommunityMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunityMemberWhereInput
+    orderBy?: CommunityMemberOrderByWithAggregationInput | CommunityMemberOrderByWithAggregationInput[]
+    by: CommunityMemberScalarFieldEnum[] | CommunityMemberScalarFieldEnum
+    having?: CommunityMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CommunityMemberCountAggregateInputType | true
+    _min?: CommunityMemberMinAggregateInputType
+    _max?: CommunityMemberMaxAggregateInputType
+  }
+
+  export type CommunityMemberGroupByOutputType = {
+    id: string
+    userId: string
+    communityId: string
+    createdAt: Date
+    updatedAt: Date
+    role: $Enums.Role
+    _count: CommunityMemberCountAggregateOutputType | null
+    _min: CommunityMemberMinAggregateOutputType | null
+    _max: CommunityMemberMaxAggregateOutputType | null
+  }
+
+  type GetCommunityMemberGroupByPayload<T extends CommunityMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CommunityMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CommunityMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CommunityMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], CommunityMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CommunityMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communityMember"]>
+
+  export type CommunityMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communityMember"]>
+
+  export type CommunityMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communityMember"]>
+
+  export type CommunityMemberSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+  }
+
+  export type CommunityMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "communityId" | "createdAt" | "updatedAt" | "role", ExtArgs["result"]["communityMember"]>
+  export type CommunityMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+  export type CommunityMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+  export type CommunityMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+
+  export type $CommunityMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CommunityMember"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      community: Prisma.$CommunityPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      communityId: string
+      createdAt: Date
+      updatedAt: Date
+      role: $Enums.Role
+    }, ExtArgs["result"]["communityMember"]>
+    composites: {}
+  }
+
+  type CommunityMemberGetPayload<S extends boolean | null | undefined | CommunityMemberDefaultArgs> = $Result.GetResult<Prisma.$CommunityMemberPayload, S>
+
+  type CommunityMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CommunityMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CommunityMemberCountAggregateInputType | true
+    }
+
+  export interface CommunityMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CommunityMember'], meta: { name: 'CommunityMember' } }
+    /**
+     * Find zero or one CommunityMember that matches the filter.
+     * @param {CommunityMemberFindUniqueArgs} args - Arguments to find a CommunityMember
+     * @example
+     * // Get one CommunityMember
+     * const communityMember = await prisma.communityMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CommunityMemberFindUniqueArgs>(args: SelectSubset<T, CommunityMemberFindUniqueArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CommunityMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CommunityMemberFindUniqueOrThrowArgs} args - Arguments to find a CommunityMember
+     * @example
+     * // Get one CommunityMember
+     * const communityMember = await prisma.communityMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CommunityMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunityMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommunityMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberFindFirstArgs} args - Arguments to find a CommunityMember
+     * @example
+     * // Get one CommunityMember
+     * const communityMember = await prisma.communityMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CommunityMemberFindFirstArgs>(args?: SelectSubset<T, CommunityMemberFindFirstArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommunityMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberFindFirstOrThrowArgs} args - Arguments to find a CommunityMember
+     * @example
+     * // Get one CommunityMember
+     * const communityMember = await prisma.communityMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CommunityMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunityMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CommunityMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CommunityMembers
+     * const communityMembers = await prisma.communityMember.findMany()
+     * 
+     * // Get first 10 CommunityMembers
+     * const communityMembers = await prisma.communityMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const communityMemberWithIdOnly = await prisma.communityMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CommunityMemberFindManyArgs>(args?: SelectSubset<T, CommunityMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CommunityMember.
+     * @param {CommunityMemberCreateArgs} args - Arguments to create a CommunityMember.
+     * @example
+     * // Create one CommunityMember
+     * const CommunityMember = await prisma.communityMember.create({
+     *   data: {
+     *     // ... data to create a CommunityMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends CommunityMemberCreateArgs>(args: SelectSubset<T, CommunityMemberCreateArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CommunityMembers.
+     * @param {CommunityMemberCreateManyArgs} args - Arguments to create many CommunityMembers.
+     * @example
+     * // Create many CommunityMembers
+     * const communityMember = await prisma.communityMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CommunityMemberCreateManyArgs>(args?: SelectSubset<T, CommunityMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CommunityMembers and returns the data saved in the database.
+     * @param {CommunityMemberCreateManyAndReturnArgs} args - Arguments to create many CommunityMembers.
+     * @example
+     * // Create many CommunityMembers
+     * const communityMember = await prisma.communityMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CommunityMembers and only return the `id`
+     * const communityMemberWithIdOnly = await prisma.communityMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CommunityMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunityMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CommunityMember.
+     * @param {CommunityMemberDeleteArgs} args - Arguments to delete one CommunityMember.
+     * @example
+     * // Delete one CommunityMember
+     * const CommunityMember = await prisma.communityMember.delete({
+     *   where: {
+     *     // ... filter to delete one CommunityMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CommunityMemberDeleteArgs>(args: SelectSubset<T, CommunityMemberDeleteArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CommunityMember.
+     * @param {CommunityMemberUpdateArgs} args - Arguments to update one CommunityMember.
+     * @example
+     * // Update one CommunityMember
+     * const communityMember = await prisma.communityMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CommunityMemberUpdateArgs>(args: SelectSubset<T, CommunityMemberUpdateArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CommunityMembers.
+     * @param {CommunityMemberDeleteManyArgs} args - Arguments to filter CommunityMembers to delete.
+     * @example
+     * // Delete a few CommunityMembers
+     * const { count } = await prisma.communityMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CommunityMemberDeleteManyArgs>(args?: SelectSubset<T, CommunityMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommunityMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CommunityMembers
+     * const communityMember = await prisma.communityMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CommunityMemberUpdateManyArgs>(args: SelectSubset<T, CommunityMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommunityMembers and returns the data updated in the database.
+     * @param {CommunityMemberUpdateManyAndReturnArgs} args - Arguments to update many CommunityMembers.
+     * @example
+     * // Update many CommunityMembers
+     * const communityMember = await prisma.communityMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CommunityMembers and only return the `id`
+     * const communityMemberWithIdOnly = await prisma.communityMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CommunityMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunityMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CommunityMember.
+     * @param {CommunityMemberUpsertArgs} args - Arguments to update or create a CommunityMember.
+     * @example
+     * // Update or create a CommunityMember
+     * const communityMember = await prisma.communityMember.upsert({
+     *   create: {
+     *     // ... data to create a CommunityMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CommunityMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CommunityMemberUpsertArgs>(args: SelectSubset<T, CommunityMemberUpsertArgs<ExtArgs>>): Prisma__CommunityMemberClient<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CommunityMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberCountArgs} args - Arguments to filter CommunityMembers to count.
+     * @example
+     * // Count the number of CommunityMembers
+     * const count = await prisma.communityMember.count({
+     *   where: {
+     *     // ... the filter for the CommunityMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends CommunityMemberCountArgs>(
+      args?: Subset<T, CommunityMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CommunityMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CommunityMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CommunityMemberAggregateArgs>(args: Subset<T, CommunityMemberAggregateArgs>): Prisma.PrismaPromise<GetCommunityMemberAggregateType<T>>
+
+    /**
+     * Group by CommunityMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunityMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CommunityMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CommunityMemberGroupByArgs['orderBy'] }
+        : { orderBy?: CommunityMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CommunityMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCommunityMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CommunityMember model
+   */
+  readonly fields: CommunityMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CommunityMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CommunityMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CommunityMember model
+   */ 
+  interface CommunityMemberFieldRefs {
+    readonly id: FieldRef<"CommunityMember", 'String'>
+    readonly userId: FieldRef<"CommunityMember", 'String'>
+    readonly communityId: FieldRef<"CommunityMember", 'String'>
+    readonly createdAt: FieldRef<"CommunityMember", 'DateTime'>
+    readonly updatedAt: FieldRef<"CommunityMember", 'DateTime'>
+    readonly role: FieldRef<"CommunityMember", 'Role'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CommunityMember findUnique
+   */
+  export type CommunityMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunityMember to fetch.
+     */
+    where: CommunityMemberWhereUniqueInput
+  }
+
+  /**
+   * CommunityMember findUniqueOrThrow
+   */
+  export type CommunityMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunityMember to fetch.
+     */
+    where: CommunityMemberWhereUniqueInput
+  }
+
+  /**
+   * CommunityMember findFirst
+   */
+  export type CommunityMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunityMember to fetch.
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunityMembers to fetch.
+     */
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommunityMembers.
+     */
+    cursor?: CommunityMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunityMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunityMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommunityMembers.
+     */
+    distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CommunityMember findFirstOrThrow
+   */
+  export type CommunityMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunityMember to fetch.
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunityMembers to fetch.
+     */
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommunityMembers.
+     */
+    cursor?: CommunityMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunityMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunityMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommunityMembers.
+     */
+    distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CommunityMember findMany
+   */
+  export type CommunityMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunityMembers to fetch.
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunityMembers to fetch.
+     */
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CommunityMembers.
+     */
+    cursor?: CommunityMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunityMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunityMembers.
+     */
+    skip?: number
+    distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CommunityMember create
+   */
+  export type CommunityMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CommunityMember.
+     */
+    data: XOR<CommunityMemberCreateInput, CommunityMemberUncheckedCreateInput>
+  }
+
+  /**
+   * CommunityMember createMany
+   */
+  export type CommunityMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CommunityMembers.
+     */
+    data: CommunityMemberCreateManyInput | CommunityMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommunityMember createManyAndReturn
+   */
+  export type CommunityMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many CommunityMembers.
+     */
+    data: CommunityMemberCreateManyInput | CommunityMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CommunityMember update
+   */
+  export type CommunityMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CommunityMember.
+     */
+    data: XOR<CommunityMemberUpdateInput, CommunityMemberUncheckedUpdateInput>
+    /**
+     * Choose, which CommunityMember to update.
+     */
+    where: CommunityMemberWhereUniqueInput
+  }
+
+  /**
+   * CommunityMember updateMany
+   */
+  export type CommunityMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CommunityMembers.
+     */
+    data: XOR<CommunityMemberUpdateManyMutationInput, CommunityMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which CommunityMembers to update
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * Limit how many CommunityMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommunityMember updateManyAndReturn
+   */
+  export type CommunityMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update CommunityMembers.
+     */
+    data: XOR<CommunityMemberUpdateManyMutationInput, CommunityMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which CommunityMembers to update
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * Limit how many CommunityMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CommunityMember upsert
+   */
+  export type CommunityMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CommunityMember to update in case it exists.
+     */
+    where: CommunityMemberWhereUniqueInput
+    /**
+     * In case the CommunityMember found by the `where` argument doesn't exist, create a new CommunityMember with this data.
+     */
+    create: XOR<CommunityMemberCreateInput, CommunityMemberUncheckedCreateInput>
+    /**
+     * In case the CommunityMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CommunityMemberUpdateInput, CommunityMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * CommunityMember delete
+   */
+  export type CommunityMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    /**
+     * Filter which CommunityMember to delete.
+     */
+    where: CommunityMemberWhereUniqueInput
+  }
+
+  /**
+   * CommunityMember deleteMany
+   */
+  export type CommunityMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommunityMembers to delete
+     */
+    where?: CommunityMemberWhereInput
+    /**
+     * Limit how many CommunityMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommunityMember without action
+   */
+  export type CommunityMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
   }
 
 
@@ -3185,9 +4951,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    members?: boolean | Community$membersArgs<ExtArgs>
     posts?: boolean | Community$postsArgs<ExtArgs>
-    follows?: boolean | Community$followsArgs<ExtArgs>
+    followers?: boolean | Community$followersArgs<ExtArgs>
+    events?: boolean | Community$eventsArgs<ExtArgs>
+    communityMembers?: boolean | Community$communityMembersArgs<ExtArgs>
     _count?: boolean | CommunityCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["community"]>
 
@@ -3232,9 +4999,10 @@ export namespace Prisma {
   export type CommunityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdById" | "name" | "slug" | "description" | "image" | "banner" | "createdAt" | "updatedAt", ExtArgs["result"]["community"]>
   export type CommunityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    members?: boolean | Community$membersArgs<ExtArgs>
     posts?: boolean | Community$postsArgs<ExtArgs>
-    follows?: boolean | Community$followsArgs<ExtArgs>
+    followers?: boolean | Community$followersArgs<ExtArgs>
+    events?: boolean | Community$eventsArgs<ExtArgs>
+    communityMembers?: boolean | Community$communityMembersArgs<ExtArgs>
     _count?: boolean | CommunityCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CommunityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3248,9 +5016,10 @@ export namespace Prisma {
     name: "Community"
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
-      members: Prisma.$UserPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
-      follows: Prisma.$CommunityFollowPayload<ExtArgs>[]
+      followers: Prisma.$CommunityFollowPayload<ExtArgs>[]
+      events: Prisma.$EventPayload<ExtArgs>[]
+      communityMembers: Prisma.$CommunityMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3273,7 +5042,7 @@ export namespace Prisma {
       select?: CommunityCountAggregateInputType | true
     }
 
-  export interface CommunityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface CommunityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Community'], meta: { name: 'Community' } }
     /**
      * Find zero or one Community that matches the filter.
@@ -3286,7 +5055,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CommunityFindUniqueArgs>(args: SelectSubset<T, CommunityFindUniqueArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends CommunityFindUniqueArgs>(args: SelectSubset<T, CommunityFindUniqueArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Community that matches the filter or throw an error with `error.code='P2025'`
@@ -3300,7 +5069,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CommunityFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends CommunityFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Community that matches the filter.
@@ -3315,7 +5084,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CommunityFindFirstArgs>(args?: SelectSubset<T, CommunityFindFirstArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends CommunityFindFirstArgs>(args?: SelectSubset<T, CommunityFindFirstArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Community that matches the filter or
@@ -3331,7 +5100,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CommunityFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends CommunityFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Communities that matches the filter.
@@ -3349,7 +5118,7 @@ export namespace Prisma {
      * const communityWithIdOnly = await prisma.community.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CommunityFindManyArgs>(args?: SelectSubset<T, CommunityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends CommunityFindManyArgs>(args?: SelectSubset<T, CommunityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Community.
@@ -3363,7 +5132,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CommunityCreateArgs>(args: SelectSubset<T, CommunityCreateArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends CommunityCreateArgs>(args: SelectSubset<T, CommunityCreateArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Communities.
@@ -3401,7 +5170,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CommunityCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends CommunityCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Community.
@@ -3415,7 +5184,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CommunityDeleteArgs>(args: SelectSubset<T, CommunityDeleteArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends CommunityDeleteArgs>(args: SelectSubset<T, CommunityDeleteArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Community.
@@ -3432,7 +5201,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CommunityUpdateArgs>(args: SelectSubset<T, CommunityUpdateArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends CommunityUpdateArgs>(args: SelectSubset<T, CommunityUpdateArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Communities.
@@ -3495,7 +5264,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CommunityUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends CommunityUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one Community.
@@ -3514,7 +5283,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CommunityUpsertArgs>(args: SelectSubset<T, CommunityUpsertArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends CommunityUpsertArgs>(args: SelectSubset<T, CommunityUpsertArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -3654,12 +5423,13 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CommunityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CommunityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    members<T extends Community$membersArgs<ExtArgs> = {}>(args?: Subset<T, Community$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    posts<T extends Community$postsArgs<ExtArgs> = {}>(args?: Subset<T, Community$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    follows<T extends Community$followsArgs<ExtArgs> = {}>(args?: Subset<T, Community$followsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    posts<T extends Community$postsArgs<ExtArgs> = {}>(args?: Subset<T, Community$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    followers<T extends Community$followersArgs<ExtArgs> = {}>(args?: Subset<T, Community$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends Community$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Community$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    communityMembers<T extends Community$communityMembersArgs<ExtArgs> = {}>(args?: Subset<T, Community$communityMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4094,30 +5864,6 @@ export namespace Prisma {
   }
 
   /**
-   * Community.members
-   */
-  export type Community$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
    * Community.posts
    */
   export type Community$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4142,9 +5888,9 @@ export namespace Prisma {
   }
 
   /**
-   * Community.follows
+   * Community.followers
    */
-  export type Community$followsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Community$followersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the CommunityFollow
      */
@@ -4163,6 +5909,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommunityFollowScalarFieldEnum | CommunityFollowScalarFieldEnum[]
+  }
+
+  /**
+   * Community.events
+   */
+  export type Community$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Community.communityMembers
+   */
+  export type Community$communityMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunityMember
+     */
+    select?: CommunityMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunityMember
+     */
+    omit?: CommunityMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunityMemberInclude<ExtArgs> | null
+    where?: CommunityMemberWhereInput
+    orderBy?: CommunityMemberOrderByWithRelationInput | CommunityMemberOrderByWithRelationInput[]
+    cursor?: CommunityMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
   }
 
   /**
@@ -4200,6 +5994,7 @@ export namespace Prisma {
     type: $Enums.MediaType | null
     createdAt: Date | null
     updatedAt: Date | null
+    postId: string | null
   }
 
   export type MediaMaxAggregateOutputType = {
@@ -4208,6 +6003,7 @@ export namespace Prisma {
     type: $Enums.MediaType | null
     createdAt: Date | null
     updatedAt: Date | null
+    postId: string | null
   }
 
   export type MediaCountAggregateOutputType = {
@@ -4216,6 +6012,7 @@ export namespace Prisma {
     type: number
     createdAt: number
     updatedAt: number
+    postId: number
     _all: number
   }
 
@@ -4226,6 +6023,7 @@ export namespace Prisma {
     type?: true
     createdAt?: true
     updatedAt?: true
+    postId?: true
   }
 
   export type MediaMaxAggregateInputType = {
@@ -4234,6 +6032,7 @@ export namespace Prisma {
     type?: true
     createdAt?: true
     updatedAt?: true
+    postId?: true
   }
 
   export type MediaCountAggregateInputType = {
@@ -4242,6 +6041,7 @@ export namespace Prisma {
     type?: true
     createdAt?: true
     updatedAt?: true
+    postId?: true
     _all?: true
   }
 
@@ -4323,6 +6123,7 @@ export namespace Prisma {
     type: $Enums.MediaType
     createdAt: Date
     updatedAt: Date
+    postId: string
     _count: MediaCountAggregateOutputType | null
     _min: MediaMinAggregateOutputType | null
     _max: MediaMaxAggregateOutputType | null
@@ -4348,8 +6149,8 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    Post?: boolean | Media$PostArgs<ExtArgs>
-    _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4358,6 +6159,8 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4366,6 +6169,8 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectScalar = {
@@ -4374,20 +6179,24 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    postId?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "type" | "createdAt" | "updatedAt" | "postId", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Post?: boolean | Media$PostArgs<ExtArgs>
-    _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
   }
-  export type MediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+  export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
 
   export type $MediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Media"
     objects: {
-      Post: Prisma.$PostPayload<ExtArgs>[]
+      post: Prisma.$PostPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4395,6 +6204,7 @@ export namespace Prisma {
       type: $Enums.MediaType
       createdAt: Date
       updatedAt: Date
+      postId: string
     }, ExtArgs["result"]["media"]>
     composites: {}
   }
@@ -4406,7 +6216,7 @@ export namespace Prisma {
       select?: MediaCountAggregateInputType | true
     }
 
-  export interface MediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface MediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Media'], meta: { name: 'Media' } }
     /**
      * Find zero or one Media that matches the filter.
@@ -4419,7 +6229,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends MediaFindUniqueArgs>(args: SelectSubset<T, MediaFindUniqueArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends MediaFindUniqueArgs>(args: SelectSubset<T, MediaFindUniqueArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Media that matches the filter or throw an error with `error.code='P2025'`
@@ -4433,7 +6243,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends MediaFindUniqueOrThrowArgs>(args: SelectSubset<T, MediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends MediaFindUniqueOrThrowArgs>(args: SelectSubset<T, MediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Media that matches the filter.
@@ -4448,7 +6258,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends MediaFindFirstArgs>(args?: SelectSubset<T, MediaFindFirstArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends MediaFindFirstArgs>(args?: SelectSubset<T, MediaFindFirstArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Media that matches the filter or
@@ -4464,7 +6274,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends MediaFindFirstOrThrowArgs>(args?: SelectSubset<T, MediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends MediaFindFirstOrThrowArgs>(args?: SelectSubset<T, MediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Media that matches the filter.
@@ -4482,7 +6292,7 @@ export namespace Prisma {
      * const mediaWithIdOnly = await prisma.media.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends MediaFindManyArgs>(args?: SelectSubset<T, MediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends MediaFindManyArgs>(args?: SelectSubset<T, MediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Media.
@@ -4496,7 +6306,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends MediaCreateArgs>(args: SelectSubset<T, MediaCreateArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends MediaCreateArgs>(args: SelectSubset<T, MediaCreateArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Media.
@@ -4534,7 +6344,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends MediaCreateManyAndReturnArgs>(args?: SelectSubset<T, MediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends MediaCreateManyAndReturnArgs>(args?: SelectSubset<T, MediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Media.
@@ -4548,7 +6358,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends MediaDeleteArgs>(args: SelectSubset<T, MediaDeleteArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends MediaDeleteArgs>(args: SelectSubset<T, MediaDeleteArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Media.
@@ -4565,7 +6375,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends MediaUpdateArgs>(args: SelectSubset<T, MediaUpdateArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends MediaUpdateArgs>(args: SelectSubset<T, MediaUpdateArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Media.
@@ -4628,7 +6438,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends MediaUpdateManyAndReturnArgs>(args: SelectSubset<T, MediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends MediaUpdateManyAndReturnArgs>(args: SelectSubset<T, MediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one Media.
@@ -4647,7 +6457,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends MediaUpsertArgs>(args: SelectSubset<T, MediaUpsertArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends MediaUpsertArgs>(args: SelectSubset<T, MediaUpsertArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -4787,9 +6597,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__MediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__MediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Post<T extends Media$PostArgs<ExtArgs> = {}>(args?: Subset<T, Media$PostArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4824,6 +6634,7 @@ export namespace Prisma {
     readonly type: FieldRef<"Media", 'MediaType'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
     readonly updatedAt: FieldRef<"Media", 'DateTime'>
+    readonly postId: FieldRef<"Media", 'String'>
   }
     
 
@@ -5073,6 +6884,10 @@ export namespace Prisma {
      */
     data: MediaCreateManyInput | MediaCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5143,6 +6958,10 @@ export namespace Prisma {
      * Limit how many Media to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5209,30 +7028,6 @@ export namespace Prisma {
      * Limit how many Media to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Media.Post
-   */
-  export type Media$PostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Post
-     */
-    omit?: PostOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
-    cursor?: PostWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -5447,6 +7242,7 @@ export namespace Prisma {
     community?: boolean | CommunityDefaultArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
+    postBadges?: boolean | Post$postBadgesArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -5494,6 +7290,7 @@ export namespace Prisma {
     community?: boolean | CommunityDefaultArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
+    postBadges?: boolean | Post$postBadgesArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5513,6 +7310,7 @@ export namespace Prisma {
       community: Prisma.$CommunityPayload<ExtArgs>
       likes: Prisma.$LikePayload<ExtArgs>[]
       comments: Prisma.$CommentPayload<ExtArgs>[]
+      postBadges: Prisma.$PostBadgesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5534,7 +7332,7 @@ export namespace Prisma {
       select?: PostCountAggregateInputType | true
     }
 
-  export interface PostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface PostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Post'], meta: { name: 'Post' } }
     /**
      * Find zero or one Post that matches the filter.
@@ -5547,7 +7345,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends PostFindUniqueArgs>(args: SelectSubset<T, PostFindUniqueArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends PostFindUniqueArgs>(args: SelectSubset<T, PostFindUniqueArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Post that matches the filter or throw an error with `error.code='P2025'`
@@ -5561,7 +7359,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends PostFindUniqueOrThrowArgs>(args: SelectSubset<T, PostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends PostFindUniqueOrThrowArgs>(args: SelectSubset<T, PostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Post that matches the filter.
@@ -5576,7 +7374,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends PostFindFirstArgs>(args?: SelectSubset<T, PostFindFirstArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends PostFindFirstArgs>(args?: SelectSubset<T, PostFindFirstArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Post that matches the filter or
@@ -5592,7 +7390,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends PostFindFirstOrThrowArgs>(args?: SelectSubset<T, PostFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends PostFindFirstOrThrowArgs>(args?: SelectSubset<T, PostFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Posts that matches the filter.
@@ -5610,7 +7408,7 @@ export namespace Prisma {
      * const postWithIdOnly = await prisma.post.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends PostFindManyArgs>(args?: SelectSubset<T, PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends PostFindManyArgs>(args?: SelectSubset<T, PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Post.
@@ -5624,7 +7422,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends PostCreateArgs>(args: SelectSubset<T, PostCreateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends PostCreateArgs>(args: SelectSubset<T, PostCreateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Posts.
@@ -5662,7 +7460,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends PostCreateManyAndReturnArgs>(args?: SelectSubset<T, PostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends PostCreateManyAndReturnArgs>(args?: SelectSubset<T, PostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Post.
@@ -5676,7 +7474,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends PostDeleteArgs>(args: SelectSubset<T, PostDeleteArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends PostDeleteArgs>(args: SelectSubset<T, PostDeleteArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Post.
@@ -5693,7 +7491,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends PostUpdateArgs>(args: SelectSubset<T, PostUpdateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends PostUpdateArgs>(args: SelectSubset<T, PostUpdateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Posts.
@@ -5756,7 +7554,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends PostUpdateManyAndReturnArgs>(args: SelectSubset<T, PostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends PostUpdateManyAndReturnArgs>(args: SelectSubset<T, PostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one Post.
@@ -5775,7 +7573,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends PostUpsertArgs>(args: SelectSubset<T, PostUpsertArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends PostUpsertArgs>(args: SelectSubset<T, PostUpsertArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -5915,13 +7713,14 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    media<T extends Post$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Post$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    media<T extends Post$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Post$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    postBadges<T extends Post$postBadgesArgs<ExtArgs> = {}>(args?: Subset<T, Post$postBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6427,6 +8226,30 @@ export namespace Prisma {
   }
 
   /**
+   * Post.postBadges
+   */
+  export type Post$postBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    where?: PostBadgesWhereInput
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    cursor?: PostBadgesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
    * Post without action
    */
   export type PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6697,7 +8520,7 @@ export namespace Prisma {
       select?: LikeCountAggregateInputType | true
     }
 
-  export interface LikeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface LikeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Like'], meta: { name: 'Like' } }
     /**
      * Find zero or one Like that matches the filter.
@@ -6710,7 +8533,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends LikeFindUniqueArgs>(args: SelectSubset<T, LikeFindUniqueArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends LikeFindUniqueArgs>(args: SelectSubset<T, LikeFindUniqueArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Like that matches the filter or throw an error with `error.code='P2025'`
@@ -6724,7 +8547,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends LikeFindUniqueOrThrowArgs>(args: SelectSubset<T, LikeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends LikeFindUniqueOrThrowArgs>(args: SelectSubset<T, LikeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Like that matches the filter.
@@ -6739,7 +8562,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends LikeFindFirstArgs>(args?: SelectSubset<T, LikeFindFirstArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends LikeFindFirstArgs>(args?: SelectSubset<T, LikeFindFirstArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Like that matches the filter or
@@ -6755,7 +8578,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends LikeFindFirstOrThrowArgs>(args?: SelectSubset<T, LikeFindFirstOrThrowArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends LikeFindFirstOrThrowArgs>(args?: SelectSubset<T, LikeFindFirstOrThrowArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Likes that matches the filter.
@@ -6773,7 +8596,7 @@ export namespace Prisma {
      * const likeWithIdOnly = await prisma.like.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends LikeFindManyArgs>(args?: SelectSubset<T, LikeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends LikeFindManyArgs>(args?: SelectSubset<T, LikeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Like.
@@ -6787,7 +8610,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends LikeCreateArgs>(args: SelectSubset<T, LikeCreateArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends LikeCreateArgs>(args: SelectSubset<T, LikeCreateArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Likes.
@@ -6825,7 +8648,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends LikeCreateManyAndReturnArgs>(args?: SelectSubset<T, LikeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends LikeCreateManyAndReturnArgs>(args?: SelectSubset<T, LikeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Like.
@@ -6839,7 +8662,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends LikeDeleteArgs>(args: SelectSubset<T, LikeDeleteArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends LikeDeleteArgs>(args: SelectSubset<T, LikeDeleteArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Like.
@@ -6856,7 +8679,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends LikeUpdateArgs>(args: SelectSubset<T, LikeUpdateArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends LikeUpdateArgs>(args: SelectSubset<T, LikeUpdateArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Likes.
@@ -6919,7 +8742,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends LikeUpdateManyAndReturnArgs>(args: SelectSubset<T, LikeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends LikeUpdateManyAndReturnArgs>(args: SelectSubset<T, LikeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one Like.
@@ -6938,7 +8761,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends LikeUpsertArgs>(args: SelectSubset<T, LikeUpsertArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends LikeUpsertArgs>(args: SelectSubset<T, LikeUpsertArgs<ExtArgs>>): Prisma__LikeClient<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -7078,11 +8901,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__LikeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__LikeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    comment<T extends Like$commentArgs<ExtArgs> = {}>(args?: Subset<T, Like$commentArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    comment<T extends Like$commentArgs<ExtArgs> = {}>(args?: Subset<T, Like$commentArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7823,7 +9646,7 @@ export namespace Prisma {
       select?: CommentCountAggregateInputType | true
     }
 
-  export interface CommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface CommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Comment'], meta: { name: 'Comment' } }
     /**
      * Find zero or one Comment that matches the filter.
@@ -7836,7 +9659,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CommentFindUniqueArgs>(args: SelectSubset<T, CommentFindUniqueArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends CommentFindUniqueArgs>(args: SelectSubset<T, CommentFindUniqueArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Comment that matches the filter or throw an error with `error.code='P2025'`
@@ -7850,7 +9673,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CommentFindUniqueOrThrowArgs>(args: SelectSubset<T, CommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends CommentFindUniqueOrThrowArgs>(args: SelectSubset<T, CommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Comment that matches the filter.
@@ -7865,7 +9688,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CommentFindFirstArgs>(args?: SelectSubset<T, CommentFindFirstArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends CommentFindFirstArgs>(args?: SelectSubset<T, CommentFindFirstArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Comment that matches the filter or
@@ -7881,7 +9704,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CommentFindFirstOrThrowArgs>(args?: SelectSubset<T, CommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends CommentFindFirstOrThrowArgs>(args?: SelectSubset<T, CommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Comments that matches the filter.
@@ -7899,7 +9722,7 @@ export namespace Prisma {
      * const commentWithIdOnly = await prisma.comment.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CommentFindManyArgs>(args?: SelectSubset<T, CommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends CommentFindManyArgs>(args?: SelectSubset<T, CommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Comment.
@@ -7913,7 +9736,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CommentCreateArgs>(args: SelectSubset<T, CommentCreateArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends CommentCreateArgs>(args: SelectSubset<T, CommentCreateArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Comments.
@@ -7951,7 +9774,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CommentCreateManyAndReturnArgs>(args?: SelectSubset<T, CommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends CommentCreateManyAndReturnArgs>(args?: SelectSubset<T, CommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Comment.
@@ -7965,7 +9788,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CommentDeleteArgs>(args: SelectSubset<T, CommentDeleteArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends CommentDeleteArgs>(args: SelectSubset<T, CommentDeleteArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Comment.
@@ -7982,7 +9805,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CommentUpdateArgs>(args: SelectSubset<T, CommentUpdateArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends CommentUpdateArgs>(args: SelectSubset<T, CommentUpdateArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Comments.
@@ -8045,7 +9868,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CommentUpdateManyAndReturnArgs>(args: SelectSubset<T, CommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends CommentUpdateManyAndReturnArgs>(args: SelectSubset<T, CommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one Comment.
@@ -8064,7 +9887,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CommentUpsertArgs>(args: SelectSubset<T, CommentUpsertArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends CommentUpsertArgs>(args: SelectSubset<T, CommentUpsertArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -8204,13 +10027,13 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    parent<T extends Comment$parentArgs<ExtArgs> = {}>(args?: Subset<T, Comment$parentArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
-    likes<T extends Comment$likesArgs<ExtArgs> = {}>(args?: Subset<T, Comment$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
-    comments<T extends Comment$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Comment$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parent<T extends Comment$parentArgs<ExtArgs> = {}>(args?: Subset<T, Comment$parentArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    likes<T extends Comment$likesArgs<ExtArgs> = {}>(args?: Subset<T, Comment$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    comments<T extends Comment$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Comment$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8961,7 +10784,7 @@ export namespace Prisma {
       select?: CommunityFollowCountAggregateInputType | true
     }
 
-  export interface CommunityFollowDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+  export interface CommunityFollowDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CommunityFollow'], meta: { name: 'CommunityFollow' } }
     /**
      * Find zero or one CommunityFollow that matches the filter.
@@ -8974,7 +10797,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CommunityFollowFindUniqueArgs>(args: SelectSubset<T, CommunityFollowFindUniqueArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findUnique<T extends CommunityFollowFindUniqueArgs>(args: SelectSubset<T, CommunityFollowFindUniqueArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one CommunityFollow that matches the filter or throw an error with `error.code='P2025'`
@@ -8988,7 +10811,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CommunityFollowFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunityFollowFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findUniqueOrThrow<T extends CommunityFollowFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunityFollowFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CommunityFollow that matches the filter.
@@ -9003,7 +10826,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CommunityFollowFindFirstArgs>(args?: SelectSubset<T, CommunityFollowFindFirstArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    findFirst<T extends CommunityFollowFindFirstArgs>(args?: SelectSubset<T, CommunityFollowFindFirstArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CommunityFollow that matches the filter or
@@ -9019,7 +10842,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CommunityFollowFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunityFollowFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+    findFirstOrThrow<T extends CommunityFollowFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunityFollowFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CommunityFollows that matches the filter.
@@ -9037,7 +10860,7 @@ export namespace Prisma {
      * const communityFollowWithIdOnly = await prisma.communityFollow.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CommunityFollowFindManyArgs>(args?: SelectSubset<T, CommunityFollowFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", ClientOptions>>
+    findMany<T extends CommunityFollowFindManyArgs>(args?: SelectSubset<T, CommunityFollowFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CommunityFollow.
@@ -9051,7 +10874,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CommunityFollowCreateArgs>(args: SelectSubset<T, CommunityFollowCreateArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+    create<T extends CommunityFollowCreateArgs>(args: SelectSubset<T, CommunityFollowCreateArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CommunityFollows.
@@ -9089,7 +10912,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CommunityFollowCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunityFollowCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+    createManyAndReturn<T extends CommunityFollowCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunityFollowCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CommunityFollow.
@@ -9103,7 +10926,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CommunityFollowDeleteArgs>(args: SelectSubset<T, CommunityFollowDeleteArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+    delete<T extends CommunityFollowDeleteArgs>(args: SelectSubset<T, CommunityFollowDeleteArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CommunityFollow.
@@ -9120,7 +10943,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CommunityFollowUpdateArgs>(args: SelectSubset<T, CommunityFollowUpdateArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+    update<T extends CommunityFollowUpdateArgs>(args: SelectSubset<T, CommunityFollowUpdateArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CommunityFollows.
@@ -9183,7 +11006,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CommunityFollowUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunityFollowUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+    updateManyAndReturn<T extends CommunityFollowUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunityFollowUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Create or update one CommunityFollow.
@@ -9202,7 +11025,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CommunityFollowUpsertArgs>(args: SelectSubset<T, CommunityFollowUpsertArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+    upsert<T extends CommunityFollowUpsertArgs>(args: SelectSubset<T, CommunityFollowUpsertArgs<ExtArgs>>): Prisma__CommunityFollowClient<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -9342,10 +11165,10 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CommunityFollowClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CommunityFollowClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
+    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9795,6 +11618,5535 @@ export namespace Prisma {
 
 
   /**
+   * Model Badge
+   */
+
+  export type AggregateBadge = {
+    _count: BadgeCountAggregateOutputType | null
+    _avg: BadgeAvgAggregateOutputType | null
+    _sum: BadgeSumAggregateOutputType | null
+    _min: BadgeMinAggregateOutputType | null
+    _max: BadgeMaxAggregateOutputType | null
+  }
+
+  export type BadgeAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type BadgeSumAggregateOutputType = {
+    price: number | null
+  }
+
+  export type BadgeMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    slug: string | null
+    type: string | null
+    price: number | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BadgeMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    slug: string | null
+    type: string | null
+    price: number | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BadgeCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    slug: number
+    type: number
+    price: number
+    image: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BadgeAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type BadgeSumAggregateInputType = {
+    price?: true
+  }
+
+  export type BadgeMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    slug?: true
+    type?: true
+    price?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BadgeMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    slug?: true
+    type?: true
+    price?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BadgeCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    slug?: true
+    type?: true
+    price?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BadgeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Badge to aggregate.
+     */
+    where?: BadgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Badges to fetch.
+     */
+    orderBy?: BadgeOrderByWithRelationInput | BadgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BadgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Badges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Badges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Badges
+    **/
+    _count?: true | BadgeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BadgeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BadgeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BadgeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BadgeMaxAggregateInputType
+  }
+
+  export type GetBadgeAggregateType<T extends BadgeAggregateArgs> = {
+        [P in keyof T & keyof AggregateBadge]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBadge[P]>
+      : GetScalarType<T[P], AggregateBadge[P]>
+  }
+
+
+
+
+  export type BadgeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BadgeWhereInput
+    orderBy?: BadgeOrderByWithAggregationInput | BadgeOrderByWithAggregationInput[]
+    by: BadgeScalarFieldEnum[] | BadgeScalarFieldEnum
+    having?: BadgeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BadgeCountAggregateInputType | true
+    _avg?: BadgeAvgAggregateInputType
+    _sum?: BadgeSumAggregateInputType
+    _min?: BadgeMinAggregateInputType
+    _max?: BadgeMaxAggregateInputType
+  }
+
+  export type BadgeGroupByOutputType = {
+    id: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt: Date
+    updatedAt: Date
+    _count: BadgeCountAggregateOutputType | null
+    _avg: BadgeAvgAggregateOutputType | null
+    _sum: BadgeSumAggregateOutputType | null
+    _min: BadgeMinAggregateOutputType | null
+    _max: BadgeMaxAggregateOutputType | null
+  }
+
+  type GetBadgeGroupByPayload<T extends BadgeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BadgeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BadgeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BadgeGroupByOutputType[P]>
+            : GetScalarType<T[P], BadgeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BadgeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    slug?: boolean
+    type?: boolean
+    price?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postBadges?: boolean | Badge$postBadgesArgs<ExtArgs>
+    userBadges?: boolean | Badge$userBadgesArgs<ExtArgs>
+    _count?: boolean | BadgeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["badge"]>
+
+  export type BadgeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    slug?: boolean
+    type?: boolean
+    price?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["badge"]>
+
+  export type BadgeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    slug?: boolean
+    type?: boolean
+    price?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["badge"]>
+
+  export type BadgeSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    slug?: boolean
+    type?: boolean
+    price?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BadgeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "slug" | "type" | "price" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["badge"]>
+  export type BadgeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postBadges?: boolean | Badge$postBadgesArgs<ExtArgs>
+    userBadges?: boolean | Badge$userBadgesArgs<ExtArgs>
+    _count?: boolean | BadgeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BadgeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BadgeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $BadgePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Badge"
+    objects: {
+      postBadges: Prisma.$PostBadgesPayload<ExtArgs>[]
+      userBadges: Prisma.$UserBadgesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string
+      slug: string
+      type: string
+      price: number
+      image: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["badge"]>
+    composites: {}
+  }
+
+  type BadgeGetPayload<S extends boolean | null | undefined | BadgeDefaultArgs> = $Result.GetResult<Prisma.$BadgePayload, S>
+
+  type BadgeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BadgeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BadgeCountAggregateInputType | true
+    }
+
+  export interface BadgeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Badge'], meta: { name: 'Badge' } }
+    /**
+     * Find zero or one Badge that matches the filter.
+     * @param {BadgeFindUniqueArgs} args - Arguments to find a Badge
+     * @example
+     * // Get one Badge
+     * const badge = await prisma.badge.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BadgeFindUniqueArgs>(args: SelectSubset<T, BadgeFindUniqueArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Badge that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BadgeFindUniqueOrThrowArgs} args - Arguments to find a Badge
+     * @example
+     * // Get one Badge
+     * const badge = await prisma.badge.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BadgeFindUniqueOrThrowArgs>(args: SelectSubset<T, BadgeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Badge that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeFindFirstArgs} args - Arguments to find a Badge
+     * @example
+     * // Get one Badge
+     * const badge = await prisma.badge.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BadgeFindFirstArgs>(args?: SelectSubset<T, BadgeFindFirstArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Badge that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeFindFirstOrThrowArgs} args - Arguments to find a Badge
+     * @example
+     * // Get one Badge
+     * const badge = await prisma.badge.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BadgeFindFirstOrThrowArgs>(args?: SelectSubset<T, BadgeFindFirstOrThrowArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Badges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Badges
+     * const badges = await prisma.badge.findMany()
+     * 
+     * // Get first 10 Badges
+     * const badges = await prisma.badge.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const badgeWithIdOnly = await prisma.badge.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BadgeFindManyArgs>(args?: SelectSubset<T, BadgeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Badge.
+     * @param {BadgeCreateArgs} args - Arguments to create a Badge.
+     * @example
+     * // Create one Badge
+     * const Badge = await prisma.badge.create({
+     *   data: {
+     *     // ... data to create a Badge
+     *   }
+     * })
+     * 
+     */
+    create<T extends BadgeCreateArgs>(args: SelectSubset<T, BadgeCreateArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Badges.
+     * @param {BadgeCreateManyArgs} args - Arguments to create many Badges.
+     * @example
+     * // Create many Badges
+     * const badge = await prisma.badge.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BadgeCreateManyArgs>(args?: SelectSubset<T, BadgeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Badges and returns the data saved in the database.
+     * @param {BadgeCreateManyAndReturnArgs} args - Arguments to create many Badges.
+     * @example
+     * // Create many Badges
+     * const badge = await prisma.badge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Badges and only return the `id`
+     * const badgeWithIdOnly = await prisma.badge.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BadgeCreateManyAndReturnArgs>(args?: SelectSubset<T, BadgeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Badge.
+     * @param {BadgeDeleteArgs} args - Arguments to delete one Badge.
+     * @example
+     * // Delete one Badge
+     * const Badge = await prisma.badge.delete({
+     *   where: {
+     *     // ... filter to delete one Badge
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BadgeDeleteArgs>(args: SelectSubset<T, BadgeDeleteArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Badge.
+     * @param {BadgeUpdateArgs} args - Arguments to update one Badge.
+     * @example
+     * // Update one Badge
+     * const badge = await prisma.badge.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BadgeUpdateArgs>(args: SelectSubset<T, BadgeUpdateArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Badges.
+     * @param {BadgeDeleteManyArgs} args - Arguments to filter Badges to delete.
+     * @example
+     * // Delete a few Badges
+     * const { count } = await prisma.badge.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BadgeDeleteManyArgs>(args?: SelectSubset<T, BadgeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Badges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Badges
+     * const badge = await prisma.badge.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BadgeUpdateManyArgs>(args: SelectSubset<T, BadgeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Badges and returns the data updated in the database.
+     * @param {BadgeUpdateManyAndReturnArgs} args - Arguments to update many Badges.
+     * @example
+     * // Update many Badges
+     * const badge = await prisma.badge.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Badges and only return the `id`
+     * const badgeWithIdOnly = await prisma.badge.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BadgeUpdateManyAndReturnArgs>(args: SelectSubset<T, BadgeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Badge.
+     * @param {BadgeUpsertArgs} args - Arguments to update or create a Badge.
+     * @example
+     * // Update or create a Badge
+     * const badge = await prisma.badge.upsert({
+     *   create: {
+     *     // ... data to create a Badge
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Badge we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BadgeUpsertArgs>(args: SelectSubset<T, BadgeUpsertArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Badges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeCountArgs} args - Arguments to filter Badges to count.
+     * @example
+     * // Count the number of Badges
+     * const count = await prisma.badge.count({
+     *   where: {
+     *     // ... the filter for the Badges we want to count
+     *   }
+     * })
+    **/
+    count<T extends BadgeCountArgs>(
+      args?: Subset<T, BadgeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BadgeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Badge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BadgeAggregateArgs>(args: Subset<T, BadgeAggregateArgs>): Prisma.PrismaPromise<GetBadgeAggregateType<T>>
+
+    /**
+     * Group by Badge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BadgeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BadgeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BadgeGroupByArgs['orderBy'] }
+        : { orderBy?: BadgeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BadgeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBadgeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Badge model
+   */
+  readonly fields: BadgeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Badge.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BadgeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    postBadges<T extends Badge$postBadgesArgs<ExtArgs> = {}>(args?: Subset<T, Badge$postBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userBadges<T extends Badge$userBadgesArgs<ExtArgs> = {}>(args?: Subset<T, Badge$userBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Badge model
+   */ 
+  interface BadgeFieldRefs {
+    readonly id: FieldRef<"Badge", 'String'>
+    readonly name: FieldRef<"Badge", 'String'>
+    readonly description: FieldRef<"Badge", 'String'>
+    readonly slug: FieldRef<"Badge", 'String'>
+    readonly type: FieldRef<"Badge", 'String'>
+    readonly price: FieldRef<"Badge", 'Float'>
+    readonly image: FieldRef<"Badge", 'String'>
+    readonly createdAt: FieldRef<"Badge", 'DateTime'>
+    readonly updatedAt: FieldRef<"Badge", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Badge findUnique
+   */
+  export type BadgeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter, which Badge to fetch.
+     */
+    where: BadgeWhereUniqueInput
+  }
+
+  /**
+   * Badge findUniqueOrThrow
+   */
+  export type BadgeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter, which Badge to fetch.
+     */
+    where: BadgeWhereUniqueInput
+  }
+
+  /**
+   * Badge findFirst
+   */
+  export type BadgeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter, which Badge to fetch.
+     */
+    where?: BadgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Badges to fetch.
+     */
+    orderBy?: BadgeOrderByWithRelationInput | BadgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Badges.
+     */
+    cursor?: BadgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Badges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Badges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Badges.
+     */
+    distinct?: BadgeScalarFieldEnum | BadgeScalarFieldEnum[]
+  }
+
+  /**
+   * Badge findFirstOrThrow
+   */
+  export type BadgeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter, which Badge to fetch.
+     */
+    where?: BadgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Badges to fetch.
+     */
+    orderBy?: BadgeOrderByWithRelationInput | BadgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Badges.
+     */
+    cursor?: BadgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Badges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Badges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Badges.
+     */
+    distinct?: BadgeScalarFieldEnum | BadgeScalarFieldEnum[]
+  }
+
+  /**
+   * Badge findMany
+   */
+  export type BadgeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter, which Badges to fetch.
+     */
+    where?: BadgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Badges to fetch.
+     */
+    orderBy?: BadgeOrderByWithRelationInput | BadgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Badges.
+     */
+    cursor?: BadgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Badges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Badges.
+     */
+    skip?: number
+    distinct?: BadgeScalarFieldEnum | BadgeScalarFieldEnum[]
+  }
+
+  /**
+   * Badge create
+   */
+  export type BadgeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Badge.
+     */
+    data: XOR<BadgeCreateInput, BadgeUncheckedCreateInput>
+  }
+
+  /**
+   * Badge createMany
+   */
+  export type BadgeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Badges.
+     */
+    data: BadgeCreateManyInput | BadgeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Badge createManyAndReturn
+   */
+  export type BadgeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Badges.
+     */
+    data: BadgeCreateManyInput | BadgeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Badge update
+   */
+  export type BadgeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Badge.
+     */
+    data: XOR<BadgeUpdateInput, BadgeUncheckedUpdateInput>
+    /**
+     * Choose, which Badge to update.
+     */
+    where: BadgeWhereUniqueInput
+  }
+
+  /**
+   * Badge updateMany
+   */
+  export type BadgeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Badges.
+     */
+    data: XOR<BadgeUpdateManyMutationInput, BadgeUncheckedUpdateManyInput>
+    /**
+     * Filter which Badges to update
+     */
+    where?: BadgeWhereInput
+    /**
+     * Limit how many Badges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Badge updateManyAndReturn
+   */
+  export type BadgeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * The data used to update Badges.
+     */
+    data: XOR<BadgeUpdateManyMutationInput, BadgeUncheckedUpdateManyInput>
+    /**
+     * Filter which Badges to update
+     */
+    where?: BadgeWhereInput
+    /**
+     * Limit how many Badges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Badge upsert
+   */
+  export type BadgeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Badge to update in case it exists.
+     */
+    where: BadgeWhereUniqueInput
+    /**
+     * In case the Badge found by the `where` argument doesn't exist, create a new Badge with this data.
+     */
+    create: XOR<BadgeCreateInput, BadgeUncheckedCreateInput>
+    /**
+     * In case the Badge was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BadgeUpdateInput, BadgeUncheckedUpdateInput>
+  }
+
+  /**
+   * Badge delete
+   */
+  export type BadgeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+    /**
+     * Filter which Badge to delete.
+     */
+    where: BadgeWhereUniqueInput
+  }
+
+  /**
+   * Badge deleteMany
+   */
+  export type BadgeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Badges to delete
+     */
+    where?: BadgeWhereInput
+    /**
+     * Limit how many Badges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Badge.postBadges
+   */
+  export type Badge$postBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    where?: PostBadgesWhereInput
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    cursor?: PostBadgesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * Badge.userBadges
+   */
+  export type Badge$userBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    where?: UserBadgesWhereInput
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    cursor?: UserBadgesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserBadgesScalarFieldEnum | UserBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * Badge without action
+   */
+  export type BadgeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Badge
+     */
+    select?: BadgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Badge
+     */
+    omit?: BadgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BadgeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PostBadges
+   */
+
+  export type AggregatePostBadges = {
+    _count: PostBadgesCountAggregateOutputType | null
+    _min: PostBadgesMinAggregateOutputType | null
+    _max: PostBadgesMaxAggregateOutputType | null
+  }
+
+  export type PostBadgesMinAggregateOutputType = {
+    id: string | null
+    postId: string | null
+    badgeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostBadgesMaxAggregateOutputType = {
+    id: string | null
+    postId: string | null
+    badgeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostBadgesCountAggregateOutputType = {
+    id: number
+    postId: number
+    badgeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PostBadgesMinAggregateInputType = {
+    id?: true
+    postId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostBadgesMaxAggregateInputType = {
+    id?: true
+    postId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostBadgesCountAggregateInputType = {
+    id?: true
+    postId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PostBadgesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostBadges to aggregate.
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostBadges to fetch.
+     */
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PostBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PostBadges
+    **/
+    _count?: true | PostBadgesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PostBadgesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PostBadgesMaxAggregateInputType
+  }
+
+  export type GetPostBadgesAggregateType<T extends PostBadgesAggregateArgs> = {
+        [P in keyof T & keyof AggregatePostBadges]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePostBadges[P]>
+      : GetScalarType<T[P], AggregatePostBadges[P]>
+  }
+
+
+
+
+  export type PostBadgesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostBadgesWhereInput
+    orderBy?: PostBadgesOrderByWithAggregationInput | PostBadgesOrderByWithAggregationInput[]
+    by: PostBadgesScalarFieldEnum[] | PostBadgesScalarFieldEnum
+    having?: PostBadgesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PostBadgesCountAggregateInputType | true
+    _min?: PostBadgesMinAggregateInputType
+    _max?: PostBadgesMaxAggregateInputType
+  }
+
+  export type PostBadgesGroupByOutputType = {
+    id: string
+    postId: string
+    badgeId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PostBadgesCountAggregateOutputType | null
+    _min: PostBadgesMinAggregateOutputType | null
+    _max: PostBadgesMaxAggregateOutputType | null
+  }
+
+  type GetPostBadgesGroupByPayload<T extends PostBadgesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PostBadgesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PostBadgesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PostBadgesGroupByOutputType[P]>
+            : GetScalarType<T[P], PostBadgesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PostBadgesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postBadges"]>
+
+  export type PostBadgesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postBadges"]>
+
+  export type PostBadgesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postBadges"]>
+
+  export type PostBadgesSelectScalar = {
+    id?: boolean
+    postId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PostBadgesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "badgeId" | "createdAt" | "updatedAt", ExtArgs["result"]["postBadges"]>
+  export type PostBadgesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+  export type PostBadgesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+  export type PostBadgesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+
+  export type $PostBadgesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PostBadges"
+    objects: {
+      post: Prisma.$PostPayload<ExtArgs>
+      badge: Prisma.$BadgePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      postId: string
+      badgeId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["postBadges"]>
+    composites: {}
+  }
+
+  type PostBadgesGetPayload<S extends boolean | null | undefined | PostBadgesDefaultArgs> = $Result.GetResult<Prisma.$PostBadgesPayload, S>
+
+  type PostBadgesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PostBadgesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PostBadgesCountAggregateInputType | true
+    }
+
+  export interface PostBadgesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PostBadges'], meta: { name: 'PostBadges' } }
+    /**
+     * Find zero or one PostBadges that matches the filter.
+     * @param {PostBadgesFindUniqueArgs} args - Arguments to find a PostBadges
+     * @example
+     * // Get one PostBadges
+     * const postBadges = await prisma.postBadges.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PostBadgesFindUniqueArgs>(args: SelectSubset<T, PostBadgesFindUniqueArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PostBadges that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PostBadgesFindUniqueOrThrowArgs} args - Arguments to find a PostBadges
+     * @example
+     * // Get one PostBadges
+     * const postBadges = await prisma.postBadges.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PostBadgesFindUniqueOrThrowArgs>(args: SelectSubset<T, PostBadgesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostBadges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesFindFirstArgs} args - Arguments to find a PostBadges
+     * @example
+     * // Get one PostBadges
+     * const postBadges = await prisma.postBadges.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PostBadgesFindFirstArgs>(args?: SelectSubset<T, PostBadgesFindFirstArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostBadges that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesFindFirstOrThrowArgs} args - Arguments to find a PostBadges
+     * @example
+     * // Get one PostBadges
+     * const postBadges = await prisma.postBadges.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PostBadgesFindFirstOrThrowArgs>(args?: SelectSubset<T, PostBadgesFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PostBadges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PostBadges
+     * const postBadges = await prisma.postBadges.findMany()
+     * 
+     * // Get first 10 PostBadges
+     * const postBadges = await prisma.postBadges.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const postBadgesWithIdOnly = await prisma.postBadges.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PostBadgesFindManyArgs>(args?: SelectSubset<T, PostBadgesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PostBadges.
+     * @param {PostBadgesCreateArgs} args - Arguments to create a PostBadges.
+     * @example
+     * // Create one PostBadges
+     * const PostBadges = await prisma.postBadges.create({
+     *   data: {
+     *     // ... data to create a PostBadges
+     *   }
+     * })
+     * 
+     */
+    create<T extends PostBadgesCreateArgs>(args: SelectSubset<T, PostBadgesCreateArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PostBadges.
+     * @param {PostBadgesCreateManyArgs} args - Arguments to create many PostBadges.
+     * @example
+     * // Create many PostBadges
+     * const postBadges = await prisma.postBadges.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PostBadgesCreateManyArgs>(args?: SelectSubset<T, PostBadgesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PostBadges and returns the data saved in the database.
+     * @param {PostBadgesCreateManyAndReturnArgs} args - Arguments to create many PostBadges.
+     * @example
+     * // Create many PostBadges
+     * const postBadges = await prisma.postBadges.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PostBadges and only return the `id`
+     * const postBadgesWithIdOnly = await prisma.postBadges.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PostBadgesCreateManyAndReturnArgs>(args?: SelectSubset<T, PostBadgesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PostBadges.
+     * @param {PostBadgesDeleteArgs} args - Arguments to delete one PostBadges.
+     * @example
+     * // Delete one PostBadges
+     * const PostBadges = await prisma.postBadges.delete({
+     *   where: {
+     *     // ... filter to delete one PostBadges
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PostBadgesDeleteArgs>(args: SelectSubset<T, PostBadgesDeleteArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PostBadges.
+     * @param {PostBadgesUpdateArgs} args - Arguments to update one PostBadges.
+     * @example
+     * // Update one PostBadges
+     * const postBadges = await prisma.postBadges.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PostBadgesUpdateArgs>(args: SelectSubset<T, PostBadgesUpdateArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PostBadges.
+     * @param {PostBadgesDeleteManyArgs} args - Arguments to filter PostBadges to delete.
+     * @example
+     * // Delete a few PostBadges
+     * const { count } = await prisma.postBadges.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PostBadgesDeleteManyArgs>(args?: SelectSubset<T, PostBadgesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PostBadges
+     * const postBadges = await prisma.postBadges.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PostBadgesUpdateManyArgs>(args: SelectSubset<T, PostBadgesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostBadges and returns the data updated in the database.
+     * @param {PostBadgesUpdateManyAndReturnArgs} args - Arguments to update many PostBadges.
+     * @example
+     * // Update many PostBadges
+     * const postBadges = await prisma.postBadges.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PostBadges and only return the `id`
+     * const postBadgesWithIdOnly = await prisma.postBadges.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PostBadgesUpdateManyAndReturnArgs>(args: SelectSubset<T, PostBadgesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PostBadges.
+     * @param {PostBadgesUpsertArgs} args - Arguments to update or create a PostBadges.
+     * @example
+     * // Update or create a PostBadges
+     * const postBadges = await prisma.postBadges.upsert({
+     *   create: {
+     *     // ... data to create a PostBadges
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PostBadges we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PostBadgesUpsertArgs>(args: SelectSubset<T, PostBadgesUpsertArgs<ExtArgs>>): Prisma__PostBadgesClient<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PostBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesCountArgs} args - Arguments to filter PostBadges to count.
+     * @example
+     * // Count the number of PostBadges
+     * const count = await prisma.postBadges.count({
+     *   where: {
+     *     // ... the filter for the PostBadges we want to count
+     *   }
+     * })
+    **/
+    count<T extends PostBadgesCountArgs>(
+      args?: Subset<T, PostBadgesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PostBadgesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PostBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PostBadgesAggregateArgs>(args: Subset<T, PostBadgesAggregateArgs>): Prisma.PrismaPromise<GetPostBadgesAggregateType<T>>
+
+    /**
+     * Group by PostBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostBadgesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PostBadgesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PostBadgesGroupByArgs['orderBy'] }
+        : { orderBy?: PostBadgesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PostBadgesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostBadgesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PostBadges model
+   */
+  readonly fields: PostBadgesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PostBadges.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PostBadgesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    badge<T extends BadgeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BadgeDefaultArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PostBadges model
+   */ 
+  interface PostBadgesFieldRefs {
+    readonly id: FieldRef<"PostBadges", 'String'>
+    readonly postId: FieldRef<"PostBadges", 'String'>
+    readonly badgeId: FieldRef<"PostBadges", 'String'>
+    readonly createdAt: FieldRef<"PostBadges", 'DateTime'>
+    readonly updatedAt: FieldRef<"PostBadges", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PostBadges findUnique
+   */
+  export type PostBadgesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which PostBadges to fetch.
+     */
+    where: PostBadgesWhereUniqueInput
+  }
+
+  /**
+   * PostBadges findUniqueOrThrow
+   */
+  export type PostBadgesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which PostBadges to fetch.
+     */
+    where: PostBadgesWhereUniqueInput
+  }
+
+  /**
+   * PostBadges findFirst
+   */
+  export type PostBadgesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which PostBadges to fetch.
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostBadges to fetch.
+     */
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostBadges.
+     */
+    cursor?: PostBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostBadges.
+     */
+    distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * PostBadges findFirstOrThrow
+   */
+  export type PostBadgesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which PostBadges to fetch.
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostBadges to fetch.
+     */
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostBadges.
+     */
+    cursor?: PostBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostBadges.
+     */
+    distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * PostBadges findMany
+   */
+  export type PostBadgesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which PostBadges to fetch.
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostBadges to fetch.
+     */
+    orderBy?: PostBadgesOrderByWithRelationInput | PostBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PostBadges.
+     */
+    cursor?: PostBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostBadges.
+     */
+    skip?: number
+    distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * PostBadges create
+   */
+  export type PostBadgesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PostBadges.
+     */
+    data: XOR<PostBadgesCreateInput, PostBadgesUncheckedCreateInput>
+  }
+
+  /**
+   * PostBadges createMany
+   */
+  export type PostBadgesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PostBadges.
+     */
+    data: PostBadgesCreateManyInput | PostBadgesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PostBadges createManyAndReturn
+   */
+  export type PostBadgesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * The data used to create many PostBadges.
+     */
+    data: PostBadgesCreateManyInput | PostBadgesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PostBadges update
+   */
+  export type PostBadgesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PostBadges.
+     */
+    data: XOR<PostBadgesUpdateInput, PostBadgesUncheckedUpdateInput>
+    /**
+     * Choose, which PostBadges to update.
+     */
+    where: PostBadgesWhereUniqueInput
+  }
+
+  /**
+   * PostBadges updateMany
+   */
+  export type PostBadgesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PostBadges.
+     */
+    data: XOR<PostBadgesUpdateManyMutationInput, PostBadgesUncheckedUpdateManyInput>
+    /**
+     * Filter which PostBadges to update
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * Limit how many PostBadges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostBadges updateManyAndReturn
+   */
+  export type PostBadgesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * The data used to update PostBadges.
+     */
+    data: XOR<PostBadgesUpdateManyMutationInput, PostBadgesUncheckedUpdateManyInput>
+    /**
+     * Filter which PostBadges to update
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * Limit how many PostBadges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PostBadges upsert
+   */
+  export type PostBadgesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PostBadges to update in case it exists.
+     */
+    where: PostBadgesWhereUniqueInput
+    /**
+     * In case the PostBadges found by the `where` argument doesn't exist, create a new PostBadges with this data.
+     */
+    create: XOR<PostBadgesCreateInput, PostBadgesUncheckedCreateInput>
+    /**
+     * In case the PostBadges was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PostBadgesUpdateInput, PostBadgesUncheckedUpdateInput>
+  }
+
+  /**
+   * PostBadges delete
+   */
+  export type PostBadgesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+    /**
+     * Filter which PostBadges to delete.
+     */
+    where: PostBadgesWhereUniqueInput
+  }
+
+  /**
+   * PostBadges deleteMany
+   */
+  export type PostBadgesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostBadges to delete
+     */
+    where?: PostBadgesWhereInput
+    /**
+     * Limit how many PostBadges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostBadges without action
+   */
+  export type PostBadgesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostBadges
+     */
+    select?: PostBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostBadges
+     */
+    omit?: PostBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostBadgesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserBadges
+   */
+
+  export type AggregateUserBadges = {
+    _count: UserBadgesCountAggregateOutputType | null
+    _min: UserBadgesMinAggregateOutputType | null
+    _max: UserBadgesMaxAggregateOutputType | null
+  }
+
+  export type UserBadgesMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    badgeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserBadgesMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    badgeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserBadgesCountAggregateOutputType = {
+    id: number
+    userId: number
+    badgeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserBadgesMinAggregateInputType = {
+    id?: true
+    userId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserBadgesMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserBadgesCountAggregateInputType = {
+    id?: true
+    userId?: true
+    badgeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserBadgesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserBadges to aggregate.
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBadges to fetch.
+     */
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserBadges
+    **/
+    _count?: true | UserBadgesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserBadgesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserBadgesMaxAggregateInputType
+  }
+
+  export type GetUserBadgesAggregateType<T extends UserBadgesAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserBadges]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserBadges[P]>
+      : GetScalarType<T[P], AggregateUserBadges[P]>
+  }
+
+
+
+
+  export type UserBadgesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserBadgesWhereInput
+    orderBy?: UserBadgesOrderByWithAggregationInput | UserBadgesOrderByWithAggregationInput[]
+    by: UserBadgesScalarFieldEnum[] | UserBadgesScalarFieldEnum
+    having?: UserBadgesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserBadgesCountAggregateInputType | true
+    _min?: UserBadgesMinAggregateInputType
+    _max?: UserBadgesMaxAggregateInputType
+  }
+
+  export type UserBadgesGroupByOutputType = {
+    id: string
+    userId: string
+    badgeId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: UserBadgesCountAggregateOutputType | null
+    _min: UserBadgesMinAggregateOutputType | null
+    _max: UserBadgesMaxAggregateOutputType | null
+  }
+
+  type GetUserBadgesGroupByPayload<T extends UserBadgesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserBadgesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserBadgesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserBadgesGroupByOutputType[P]>
+            : GetScalarType<T[P], UserBadgesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserBadgesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userBadges"]>
+
+  export type UserBadgesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userBadges"]>
+
+  export type UserBadgesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userBadges"]>
+
+  export type UserBadgesSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    badgeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserBadgesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "badgeId" | "createdAt" | "updatedAt", ExtArgs["result"]["userBadges"]>
+  export type UserBadgesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+  export type UserBadgesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+  export type UserBadgesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    badge?: boolean | BadgeDefaultArgs<ExtArgs>
+  }
+
+  export type $UserBadgesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserBadges"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      badge: Prisma.$BadgePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      badgeId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userBadges"]>
+    composites: {}
+  }
+
+  type UserBadgesGetPayload<S extends boolean | null | undefined | UserBadgesDefaultArgs> = $Result.GetResult<Prisma.$UserBadgesPayload, S>
+
+  type UserBadgesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserBadgesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserBadgesCountAggregateInputType | true
+    }
+
+  export interface UserBadgesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserBadges'], meta: { name: 'UserBadges' } }
+    /**
+     * Find zero or one UserBadges that matches the filter.
+     * @param {UserBadgesFindUniqueArgs} args - Arguments to find a UserBadges
+     * @example
+     * // Get one UserBadges
+     * const userBadges = await prisma.userBadges.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserBadgesFindUniqueArgs>(args: SelectSubset<T, UserBadgesFindUniqueArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserBadges that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserBadgesFindUniqueOrThrowArgs} args - Arguments to find a UserBadges
+     * @example
+     * // Get one UserBadges
+     * const userBadges = await prisma.userBadges.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserBadgesFindUniqueOrThrowArgs>(args: SelectSubset<T, UserBadgesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserBadges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesFindFirstArgs} args - Arguments to find a UserBadges
+     * @example
+     * // Get one UserBadges
+     * const userBadges = await prisma.userBadges.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserBadgesFindFirstArgs>(args?: SelectSubset<T, UserBadgesFindFirstArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserBadges that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesFindFirstOrThrowArgs} args - Arguments to find a UserBadges
+     * @example
+     * // Get one UserBadges
+     * const userBadges = await prisma.userBadges.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserBadgesFindFirstOrThrowArgs>(args?: SelectSubset<T, UserBadgesFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserBadges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserBadges
+     * const userBadges = await prisma.userBadges.findMany()
+     * 
+     * // Get first 10 UserBadges
+     * const userBadges = await prisma.userBadges.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userBadgesWithIdOnly = await prisma.userBadges.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserBadgesFindManyArgs>(args?: SelectSubset<T, UserBadgesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserBadges.
+     * @param {UserBadgesCreateArgs} args - Arguments to create a UserBadges.
+     * @example
+     * // Create one UserBadges
+     * const UserBadges = await prisma.userBadges.create({
+     *   data: {
+     *     // ... data to create a UserBadges
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserBadgesCreateArgs>(args: SelectSubset<T, UserBadgesCreateArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserBadges.
+     * @param {UserBadgesCreateManyArgs} args - Arguments to create many UserBadges.
+     * @example
+     * // Create many UserBadges
+     * const userBadges = await prisma.userBadges.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserBadgesCreateManyArgs>(args?: SelectSubset<T, UserBadgesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserBadges and returns the data saved in the database.
+     * @param {UserBadgesCreateManyAndReturnArgs} args - Arguments to create many UserBadges.
+     * @example
+     * // Create many UserBadges
+     * const userBadges = await prisma.userBadges.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserBadges and only return the `id`
+     * const userBadgesWithIdOnly = await prisma.userBadges.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserBadgesCreateManyAndReturnArgs>(args?: SelectSubset<T, UserBadgesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserBadges.
+     * @param {UserBadgesDeleteArgs} args - Arguments to delete one UserBadges.
+     * @example
+     * // Delete one UserBadges
+     * const UserBadges = await prisma.userBadges.delete({
+     *   where: {
+     *     // ... filter to delete one UserBadges
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserBadgesDeleteArgs>(args: SelectSubset<T, UserBadgesDeleteArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserBadges.
+     * @param {UserBadgesUpdateArgs} args - Arguments to update one UserBadges.
+     * @example
+     * // Update one UserBadges
+     * const userBadges = await prisma.userBadges.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserBadgesUpdateArgs>(args: SelectSubset<T, UserBadgesUpdateArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserBadges.
+     * @param {UserBadgesDeleteManyArgs} args - Arguments to filter UserBadges to delete.
+     * @example
+     * // Delete a few UserBadges
+     * const { count } = await prisma.userBadges.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserBadgesDeleteManyArgs>(args?: SelectSubset<T, UserBadgesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserBadges
+     * const userBadges = await prisma.userBadges.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserBadgesUpdateManyArgs>(args: SelectSubset<T, UserBadgesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserBadges and returns the data updated in the database.
+     * @param {UserBadgesUpdateManyAndReturnArgs} args - Arguments to update many UserBadges.
+     * @example
+     * // Update many UserBadges
+     * const userBadges = await prisma.userBadges.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserBadges and only return the `id`
+     * const userBadgesWithIdOnly = await prisma.userBadges.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserBadgesUpdateManyAndReturnArgs>(args: SelectSubset<T, UserBadgesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserBadges.
+     * @param {UserBadgesUpsertArgs} args - Arguments to update or create a UserBadges.
+     * @example
+     * // Update or create a UserBadges
+     * const userBadges = await prisma.userBadges.upsert({
+     *   create: {
+     *     // ... data to create a UserBadges
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserBadges we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserBadgesUpsertArgs>(args: SelectSubset<T, UserBadgesUpsertArgs<ExtArgs>>): Prisma__UserBadgesClient<$Result.GetResult<Prisma.$UserBadgesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesCountArgs} args - Arguments to filter UserBadges to count.
+     * @example
+     * // Count the number of UserBadges
+     * const count = await prisma.userBadges.count({
+     *   where: {
+     *     // ... the filter for the UserBadges we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserBadgesCountArgs>(
+      args?: Subset<T, UserBadgesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserBadgesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserBadgesAggregateArgs>(args: Subset<T, UserBadgesAggregateArgs>): Prisma.PrismaPromise<GetUserBadgesAggregateType<T>>
+
+    /**
+     * Group by UserBadges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBadgesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserBadgesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserBadgesGroupByArgs['orderBy'] }
+        : { orderBy?: UserBadgesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserBadgesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserBadgesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserBadges model
+   */
+  readonly fields: UserBadgesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserBadges.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserBadgesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    badge<T extends BadgeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BadgeDefaultArgs<ExtArgs>>): Prisma__BadgeClient<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserBadges model
+   */ 
+  interface UserBadgesFieldRefs {
+    readonly id: FieldRef<"UserBadges", 'String'>
+    readonly userId: FieldRef<"UserBadges", 'String'>
+    readonly badgeId: FieldRef<"UserBadges", 'String'>
+    readonly createdAt: FieldRef<"UserBadges", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserBadges", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserBadges findUnique
+   */
+  export type UserBadgesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which UserBadges to fetch.
+     */
+    where: UserBadgesWhereUniqueInput
+  }
+
+  /**
+   * UserBadges findUniqueOrThrow
+   */
+  export type UserBadgesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which UserBadges to fetch.
+     */
+    where: UserBadgesWhereUniqueInput
+  }
+
+  /**
+   * UserBadges findFirst
+   */
+  export type UserBadgesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which UserBadges to fetch.
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBadges to fetch.
+     */
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserBadges.
+     */
+    cursor?: UserBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserBadges.
+     */
+    distinct?: UserBadgesScalarFieldEnum | UserBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * UserBadges findFirstOrThrow
+   */
+  export type UserBadgesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which UserBadges to fetch.
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBadges to fetch.
+     */
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserBadges.
+     */
+    cursor?: UserBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBadges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserBadges.
+     */
+    distinct?: UserBadgesScalarFieldEnum | UserBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * UserBadges findMany
+   */
+  export type UserBadgesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter, which UserBadges to fetch.
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBadges to fetch.
+     */
+    orderBy?: UserBadgesOrderByWithRelationInput | UserBadgesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserBadges.
+     */
+    cursor?: UserBadgesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBadges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBadges.
+     */
+    skip?: number
+    distinct?: UserBadgesScalarFieldEnum | UserBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * UserBadges create
+   */
+  export type UserBadgesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserBadges.
+     */
+    data: XOR<UserBadgesCreateInput, UserBadgesUncheckedCreateInput>
+  }
+
+  /**
+   * UserBadges createMany
+   */
+  export type UserBadgesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserBadges.
+     */
+    data: UserBadgesCreateManyInput | UserBadgesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserBadges createManyAndReturn
+   */
+  export type UserBadgesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserBadges.
+     */
+    data: UserBadgesCreateManyInput | UserBadgesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserBadges update
+   */
+  export type UserBadgesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserBadges.
+     */
+    data: XOR<UserBadgesUpdateInput, UserBadgesUncheckedUpdateInput>
+    /**
+     * Choose, which UserBadges to update.
+     */
+    where: UserBadgesWhereUniqueInput
+  }
+
+  /**
+   * UserBadges updateMany
+   */
+  export type UserBadgesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserBadges.
+     */
+    data: XOR<UserBadgesUpdateManyMutationInput, UserBadgesUncheckedUpdateManyInput>
+    /**
+     * Filter which UserBadges to update
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * Limit how many UserBadges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserBadges updateManyAndReturn
+   */
+  export type UserBadgesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * The data used to update UserBadges.
+     */
+    data: XOR<UserBadgesUpdateManyMutationInput, UserBadgesUncheckedUpdateManyInput>
+    /**
+     * Filter which UserBadges to update
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * Limit how many UserBadges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserBadges upsert
+   */
+  export type UserBadgesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserBadges to update in case it exists.
+     */
+    where: UserBadgesWhereUniqueInput
+    /**
+     * In case the UserBadges found by the `where` argument doesn't exist, create a new UserBadges with this data.
+     */
+    create: XOR<UserBadgesCreateInput, UserBadgesUncheckedCreateInput>
+    /**
+     * In case the UserBadges was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserBadgesUpdateInput, UserBadgesUncheckedUpdateInput>
+  }
+
+  /**
+   * UserBadges delete
+   */
+  export type UserBadgesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+    /**
+     * Filter which UserBadges to delete.
+     */
+    where: UserBadgesWhereUniqueInput
+  }
+
+  /**
+   * UserBadges deleteMany
+   */
+  export type UserBadgesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserBadges to delete
+     */
+    where?: UserBadgesWhereInput
+    /**
+     * Limit how many UserBadges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserBadges without action
+   */
+  export type UserBadgesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBadges
+     */
+    select?: UserBadgesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBadges
+     */
+    omit?: UserBadgesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserBadgesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Portfolio
+   */
+
+  export type AggregatePortfolio = {
+    _count: PortfolioCountAggregateOutputType | null
+    _min: PortfolioMinAggregateOutputType | null
+    _max: PortfolioMaxAggregateOutputType | null
+  }
+
+  export type PortfolioMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    bio: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortfolioMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    bio: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortfolioCountAggregateOutputType = {
+    id: number
+    userId: number
+    bio: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PortfolioMinAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortfolioMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortfolioCountAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PortfolioAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Portfolio to aggregate.
+     */
+    where?: PortfolioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Portfolios to fetch.
+     */
+    orderBy?: PortfolioOrderByWithRelationInput | PortfolioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PortfolioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Portfolios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Portfolios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Portfolios
+    **/
+    _count?: true | PortfolioCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PortfolioMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PortfolioMaxAggregateInputType
+  }
+
+  export type GetPortfolioAggregateType<T extends PortfolioAggregateArgs> = {
+        [P in keyof T & keyof AggregatePortfolio]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePortfolio[P]>
+      : GetScalarType<T[P], AggregatePortfolio[P]>
+  }
+
+
+
+
+  export type PortfolioGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortfolioWhereInput
+    orderBy?: PortfolioOrderByWithAggregationInput | PortfolioOrderByWithAggregationInput[]
+    by: PortfolioScalarFieldEnum[] | PortfolioScalarFieldEnum
+    having?: PortfolioScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PortfolioCountAggregateInputType | true
+    _min?: PortfolioMinAggregateInputType
+    _max?: PortfolioMaxAggregateInputType
+  }
+
+  export type PortfolioGroupByOutputType = {
+    id: string
+    userId: string
+    bio: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PortfolioCountAggregateOutputType | null
+    _min: PortfolioMinAggregateOutputType | null
+    _max: PortfolioMaxAggregateOutputType | null
+  }
+
+  type GetPortfolioGroupByPayload<T extends PortfolioGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PortfolioGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PortfolioGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PortfolioGroupByOutputType[P]>
+            : GetScalarType<T[P], PortfolioGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PortfolioSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | Portfolio$userArgs<ExtArgs>
+  }, ExtArgs["result"]["portfolio"]>
+
+  export type PortfolioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["portfolio"]>
+
+  export type PortfolioSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["portfolio"]>
+
+  export type PortfolioSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PortfolioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "createdAt" | "updatedAt", ExtArgs["result"]["portfolio"]>
+  export type PortfolioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Portfolio$userArgs<ExtArgs>
+  }
+  export type PortfolioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PortfolioIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PortfolioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Portfolio"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      bio: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["portfolio"]>
+    composites: {}
+  }
+
+  type PortfolioGetPayload<S extends boolean | null | undefined | PortfolioDefaultArgs> = $Result.GetResult<Prisma.$PortfolioPayload, S>
+
+  type PortfolioCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PortfolioFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PortfolioCountAggregateInputType | true
+    }
+
+  export interface PortfolioDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Portfolio'], meta: { name: 'Portfolio' } }
+    /**
+     * Find zero or one Portfolio that matches the filter.
+     * @param {PortfolioFindUniqueArgs} args - Arguments to find a Portfolio
+     * @example
+     * // Get one Portfolio
+     * const portfolio = await prisma.portfolio.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PortfolioFindUniqueArgs>(args: SelectSubset<T, PortfolioFindUniqueArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Portfolio that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PortfolioFindUniqueOrThrowArgs} args - Arguments to find a Portfolio
+     * @example
+     * // Get one Portfolio
+     * const portfolio = await prisma.portfolio.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PortfolioFindUniqueOrThrowArgs>(args: SelectSubset<T, PortfolioFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Portfolio that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioFindFirstArgs} args - Arguments to find a Portfolio
+     * @example
+     * // Get one Portfolio
+     * const portfolio = await prisma.portfolio.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PortfolioFindFirstArgs>(args?: SelectSubset<T, PortfolioFindFirstArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Portfolio that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioFindFirstOrThrowArgs} args - Arguments to find a Portfolio
+     * @example
+     * // Get one Portfolio
+     * const portfolio = await prisma.portfolio.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PortfolioFindFirstOrThrowArgs>(args?: SelectSubset<T, PortfolioFindFirstOrThrowArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Portfolios that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Portfolios
+     * const portfolios = await prisma.portfolio.findMany()
+     * 
+     * // Get first 10 Portfolios
+     * const portfolios = await prisma.portfolio.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const portfolioWithIdOnly = await prisma.portfolio.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PortfolioFindManyArgs>(args?: SelectSubset<T, PortfolioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Portfolio.
+     * @param {PortfolioCreateArgs} args - Arguments to create a Portfolio.
+     * @example
+     * // Create one Portfolio
+     * const Portfolio = await prisma.portfolio.create({
+     *   data: {
+     *     // ... data to create a Portfolio
+     *   }
+     * })
+     * 
+     */
+    create<T extends PortfolioCreateArgs>(args: SelectSubset<T, PortfolioCreateArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Portfolios.
+     * @param {PortfolioCreateManyArgs} args - Arguments to create many Portfolios.
+     * @example
+     * // Create many Portfolios
+     * const portfolio = await prisma.portfolio.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PortfolioCreateManyArgs>(args?: SelectSubset<T, PortfolioCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Portfolios and returns the data saved in the database.
+     * @param {PortfolioCreateManyAndReturnArgs} args - Arguments to create many Portfolios.
+     * @example
+     * // Create many Portfolios
+     * const portfolio = await prisma.portfolio.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Portfolios and only return the `id`
+     * const portfolioWithIdOnly = await prisma.portfolio.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PortfolioCreateManyAndReturnArgs>(args?: SelectSubset<T, PortfolioCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Portfolio.
+     * @param {PortfolioDeleteArgs} args - Arguments to delete one Portfolio.
+     * @example
+     * // Delete one Portfolio
+     * const Portfolio = await prisma.portfolio.delete({
+     *   where: {
+     *     // ... filter to delete one Portfolio
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PortfolioDeleteArgs>(args: SelectSubset<T, PortfolioDeleteArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Portfolio.
+     * @param {PortfolioUpdateArgs} args - Arguments to update one Portfolio.
+     * @example
+     * // Update one Portfolio
+     * const portfolio = await prisma.portfolio.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PortfolioUpdateArgs>(args: SelectSubset<T, PortfolioUpdateArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Portfolios.
+     * @param {PortfolioDeleteManyArgs} args - Arguments to filter Portfolios to delete.
+     * @example
+     * // Delete a few Portfolios
+     * const { count } = await prisma.portfolio.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PortfolioDeleteManyArgs>(args?: SelectSubset<T, PortfolioDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Portfolios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Portfolios
+     * const portfolio = await prisma.portfolio.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PortfolioUpdateManyArgs>(args: SelectSubset<T, PortfolioUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Portfolios and returns the data updated in the database.
+     * @param {PortfolioUpdateManyAndReturnArgs} args - Arguments to update many Portfolios.
+     * @example
+     * // Update many Portfolios
+     * const portfolio = await prisma.portfolio.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Portfolios and only return the `id`
+     * const portfolioWithIdOnly = await prisma.portfolio.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PortfolioUpdateManyAndReturnArgs>(args: SelectSubset<T, PortfolioUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Portfolio.
+     * @param {PortfolioUpsertArgs} args - Arguments to update or create a Portfolio.
+     * @example
+     * // Update or create a Portfolio
+     * const portfolio = await prisma.portfolio.upsert({
+     *   create: {
+     *     // ... data to create a Portfolio
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Portfolio we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PortfolioUpsertArgs>(args: SelectSubset<T, PortfolioUpsertArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Portfolios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioCountArgs} args - Arguments to filter Portfolios to count.
+     * @example
+     * // Count the number of Portfolios
+     * const count = await prisma.portfolio.count({
+     *   where: {
+     *     // ... the filter for the Portfolios we want to count
+     *   }
+     * })
+    **/
+    count<T extends PortfolioCountArgs>(
+      args?: Subset<T, PortfolioCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PortfolioCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Portfolio.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PortfolioAggregateArgs>(args: Subset<T, PortfolioAggregateArgs>): Prisma.PrismaPromise<GetPortfolioAggregateType<T>>
+
+    /**
+     * Group by Portfolio.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PortfolioGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PortfolioGroupByArgs['orderBy'] }
+        : { orderBy?: PortfolioGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PortfolioGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPortfolioGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Portfolio model
+   */
+  readonly fields: PortfolioFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Portfolio.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PortfolioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Portfolio$userArgs<ExtArgs> = {}>(args?: Subset<T, Portfolio$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Portfolio model
+   */ 
+  interface PortfolioFieldRefs {
+    readonly id: FieldRef<"Portfolio", 'String'>
+    readonly userId: FieldRef<"Portfolio", 'String'>
+    readonly bio: FieldRef<"Portfolio", 'String'>
+    readonly createdAt: FieldRef<"Portfolio", 'DateTime'>
+    readonly updatedAt: FieldRef<"Portfolio", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Portfolio findUnique
+   */
+  export type PortfolioFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter, which Portfolio to fetch.
+     */
+    where: PortfolioWhereUniqueInput
+  }
+
+  /**
+   * Portfolio findUniqueOrThrow
+   */
+  export type PortfolioFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter, which Portfolio to fetch.
+     */
+    where: PortfolioWhereUniqueInput
+  }
+
+  /**
+   * Portfolio findFirst
+   */
+  export type PortfolioFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter, which Portfolio to fetch.
+     */
+    where?: PortfolioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Portfolios to fetch.
+     */
+    orderBy?: PortfolioOrderByWithRelationInput | PortfolioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Portfolios.
+     */
+    cursor?: PortfolioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Portfolios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Portfolios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Portfolios.
+     */
+    distinct?: PortfolioScalarFieldEnum | PortfolioScalarFieldEnum[]
+  }
+
+  /**
+   * Portfolio findFirstOrThrow
+   */
+  export type PortfolioFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter, which Portfolio to fetch.
+     */
+    where?: PortfolioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Portfolios to fetch.
+     */
+    orderBy?: PortfolioOrderByWithRelationInput | PortfolioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Portfolios.
+     */
+    cursor?: PortfolioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Portfolios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Portfolios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Portfolios.
+     */
+    distinct?: PortfolioScalarFieldEnum | PortfolioScalarFieldEnum[]
+  }
+
+  /**
+   * Portfolio findMany
+   */
+  export type PortfolioFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter, which Portfolios to fetch.
+     */
+    where?: PortfolioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Portfolios to fetch.
+     */
+    orderBy?: PortfolioOrderByWithRelationInput | PortfolioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Portfolios.
+     */
+    cursor?: PortfolioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Portfolios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Portfolios.
+     */
+    skip?: number
+    distinct?: PortfolioScalarFieldEnum | PortfolioScalarFieldEnum[]
+  }
+
+  /**
+   * Portfolio create
+   */
+  export type PortfolioCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Portfolio.
+     */
+    data: XOR<PortfolioCreateInput, PortfolioUncheckedCreateInput>
+  }
+
+  /**
+   * Portfolio createMany
+   */
+  export type PortfolioCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Portfolios.
+     */
+    data: PortfolioCreateManyInput | PortfolioCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Portfolio createManyAndReturn
+   */
+  export type PortfolioCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * The data used to create many Portfolios.
+     */
+    data: PortfolioCreateManyInput | PortfolioCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Portfolio update
+   */
+  export type PortfolioUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Portfolio.
+     */
+    data: XOR<PortfolioUpdateInput, PortfolioUncheckedUpdateInput>
+    /**
+     * Choose, which Portfolio to update.
+     */
+    where: PortfolioWhereUniqueInput
+  }
+
+  /**
+   * Portfolio updateMany
+   */
+  export type PortfolioUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Portfolios.
+     */
+    data: XOR<PortfolioUpdateManyMutationInput, PortfolioUncheckedUpdateManyInput>
+    /**
+     * Filter which Portfolios to update
+     */
+    where?: PortfolioWhereInput
+    /**
+     * Limit how many Portfolios to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Portfolio updateManyAndReturn
+   */
+  export type PortfolioUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * The data used to update Portfolios.
+     */
+    data: XOR<PortfolioUpdateManyMutationInput, PortfolioUncheckedUpdateManyInput>
+    /**
+     * Filter which Portfolios to update
+     */
+    where?: PortfolioWhereInput
+    /**
+     * Limit how many Portfolios to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Portfolio upsert
+   */
+  export type PortfolioUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Portfolio to update in case it exists.
+     */
+    where: PortfolioWhereUniqueInput
+    /**
+     * In case the Portfolio found by the `where` argument doesn't exist, create a new Portfolio with this data.
+     */
+    create: XOR<PortfolioCreateInput, PortfolioUncheckedCreateInput>
+    /**
+     * In case the Portfolio was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PortfolioUpdateInput, PortfolioUncheckedUpdateInput>
+  }
+
+  /**
+   * Portfolio delete
+   */
+  export type PortfolioDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+    /**
+     * Filter which Portfolio to delete.
+     */
+    where: PortfolioWhereUniqueInput
+  }
+
+  /**
+   * Portfolio deleteMany
+   */
+  export type PortfolioDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Portfolios to delete
+     */
+    where?: PortfolioWhereInput
+    /**
+     * Limit how many Portfolios to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Portfolio.user
+   */
+  export type Portfolio$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Portfolio without action
+   */
+  export type PortfolioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Portfolio
+     */
+    select?: PortfolioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Portfolio
+     */
+    omit?: PortfolioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Event
+   */
+
+  export type AggregateEvent = {
+    _count: EventCountAggregateOutputType | null
+    _min: EventMinAggregateOutputType | null
+    _max: EventMaxAggregateOutputType | null
+  }
+
+  export type EventMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    image: string | null
+    winnerId: string | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    communityId: string | null
+  }
+
+  export type EventMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    image: string | null
+    winnerId: string | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    communityId: string | null
+  }
+
+  export type EventCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    image: number
+    winnerId: number
+    startDate: number
+    endDate: number
+    createdAt: number
+    updatedAt: number
+    communityId: number
+    _all: number
+  }
+
+
+  export type EventMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    image?: true
+    winnerId?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    communityId?: true
+  }
+
+  export type EventMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    image?: true
+    winnerId?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    communityId?: true
+  }
+
+  export type EventCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    image?: true
+    winnerId?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    communityId?: true
+    _all?: true
+  }
+
+  export type EventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Event to aggregate.
+     */
+    where?: EventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Events to fetch.
+     */
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Events from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Events.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Events
+    **/
+    _count?: true | EventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EventMaxAggregateInputType
+  }
+
+  export type GetEventAggregateType<T extends EventAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvent[P]>
+      : GetScalarType<T[P], AggregateEvent[P]>
+  }
+
+
+
+
+  export type EventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithAggregationInput | EventOrderByWithAggregationInput[]
+    by: EventScalarFieldEnum[] | EventScalarFieldEnum
+    having?: EventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EventCountAggregateInputType | true
+    _min?: EventMinAggregateInputType
+    _max?: EventMaxAggregateInputType
+  }
+
+  export type EventGroupByOutputType = {
+    id: string
+    name: string
+    description: string
+    image: string
+    winnerId: string | null
+    startDate: Date
+    endDate: Date
+    createdAt: Date
+    updatedAt: Date
+    communityId: string
+    _count: EventCountAggregateOutputType | null
+    _min: EventMinAggregateOutputType | null
+    _max: EventMaxAggregateOutputType | null
+  }
+
+  type GetEventGroupByPayload<T extends EventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EventGroupByOutputType[P]>
+            : GetScalarType<T[P], EventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    winnerId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    communityId?: boolean
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["event"]>
+
+  export type EventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    winnerId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    communityId?: boolean
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["event"]>
+
+  export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    winnerId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    communityId?: boolean
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["event"]>
+
+  export type EventSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    winnerId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    communityId?: boolean
+  }
+
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "image" | "winnerId" | "startDate" | "endDate" | "createdAt" | "updatedAt" | "communityId", ExtArgs["result"]["event"]>
+  export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+  export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    winner?: boolean | Event$winnerArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+  }
+
+  export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Event"
+    objects: {
+      winner: Prisma.$UserPayload<ExtArgs> | null
+      community: Prisma.$CommunityPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string
+      image: string
+      winnerId: string | null
+      startDate: Date
+      endDate: Date
+      createdAt: Date
+      updatedAt: Date
+      communityId: string
+    }, ExtArgs["result"]["event"]>
+    composites: {}
+  }
+
+  type EventGetPayload<S extends boolean | null | undefined | EventDefaultArgs> = $Result.GetResult<Prisma.$EventPayload, S>
+
+  type EventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EventCountAggregateInputType | true
+    }
+
+  export interface EventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Event'], meta: { name: 'Event' } }
+    /**
+     * Find zero or one Event that matches the filter.
+     * @param {EventFindUniqueArgs} args - Arguments to find a Event
+     * @example
+     * // Get one Event
+     * const event = await prisma.event.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventFindUniqueArgs>(args: SelectSubset<T, EventFindUniqueArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Event that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventFindUniqueOrThrowArgs} args - Arguments to find a Event
+     * @example
+     * // Get one Event
+     * const event = await prisma.event.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventFindUniqueOrThrowArgs>(args: SelectSubset<T, EventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Event that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventFindFirstArgs} args - Arguments to find a Event
+     * @example
+     * // Get one Event
+     * const event = await prisma.event.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventFindFirstArgs>(args?: SelectSubset<T, EventFindFirstArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Event that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventFindFirstOrThrowArgs} args - Arguments to find a Event
+     * @example
+     * // Get one Event
+     * const event = await prisma.event.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventFindFirstOrThrowArgs>(args?: SelectSubset<T, EventFindFirstOrThrowArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Events that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Events
+     * const events = await prisma.event.findMany()
+     * 
+     * // Get first 10 Events
+     * const events = await prisma.event.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const eventWithIdOnly = await prisma.event.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EventFindManyArgs>(args?: SelectSubset<T, EventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Event.
+     * @param {EventCreateArgs} args - Arguments to create a Event.
+     * @example
+     * // Create one Event
+     * const Event = await prisma.event.create({
+     *   data: {
+     *     // ... data to create a Event
+     *   }
+     * })
+     * 
+     */
+    create<T extends EventCreateArgs>(args: SelectSubset<T, EventCreateArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Events.
+     * @param {EventCreateManyArgs} args - Arguments to create many Events.
+     * @example
+     * // Create many Events
+     * const event = await prisma.event.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EventCreateManyArgs>(args?: SelectSubset<T, EventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Events and returns the data saved in the database.
+     * @param {EventCreateManyAndReturnArgs} args - Arguments to create many Events.
+     * @example
+     * // Create many Events
+     * const event = await prisma.event.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Events and only return the `id`
+     * const eventWithIdOnly = await prisma.event.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EventCreateManyAndReturnArgs>(args?: SelectSubset<T, EventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Event.
+     * @param {EventDeleteArgs} args - Arguments to delete one Event.
+     * @example
+     * // Delete one Event
+     * const Event = await prisma.event.delete({
+     *   where: {
+     *     // ... filter to delete one Event
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EventDeleteArgs>(args: SelectSubset<T, EventDeleteArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Event.
+     * @param {EventUpdateArgs} args - Arguments to update one Event.
+     * @example
+     * // Update one Event
+     * const event = await prisma.event.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EventUpdateArgs>(args: SelectSubset<T, EventUpdateArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Events.
+     * @param {EventDeleteManyArgs} args - Arguments to filter Events to delete.
+     * @example
+     * // Delete a few Events
+     * const { count } = await prisma.event.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EventDeleteManyArgs>(args?: SelectSubset<T, EventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Events.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Events
+     * const event = await prisma.event.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EventUpdateManyArgs>(args: SelectSubset<T, EventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Events and returns the data updated in the database.
+     * @param {EventUpdateManyAndReturnArgs} args - Arguments to update many Events.
+     * @example
+     * // Update many Events
+     * const event = await prisma.event.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Events and only return the `id`
+     * const eventWithIdOnly = await prisma.event.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EventUpdateManyAndReturnArgs>(args: SelectSubset<T, EventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Event.
+     * @param {EventUpsertArgs} args - Arguments to update or create a Event.
+     * @example
+     * // Update or create a Event
+     * const event = await prisma.event.upsert({
+     *   create: {
+     *     // ... data to create a Event
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Event we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventUpsertArgs>(args: SelectSubset<T, EventUpsertArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Events.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventCountArgs} args - Arguments to filter Events to count.
+     * @example
+     * // Count the number of Events
+     * const count = await prisma.event.count({
+     *   where: {
+     *     // ... the filter for the Events we want to count
+     *   }
+     * })
+    **/
+    count<T extends EventCountArgs>(
+      args?: Subset<T, EventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Event.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EventAggregateArgs>(args: Subset<T, EventAggregateArgs>): Prisma.PrismaPromise<GetEventAggregateType<T>>
+
+    /**
+     * Group by Event.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EventGroupByArgs['orderBy'] }
+        : { orderBy?: EventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Event model
+   */
+  readonly fields: EventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Event.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    winner<T extends Event$winnerArgs<ExtArgs> = {}>(args?: Subset<T, Event$winnerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Event model
+   */ 
+  interface EventFieldRefs {
+    readonly id: FieldRef<"Event", 'String'>
+    readonly name: FieldRef<"Event", 'String'>
+    readonly description: FieldRef<"Event", 'String'>
+    readonly image: FieldRef<"Event", 'String'>
+    readonly winnerId: FieldRef<"Event", 'String'>
+    readonly startDate: FieldRef<"Event", 'DateTime'>
+    readonly endDate: FieldRef<"Event", 'DateTime'>
+    readonly createdAt: FieldRef<"Event", 'DateTime'>
+    readonly updatedAt: FieldRef<"Event", 'DateTime'>
+    readonly communityId: FieldRef<"Event", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Event findUnique
+   */
+  export type EventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter, which Event to fetch.
+     */
+    where: EventWhereUniqueInput
+  }
+
+  /**
+   * Event findUniqueOrThrow
+   */
+  export type EventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter, which Event to fetch.
+     */
+    where: EventWhereUniqueInput
+  }
+
+  /**
+   * Event findFirst
+   */
+  export type EventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter, which Event to fetch.
+     */
+    where?: EventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Events to fetch.
+     */
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Events.
+     */
+    cursor?: EventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Events from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Events.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Events.
+     */
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Event findFirstOrThrow
+   */
+  export type EventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter, which Event to fetch.
+     */
+    where?: EventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Events to fetch.
+     */
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Events.
+     */
+    cursor?: EventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Events from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Events.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Events.
+     */
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Event findMany
+   */
+  export type EventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter, which Events to fetch.
+     */
+    where?: EventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Events to fetch.
+     */
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Events.
+     */
+    cursor?: EventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Events from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Events.
+     */
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Event create
+   */
+  export type EventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Event.
+     */
+    data: XOR<EventCreateInput, EventUncheckedCreateInput>
+  }
+
+  /**
+   * Event createMany
+   */
+  export type EventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Events.
+     */
+    data: EventCreateManyInput | EventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Event createManyAndReturn
+   */
+  export type EventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * The data used to create many Events.
+     */
+    data: EventCreateManyInput | EventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Event update
+   */
+  export type EventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Event.
+     */
+    data: XOR<EventUpdateInput, EventUncheckedUpdateInput>
+    /**
+     * Choose, which Event to update.
+     */
+    where: EventWhereUniqueInput
+  }
+
+  /**
+   * Event updateMany
+   */
+  export type EventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Events.
+     */
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyInput>
+    /**
+     * Filter which Events to update
+     */
+    where?: EventWhereInput
+    /**
+     * Limit how many Events to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Event updateManyAndReturn
+   */
+  export type EventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * The data used to update Events.
+     */
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyInput>
+    /**
+     * Filter which Events to update
+     */
+    where?: EventWhereInput
+    /**
+     * Limit how many Events to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Event upsert
+   */
+  export type EventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Event to update in case it exists.
+     */
+    where: EventWhereUniqueInput
+    /**
+     * In case the Event found by the `where` argument doesn't exist, create a new Event with this data.
+     */
+    create: XOR<EventCreateInput, EventUncheckedCreateInput>
+    /**
+     * In case the Event was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventUpdateInput, EventUncheckedUpdateInput>
+  }
+
+  /**
+   * Event delete
+   */
+  export type EventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * Filter which Event to delete.
+     */
+    where: EventWhereUniqueInput
+  }
+
+  /**
+   * Event deleteMany
+   */
+  export type EventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Events to delete
+     */
+    where?: EventWhereInput
+    /**
+     * Limit how many Events to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Event.winner
+   */
+  export type Event$winnerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Event without action
+   */
+  export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9817,12 +17169,24 @@ export namespace Prisma {
     name: 'name',
     provider: 'provider',
     role: 'role',
-    communityId: 'communityId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    portfolioId: 'portfolioId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const CommunityMemberScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    communityId: 'communityId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    role: 'role'
+  };
+
+  export type CommunityMemberScalarFieldEnum = (typeof CommunityMemberScalarFieldEnum)[keyof typeof CommunityMemberScalarFieldEnum]
 
 
   export const CommunityScalarFieldEnum: {
@@ -9845,7 +17209,8 @@ export namespace Prisma {
     url: 'url',
     type: 'type',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    postId: 'postId'
   };
 
   export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
@@ -9899,6 +17264,70 @@ export namespace Prisma {
   };
 
   export type CommunityFollowScalarFieldEnum = (typeof CommunityFollowScalarFieldEnum)[keyof typeof CommunityFollowScalarFieldEnum]
+
+
+  export const BadgeScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    slug: 'slug',
+    type: 'type',
+    price: 'price',
+    image: 'image',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BadgeScalarFieldEnum = (typeof BadgeScalarFieldEnum)[keyof typeof BadgeScalarFieldEnum]
+
+
+  export const PostBadgesScalarFieldEnum: {
+    id: 'id',
+    postId: 'postId',
+    badgeId: 'badgeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PostBadgesScalarFieldEnum = (typeof PostBadgesScalarFieldEnum)[keyof typeof PostBadgesScalarFieldEnum]
+
+
+  export const UserBadgesScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    badgeId: 'badgeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserBadgesScalarFieldEnum = (typeof UserBadgesScalarFieldEnum)[keyof typeof UserBadgesScalarFieldEnum]
+
+
+  export const PortfolioScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    bio: 'bio',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PortfolioScalarFieldEnum = (typeof PortfolioScalarFieldEnum)[keyof typeof PortfolioScalarFieldEnum]
+
+
+  export const EventScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    image: 'image',
+    winnerId: 'winnerId',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    communityId: 'communityId'
+  };
+
+  export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10001,6 +17430,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -10029,15 +17472,18 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     provider?: EnumCredentialProviderFilter<"User"> | $Enums.CredentialProvider
     role?: EnumRoleFilter<"User"> | $Enums.Role
-    communityId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    community?: XOR<CommunityNullableScalarRelationFilter, CommunityWhereInput> | null
-    Post?: PostListRelationFilter
-    Like?: LikeListRelationFilter
-    Comment?: CommentListRelationFilter
+    portfolioId?: StringNullableFilter<"User"> | string | null
+    posts?: PostListRelationFilter
+    likes?: LikeListRelationFilter
+    comments?: CommentListRelationFilter
     createdCommunities?: CommunityListRelationFilter
     follows?: CommunityFollowListRelationFilter
+    userBadges?: UserBadgesListRelationFilter
+    portfolio?: XOR<PortfolioNullableScalarRelationFilter, PortfolioWhereInput> | null
+    eventsWon?: EventListRelationFilter
+    memberOf?: CommunityMemberListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -10049,21 +17495,25 @@ export namespace Prisma {
     name?: SortOrder
     provider?: SortOrder
     role?: SortOrder
-    communityId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    community?: CommunityOrderByWithRelationInput
-    Post?: PostOrderByRelationAggregateInput
-    Like?: LikeOrderByRelationAggregateInput
-    Comment?: CommentOrderByRelationAggregateInput
+    portfolioId?: SortOrderInput | SortOrder
+    posts?: PostOrderByRelationAggregateInput
+    likes?: LikeOrderByRelationAggregateInput
+    comments?: CommentOrderByRelationAggregateInput
     createdCommunities?: CommunityOrderByRelationAggregateInput
     follows?: CommunityFollowOrderByRelationAggregateInput
+    userBadges?: UserBadgesOrderByRelationAggregateInput
+    portfolio?: PortfolioOrderByWithRelationInput
+    eventsWon?: EventOrderByRelationAggregateInput
+    memberOf?: CommunityMemberOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     username?: string
     email?: string
+    portfolioId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -10072,16 +17522,18 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     provider?: EnumCredentialProviderFilter<"User"> | $Enums.CredentialProvider
     role?: EnumRoleFilter<"User"> | $Enums.Role
-    communityId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    community?: XOR<CommunityNullableScalarRelationFilter, CommunityWhereInput> | null
-    Post?: PostListRelationFilter
-    Like?: LikeListRelationFilter
-    Comment?: CommentListRelationFilter
+    posts?: PostListRelationFilter
+    likes?: LikeListRelationFilter
+    comments?: CommentListRelationFilter
     createdCommunities?: CommunityListRelationFilter
     follows?: CommunityFollowListRelationFilter
-  }, "id" | "username" | "email">
+    userBadges?: UserBadgesListRelationFilter
+    portfolio?: XOR<PortfolioNullableScalarRelationFilter, PortfolioWhereInput> | null
+    eventsWon?: EventListRelationFilter
+    memberOf?: CommunityMemberListRelationFilter
+  }, "id" | "username" | "email" | "portfolioId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10092,9 +17544,9 @@ export namespace Prisma {
     name?: SortOrder
     provider?: SortOrder
     role?: SortOrder
-    communityId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    portfolioId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -10112,9 +17564,73 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     provider?: EnumCredentialProviderWithAggregatesFilter<"User"> | $Enums.CredentialProvider
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
-    communityId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    portfolioId?: StringNullableWithAggregatesFilter<"User"> | string | null
+  }
+
+  export type CommunityMemberWhereInput = {
+    AND?: CommunityMemberWhereInput | CommunityMemberWhereInput[]
+    OR?: CommunityMemberWhereInput[]
+    NOT?: CommunityMemberWhereInput | CommunityMemberWhereInput[]
+    id?: StringFilter<"CommunityMember"> | string
+    userId?: StringFilter<"CommunityMember"> | string
+    communityId?: StringFilter<"CommunityMember"> | string
+    createdAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    role?: EnumRoleFilter<"CommunityMember"> | $Enums.Role
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+  }
+
+  export type CommunityMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    user?: UserOrderByWithRelationInput
+    community?: CommunityOrderByWithRelationInput
+  }
+
+  export type CommunityMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_communityId?: CommunityMemberUserIdCommunityIdCompoundUniqueInput
+    AND?: CommunityMemberWhereInput | CommunityMemberWhereInput[]
+    OR?: CommunityMemberWhereInput[]
+    NOT?: CommunityMemberWhereInput | CommunityMemberWhereInput[]
+    userId?: StringFilter<"CommunityMember"> | string
+    communityId?: StringFilter<"CommunityMember"> | string
+    createdAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    role?: EnumRoleFilter<"CommunityMember"> | $Enums.Role
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+  }, "id" | "userId_communityId">
+
+  export type CommunityMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    _count?: CommunityMemberCountOrderByAggregateInput
+    _max?: CommunityMemberMaxOrderByAggregateInput
+    _min?: CommunityMemberMinOrderByAggregateInput
+  }
+
+  export type CommunityMemberScalarWhereWithAggregatesInput = {
+    AND?: CommunityMemberScalarWhereWithAggregatesInput | CommunityMemberScalarWhereWithAggregatesInput[]
+    OR?: CommunityMemberScalarWhereWithAggregatesInput[]
+    NOT?: CommunityMemberScalarWhereWithAggregatesInput | CommunityMemberScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CommunityMember"> | string
+    userId?: StringWithAggregatesFilter<"CommunityMember"> | string
+    communityId?: StringWithAggregatesFilter<"CommunityMember"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CommunityMember"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CommunityMember"> | Date | string
+    role?: EnumRoleWithAggregatesFilter<"CommunityMember"> | $Enums.Role
   }
 
   export type CommunityWhereInput = {
@@ -10131,9 +17647,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Community"> | Date | string
     updatedAt?: DateTimeFilter<"Community"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
-    members?: UserListRelationFilter
     posts?: PostListRelationFilter
-    follows?: CommunityFollowListRelationFilter
+    followers?: CommunityFollowListRelationFilter
+    events?: EventListRelationFilter
+    communityMembers?: CommunityMemberListRelationFilter
   }
 
   export type CommunityOrderByWithRelationInput = {
@@ -10147,9 +17664,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
-    members?: UserOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
-    follows?: CommunityFollowOrderByRelationAggregateInput
+    followers?: CommunityFollowOrderByRelationAggregateInput
+    events?: EventOrderByRelationAggregateInput
+    communityMembers?: CommunityMemberOrderByRelationAggregateInput
   }
 
   export type CommunityWhereUniqueInput = Prisma.AtLeast<{
@@ -10166,9 +17684,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Community"> | Date | string
     updatedAt?: DateTimeFilter<"Community"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
-    members?: UserListRelationFilter
     posts?: PostListRelationFilter
-    follows?: CommunityFollowListRelationFilter
+    followers?: CommunityFollowListRelationFilter
+    events?: EventListRelationFilter
+    communityMembers?: CommunityMemberListRelationFilter
   }, "id" | "name" | "slug">
 
   export type CommunityOrderByWithAggregationInput = {
@@ -10210,7 +17729,8 @@ export namespace Prisma {
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
     createdAt?: DateTimeFilter<"Media"> | Date | string
     updatedAt?: DateTimeFilter<"Media"> | Date | string
-    Post?: PostListRelationFilter
+    postId?: StringFilter<"Media"> | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
   }
 
   export type MediaOrderByWithRelationInput = {
@@ -10219,7 +17739,8 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    Post?: PostOrderByRelationAggregateInput
+    postId?: SortOrder
+    post?: PostOrderByWithRelationInput
   }
 
   export type MediaWhereUniqueInput = Prisma.AtLeast<{
@@ -10231,7 +17752,8 @@ export namespace Prisma {
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
     createdAt?: DateTimeFilter<"Media"> | Date | string
     updatedAt?: DateTimeFilter<"Media"> | Date | string
-    Post?: PostListRelationFilter
+    postId?: StringFilter<"Media"> | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
   }, "id">
 
   export type MediaOrderByWithAggregationInput = {
@@ -10240,6 +17762,7 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
     _count?: MediaCountOrderByAggregateInput
     _max?: MediaMaxOrderByAggregateInput
     _min?: MediaMinOrderByAggregateInput
@@ -10254,6 +17777,7 @@ export namespace Prisma {
     type?: EnumMediaTypeWithAggregatesFilter<"Media"> | $Enums.MediaType
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
+    postId?: StringWithAggregatesFilter<"Media"> | string
   }
 
   export type PostWhereInput = {
@@ -10273,6 +17797,7 @@ export namespace Prisma {
     community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
     likes?: LikeListRelationFilter
     comments?: CommentListRelationFilter
+    postBadges?: PostBadgesListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
@@ -10289,6 +17814,7 @@ export namespace Prisma {
     community?: CommunityOrderByWithRelationInput
     likes?: LikeOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
+    postBadges?: PostBadgesOrderByRelationAggregateInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -10308,6 +17834,7 @@ export namespace Prisma {
     community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
     likes?: LikeListRelationFilter
     comments?: CommentListRelationFilter
+    postBadges?: PostBadgesListRelationFilter
   }, "id" | "slug">
 
   export type PostOrderByWithAggregationInput = {
@@ -10540,6 +18067,342 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CommunityFollow"> | Date | string
   }
 
+  export type BadgeWhereInput = {
+    AND?: BadgeWhereInput | BadgeWhereInput[]
+    OR?: BadgeWhereInput[]
+    NOT?: BadgeWhereInput | BadgeWhereInput[]
+    id?: StringFilter<"Badge"> | string
+    name?: StringFilter<"Badge"> | string
+    description?: StringFilter<"Badge"> | string
+    slug?: StringFilter<"Badge"> | string
+    type?: StringFilter<"Badge"> | string
+    price?: FloatFilter<"Badge"> | number
+    image?: StringFilter<"Badge"> | string
+    createdAt?: DateTimeFilter<"Badge"> | Date | string
+    updatedAt?: DateTimeFilter<"Badge"> | Date | string
+    postBadges?: PostBadgesListRelationFilter
+    userBadges?: UserBadgesListRelationFilter
+  }
+
+  export type BadgeOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    slug?: SortOrder
+    type?: SortOrder
+    price?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    postBadges?: PostBadgesOrderByRelationAggregateInput
+    userBadges?: UserBadgesOrderByRelationAggregateInput
+  }
+
+  export type BadgeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: BadgeWhereInput | BadgeWhereInput[]
+    OR?: BadgeWhereInput[]
+    NOT?: BadgeWhereInput | BadgeWhereInput[]
+    name?: StringFilter<"Badge"> | string
+    description?: StringFilter<"Badge"> | string
+    type?: StringFilter<"Badge"> | string
+    price?: FloatFilter<"Badge"> | number
+    image?: StringFilter<"Badge"> | string
+    createdAt?: DateTimeFilter<"Badge"> | Date | string
+    updatedAt?: DateTimeFilter<"Badge"> | Date | string
+    postBadges?: PostBadgesListRelationFilter
+    userBadges?: UserBadgesListRelationFilter
+  }, "id" | "slug">
+
+  export type BadgeOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    slug?: SortOrder
+    type?: SortOrder
+    price?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BadgeCountOrderByAggregateInput
+    _avg?: BadgeAvgOrderByAggregateInput
+    _max?: BadgeMaxOrderByAggregateInput
+    _min?: BadgeMinOrderByAggregateInput
+    _sum?: BadgeSumOrderByAggregateInput
+  }
+
+  export type BadgeScalarWhereWithAggregatesInput = {
+    AND?: BadgeScalarWhereWithAggregatesInput | BadgeScalarWhereWithAggregatesInput[]
+    OR?: BadgeScalarWhereWithAggregatesInput[]
+    NOT?: BadgeScalarWhereWithAggregatesInput | BadgeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Badge"> | string
+    name?: StringWithAggregatesFilter<"Badge"> | string
+    description?: StringWithAggregatesFilter<"Badge"> | string
+    slug?: StringWithAggregatesFilter<"Badge"> | string
+    type?: StringWithAggregatesFilter<"Badge"> | string
+    price?: FloatWithAggregatesFilter<"Badge"> | number
+    image?: StringWithAggregatesFilter<"Badge"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Badge"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Badge"> | Date | string
+  }
+
+  export type PostBadgesWhereInput = {
+    AND?: PostBadgesWhereInput | PostBadgesWhereInput[]
+    OR?: PostBadgesWhereInput[]
+    NOT?: PostBadgesWhereInput | PostBadgesWhereInput[]
+    id?: StringFilter<"PostBadges"> | string
+    postId?: StringFilter<"PostBadges"> | string
+    badgeId?: StringFilter<"PostBadges"> | string
+    createdAt?: DateTimeFilter<"PostBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"PostBadges"> | Date | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    badge?: XOR<BadgeScalarRelationFilter, BadgeWhereInput>
+  }
+
+  export type PostBadgesOrderByWithRelationInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    post?: PostOrderByWithRelationInput
+    badge?: BadgeOrderByWithRelationInput
+  }
+
+  export type PostBadgesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    postId_badgeId?: PostBadgesPostIdBadgeIdCompoundUniqueInput
+    AND?: PostBadgesWhereInput | PostBadgesWhereInput[]
+    OR?: PostBadgesWhereInput[]
+    NOT?: PostBadgesWhereInput | PostBadgesWhereInput[]
+    postId?: StringFilter<"PostBadges"> | string
+    badgeId?: StringFilter<"PostBadges"> | string
+    createdAt?: DateTimeFilter<"PostBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"PostBadges"> | Date | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    badge?: XOR<BadgeScalarRelationFilter, BadgeWhereInput>
+  }, "id" | "postId_badgeId">
+
+  export type PostBadgesOrderByWithAggregationInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PostBadgesCountOrderByAggregateInput
+    _max?: PostBadgesMaxOrderByAggregateInput
+    _min?: PostBadgesMinOrderByAggregateInput
+  }
+
+  export type PostBadgesScalarWhereWithAggregatesInput = {
+    AND?: PostBadgesScalarWhereWithAggregatesInput | PostBadgesScalarWhereWithAggregatesInput[]
+    OR?: PostBadgesScalarWhereWithAggregatesInput[]
+    NOT?: PostBadgesScalarWhereWithAggregatesInput | PostBadgesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PostBadges"> | string
+    postId?: StringWithAggregatesFilter<"PostBadges"> | string
+    badgeId?: StringWithAggregatesFilter<"PostBadges"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PostBadges"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PostBadges"> | Date | string
+  }
+
+  export type UserBadgesWhereInput = {
+    AND?: UserBadgesWhereInput | UserBadgesWhereInput[]
+    OR?: UserBadgesWhereInput[]
+    NOT?: UserBadgesWhereInput | UserBadgesWhereInput[]
+    id?: StringFilter<"UserBadges"> | string
+    userId?: StringFilter<"UserBadges"> | string
+    badgeId?: StringFilter<"UserBadges"> | string
+    createdAt?: DateTimeFilter<"UserBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"UserBadges"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    badge?: XOR<BadgeScalarRelationFilter, BadgeWhereInput>
+  }
+
+  export type UserBadgesOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    badge?: BadgeOrderByWithRelationInput
+  }
+
+  export type UserBadgesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_badgeId?: UserBadgesUserIdBadgeIdCompoundUniqueInput
+    AND?: UserBadgesWhereInput | UserBadgesWhereInput[]
+    OR?: UserBadgesWhereInput[]
+    NOT?: UserBadgesWhereInput | UserBadgesWhereInput[]
+    userId?: StringFilter<"UserBadges"> | string
+    badgeId?: StringFilter<"UserBadges"> | string
+    createdAt?: DateTimeFilter<"UserBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"UserBadges"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    badge?: XOR<BadgeScalarRelationFilter, BadgeWhereInput>
+  }, "id" | "userId_badgeId">
+
+  export type UserBadgesOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserBadgesCountOrderByAggregateInput
+    _max?: UserBadgesMaxOrderByAggregateInput
+    _min?: UserBadgesMinOrderByAggregateInput
+  }
+
+  export type UserBadgesScalarWhereWithAggregatesInput = {
+    AND?: UserBadgesScalarWhereWithAggregatesInput | UserBadgesScalarWhereWithAggregatesInput[]
+    OR?: UserBadgesScalarWhereWithAggregatesInput[]
+    NOT?: UserBadgesScalarWhereWithAggregatesInput | UserBadgesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserBadges"> | string
+    userId?: StringWithAggregatesFilter<"UserBadges"> | string
+    badgeId?: StringWithAggregatesFilter<"UserBadges"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"UserBadges"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserBadges"> | Date | string
+  }
+
+  export type PortfolioWhereInput = {
+    AND?: PortfolioWhereInput | PortfolioWhereInput[]
+    OR?: PortfolioWhereInput[]
+    NOT?: PortfolioWhereInput | PortfolioWhereInput[]
+    id?: StringFilter<"Portfolio"> | string
+    userId?: StringFilter<"Portfolio"> | string
+    bio?: StringFilter<"Portfolio"> | string
+    createdAt?: DateTimeFilter<"Portfolio"> | Date | string
+    updatedAt?: DateTimeFilter<"Portfolio"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type PortfolioOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PortfolioWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PortfolioWhereInput | PortfolioWhereInput[]
+    OR?: PortfolioWhereInput[]
+    NOT?: PortfolioWhereInput | PortfolioWhereInput[]
+    userId?: StringFilter<"Portfolio"> | string
+    bio?: StringFilter<"Portfolio"> | string
+    createdAt?: DateTimeFilter<"Portfolio"> | Date | string
+    updatedAt?: DateTimeFilter<"Portfolio"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type PortfolioOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PortfolioCountOrderByAggregateInput
+    _max?: PortfolioMaxOrderByAggregateInput
+    _min?: PortfolioMinOrderByAggregateInput
+  }
+
+  export type PortfolioScalarWhereWithAggregatesInput = {
+    AND?: PortfolioScalarWhereWithAggregatesInput | PortfolioScalarWhereWithAggregatesInput[]
+    OR?: PortfolioScalarWhereWithAggregatesInput[]
+    NOT?: PortfolioScalarWhereWithAggregatesInput | PortfolioScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Portfolio"> | string
+    userId?: StringWithAggregatesFilter<"Portfolio"> | string
+    bio?: StringWithAggregatesFilter<"Portfolio"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Portfolio"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Portfolio"> | Date | string
+  }
+
+  export type EventWhereInput = {
+    AND?: EventWhereInput | EventWhereInput[]
+    OR?: EventWhereInput[]
+    NOT?: EventWhereInput | EventWhereInput[]
+    id?: StringFilter<"Event"> | string
+    name?: StringFilter<"Event"> | string
+    description?: StringFilter<"Event"> | string
+    image?: StringFilter<"Event"> | string
+    winnerId?: StringNullableFilter<"Event"> | string | null
+    startDate?: DateTimeFilter<"Event"> | Date | string
+    endDate?: DateTimeFilter<"Event"> | Date | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+    communityId?: StringFilter<"Event"> | string
+    winner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+  }
+
+  export type EventOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    winnerId?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    communityId?: SortOrder
+    winner?: UserOrderByWithRelationInput
+    community?: CommunityOrderByWithRelationInput
+  }
+
+  export type EventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EventWhereInput | EventWhereInput[]
+    OR?: EventWhereInput[]
+    NOT?: EventWhereInput | EventWhereInput[]
+    name?: StringFilter<"Event"> | string
+    description?: StringFilter<"Event"> | string
+    image?: StringFilter<"Event"> | string
+    winnerId?: StringNullableFilter<"Event"> | string | null
+    startDate?: DateTimeFilter<"Event"> | Date | string
+    endDate?: DateTimeFilter<"Event"> | Date | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+    communityId?: StringFilter<"Event"> | string
+    winner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+  }, "id">
+
+  export type EventOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    winnerId?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    communityId?: SortOrder
+    _count?: EventCountOrderByAggregateInput
+    _max?: EventMaxOrderByAggregateInput
+    _min?: EventMinOrderByAggregateInput
+  }
+
+  export type EventScalarWhereWithAggregatesInput = {
+    AND?: EventScalarWhereWithAggregatesInput | EventScalarWhereWithAggregatesInput[]
+    OR?: EventScalarWhereWithAggregatesInput[]
+    NOT?: EventScalarWhereWithAggregatesInput | EventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Event"> | string
+    name?: StringWithAggregatesFilter<"Event"> | string
+    description?: StringWithAggregatesFilter<"Event"> | string
+    image?: StringWithAggregatesFilter<"Event"> | string
+    winnerId?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    communityId?: StringWithAggregatesFilter<"Event"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -10551,12 +18414,15 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Like?: LikeCreateNestedManyWithoutUserInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10568,14 +18434,17 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -10589,12 +18458,15 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10606,14 +18478,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10625,9 +18500,9 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    portfolioId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10652,9 +18527,70 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CommunityMemberCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+    user: UserCreateNestedOneWithoutMemberOfInput
+    community: CommunityCreateNestedOneWithoutCommunityMembersInput
+  }
+
+  export type CommunityMemberUncheckedCreateInput = {
+    id?: string
+    userId: string
+    communityId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+  }
+
+  export type CommunityMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    user?: UserUpdateOneRequiredWithoutMemberOfNestedInput
+    community?: CommunityUpdateOneRequiredWithoutCommunityMembersNestedInput
+  }
+
+  export type CommunityMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type CommunityMemberCreateManyInput = {
+    id?: string
+    userId: string
+    communityId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+  }
+
+  export type CommunityMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type CommunityMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type CommunityCreateInput = {
@@ -10667,9 +18603,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
-    members?: UserCreateNestedManyWithoutCommunityInput
     posts?: PostCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateInput = {
@@ -10682,9 +18619,10 @@ export namespace Prisma {
     banner: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: UserUncheckedCreateNestedManyWithoutCommunityInput
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUpdateInput = {
@@ -10697,9 +18635,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
-    members?: UserUpdateManyWithoutCommunityNestedInput
     posts?: PostUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateInput = {
@@ -10712,9 +18651,10 @@ export namespace Prisma {
     banner?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: UserUncheckedUpdateManyWithoutCommunityNestedInput
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityCreateManyInput = {
@@ -10758,7 +18698,7 @@ export namespace Prisma {
     type: $Enums.MediaType
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostCreateNestedManyWithoutMediaInput
+    post: PostCreateNestedOneWithoutMediaInput
   }
 
   export type MediaUncheckedCreateInput = {
@@ -10767,7 +18707,7 @@ export namespace Prisma {
     type: $Enums.MediaType
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutMediaInput
+    postId: string
   }
 
   export type MediaUpdateInput = {
@@ -10776,7 +18716,7 @@ export namespace Prisma {
     type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUpdateManyWithoutMediaNestedInput
+    post?: PostUpdateOneRequiredWithoutMediaNestedInput
   }
 
   export type MediaUncheckedUpdateInput = {
@@ -10785,7 +18725,7 @@ export namespace Prisma {
     type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutMediaNestedInput
+    postId?: StringFieldUpdateOperationsInput | string
   }
 
   export type MediaCreateManyInput = {
@@ -10794,6 +18734,7 @@ export namespace Prisma {
     type: $Enums.MediaType
     createdAt?: Date | string
     updatedAt?: Date | string
+    postId: string
   }
 
   export type MediaUpdateManyMutationInput = {
@@ -10810,6 +18751,7 @@ export namespace Prisma {
     type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PostCreateInput = {
@@ -10820,10 +18762,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: MediaCreateNestedManyWithoutPostInput
-    author: UserCreateNestedOneWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -10838,6 +18781,7 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
@@ -10848,10 +18792,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: MediaUpdateManyWithoutPostNestedInput
-    author?: UserUpdateOneRequiredWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -10866,6 +18811,7 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
@@ -10903,7 +18849,7 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutLikeInput
+    user: UserCreateNestedOneWithoutLikesInput
     post: PostCreateNestedOneWithoutLikesInput
     comment?: CommentCreateNestedOneWithoutLikesInput
   }
@@ -10921,7 +18867,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutLikeNestedInput
+    user?: UserUpdateOneRequiredWithoutLikesNestedInput
     post?: PostUpdateOneRequiredWithoutLikesNestedInput
     comment?: CommentUpdateOneWithoutLikesNestedInput
   }
@@ -10964,7 +18910,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutCommentInput
+    author: UserCreateNestedOneWithoutCommentsInput
     post: PostCreateNestedOneWithoutCommentsInput
     parent?: CommentCreateNestedOneWithoutCommentsInput
     likes?: LikeCreateNestedManyWithoutCommentInput
@@ -10988,7 +18934,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutCommentNestedInput
+    author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
     parent?: CommentUpdateOneWithoutCommentsNestedInput
     likes?: LikeUpdateManyWithoutCommentNestedInput
@@ -11038,7 +18984,7 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    community: CommunityCreateNestedOneWithoutFollowsInput
+    community: CommunityCreateNestedOneWithoutFollowersInput
     user: UserCreateNestedOneWithoutFollowsInput
   }
 
@@ -11054,7 +19000,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneRequiredWithoutFollowsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutFollowersNestedInput
     user?: UserUpdateOneRequiredWithoutFollowsNestedInput
   }
 
@@ -11086,6 +19032,355 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BadgeCreateInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postBadges?: PostBadgesCreateNestedManyWithoutBadgeInput
+    userBadges?: UserBadgesCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeUncheckedCreateInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutBadgeInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postBadges?: PostBadgesUpdateManyWithoutBadgeNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type BadgeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutBadgeNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type BadgeCreateManyInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BadgeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BadgeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutPostBadgesInput
+    badge: BadgeCreateNestedOneWithoutPostBadgesInput
+  }
+
+  export type PostBadgesUncheckedCreateInput = {
+    id?: string
+    postId: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutPostBadgesNestedInput
+    badge?: BadgeUpdateOneRequiredWithoutPostBadgesNestedInput
+  }
+
+  export type PostBadgesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesCreateManyInput = {
+    id?: string
+    postId: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUserBadgesInput
+    badge: BadgeCreateNestedOneWithoutUserBadgesInput
+  }
+
+  export type UserBadgesUncheckedCreateInput = {
+    id?: string
+    userId: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserBadgesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserBadgesNestedInput
+    badge?: BadgeUpdateOneRequiredWithoutUserBadgesNestedInput
+  }
+
+  export type UserBadgesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesCreateManyInput = {
+    id?: string
+    userId: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserBadgesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioCreateInput = {
+    id?: string
+    userId: string
+    bio: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutPortfolioInput
+  }
+
+  export type PortfolioUncheckedCreateInput = {
+    id?: string
+    userId: string
+    bio: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserUncheckedCreateNestedOneWithoutPortfolioInput
+  }
+
+  export type PortfolioUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutPortfolioNestedInput
+  }
+
+  export type PortfolioUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUncheckedUpdateOneWithoutPortfolioNestedInput
+  }
+
+  export type PortfolioCreateManyInput = {
+    id?: string
+    userId: string
+    bio: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventCreateInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    winner?: UserCreateNestedOneWithoutEventsWonInput
+    community: CommunityCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    winnerId?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+  }
+
+  export type EventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    winner?: UserUpdateOneWithoutEventsWonNestedInput
+    community?: CommunityUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventCreateManyInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    winnerId?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+  }
+
+  export type EventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -11143,11 +19438,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type CommunityNullableScalarRelationFilter = {
-    is?: CommunityWhereInput | null
-    isNot?: CommunityWhereInput | null
-  }
-
   export type PostListRelationFilter = {
     every?: PostWhereInput
     some?: PostWhereInput
@@ -11178,6 +19468,29 @@ export namespace Prisma {
     none?: CommunityFollowWhereInput
   }
 
+  export type UserBadgesListRelationFilter = {
+    every?: UserBadgesWhereInput
+    some?: UserBadgesWhereInput
+    none?: UserBadgesWhereInput
+  }
+
+  export type PortfolioNullableScalarRelationFilter = {
+    is?: PortfolioWhereInput | null
+    isNot?: PortfolioWhereInput | null
+  }
+
+  export type EventListRelationFilter = {
+    every?: EventWhereInput
+    some?: EventWhereInput
+    none?: EventWhereInput
+  }
+
+  export type CommunityMemberListRelationFilter = {
+    every?: CommunityMemberWhereInput
+    some?: CommunityMemberWhereInput
+    none?: CommunityMemberWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -11203,6 +19516,18 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type UserBadgesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CommunityMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
@@ -11212,9 +19537,9 @@ export namespace Prisma {
     name?: SortOrder
     provider?: SortOrder
     role?: SortOrder
-    communityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    portfolioId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -11226,9 +19551,9 @@ export namespace Prisma {
     name?: SortOrder
     provider?: SortOrder
     role?: SortOrder
-    communityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    portfolioId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11240,9 +19565,9 @@ export namespace Prisma {
     name?: SortOrder
     provider?: SortOrder
     role?: SortOrder
-    communityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    portfolioId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -11320,14 +19645,41 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
+  export type CommunityScalarRelationFilter = {
+    is?: CommunityWhereInput
+    isNot?: CommunityWhereInput
   }
 
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type CommunityMemberUserIdCommunityIdCompoundUniqueInput = {
+    userId: string
+    communityId: string
+  }
+
+  export type CommunityMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+  }
+
+  export type CommunityMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+  }
+
+  export type CommunityMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
   }
 
   export type CommunityCountOrderByAggregateInput = {
@@ -11373,12 +19725,18 @@ export namespace Prisma {
     not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
   }
 
+  export type PostScalarRelationFilter = {
+    is?: PostWhereInput
+    isNot?: PostWhereInput
+  }
+
   export type MediaCountOrderByAggregateInput = {
     id?: SortOrder
     url?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
   export type MediaMaxOrderByAggregateInput = {
@@ -11387,6 +19745,7 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
   export type MediaMinOrderByAggregateInput = {
@@ -11395,6 +19754,7 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
   export type EnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -11413,12 +19773,17 @@ export namespace Prisma {
     none?: MediaWhereInput
   }
 
-  export type CommunityScalarRelationFilter = {
-    is?: CommunityWhereInput
-    isNot?: CommunityWhereInput
+  export type PostBadgesListRelationFilter = {
+    every?: PostBadgesWhereInput
+    some?: PostBadgesWhereInput
+    none?: PostBadgesWhereInput
   }
 
   export type MediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PostBadgesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11453,11 +19818,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     communityId?: SortOrder
-  }
-
-  export type PostScalarRelationFilter = {
-    is?: PostWhereInput
-    isNot?: PostWhereInput
   }
 
   export type CommentNullableScalarRelationFilter = {
@@ -11551,10 +19911,206 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type CommunityCreateNestedOneWithoutMembersInput = {
-    create?: XOR<CommunityCreateWithoutMembersInput, CommunityUncheckedCreateWithoutMembersInput>
-    connectOrCreate?: CommunityCreateOrConnectWithoutMembersInput
-    connect?: CommunityWhereUniqueInput
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type BadgeCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    slug?: SortOrder
+    type?: SortOrder
+    price?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BadgeAvgOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type BadgeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    slug?: SortOrder
+    type?: SortOrder
+    price?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BadgeMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    slug?: SortOrder
+    type?: SortOrder
+    price?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BadgeSumOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type BadgeScalarRelationFilter = {
+    is?: BadgeWhereInput
+    isNot?: BadgeWhereInput
+  }
+
+  export type PostBadgesPostIdBadgeIdCompoundUniqueInput = {
+    postId: string
+    badgeId: string
+  }
+
+  export type PostBadgesCountOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostBadgesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostBadgesMinOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserBadgesUserIdBadgeIdCompoundUniqueInput = {
+    userId: string
+    badgeId: string
+  }
+
+  export type UserBadgesCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserBadgesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserBadgesMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    badgeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type PortfolioCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortfolioMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortfolioMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    winnerId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    communityId?: SortOrder
+  }
+
+  export type EventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    winnerId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    communityId?: SortOrder
+  }
+
+  export type EventMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    winnerId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    communityId?: SortOrder
   }
 
   export type PostCreateNestedManyWithoutAuthorInput = {
@@ -11592,6 +20148,33 @@ export namespace Prisma {
     connect?: CommunityFollowWhereUniqueInput | CommunityFollowWhereUniqueInput[]
   }
 
+  export type UserBadgesCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput> | UserBadgesCreateWithoutUserInput[] | UserBadgesUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutUserInput | UserBadgesCreateOrConnectWithoutUserInput[]
+    createMany?: UserBadgesCreateManyUserInputEnvelope
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+  }
+
+  export type PortfolioCreateNestedOneWithoutUserInput = {
+    create?: XOR<PortfolioCreateWithoutUserInput, PortfolioUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PortfolioCreateOrConnectWithoutUserInput
+    connect?: PortfolioWhereUniqueInput
+  }
+
+  export type EventCreateNestedManyWithoutWinnerInput = {
+    create?: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput> | EventCreateWithoutWinnerInput[] | EventUncheckedCreateWithoutWinnerInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutWinnerInput | EventCreateOrConnectWithoutWinnerInput[]
+    createMany?: EventCreateManyWinnerInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type CommunityMemberCreateNestedManyWithoutUserInput = {
+    create?: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput> | CommunityMemberCreateWithoutUserInput[] | CommunityMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutUserInput | CommunityMemberCreateOrConnectWithoutUserInput[]
+    createMany?: CommunityMemberCreateManyUserInputEnvelope
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -11627,6 +20210,27 @@ export namespace Prisma {
     connect?: CommunityFollowWhereUniqueInput | CommunityFollowWhereUniqueInput[]
   }
 
+  export type UserBadgesUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput> | UserBadgesCreateWithoutUserInput[] | UserBadgesUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutUserInput | UserBadgesCreateOrConnectWithoutUserInput[]
+    createMany?: UserBadgesCreateManyUserInputEnvelope
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutWinnerInput = {
+    create?: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput> | EventCreateWithoutWinnerInput[] | EventUncheckedCreateWithoutWinnerInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutWinnerInput | EventCreateOrConnectWithoutWinnerInput[]
+    createMany?: EventCreateManyWinnerInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type CommunityMemberUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput> | CommunityMemberCreateWithoutUserInput[] | CommunityMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutUserInput | CommunityMemberCreateOrConnectWithoutUserInput[]
+    createMany?: CommunityMemberCreateManyUserInputEnvelope
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -11645,16 +20249,6 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type CommunityUpdateOneWithoutMembersNestedInput = {
-    create?: XOR<CommunityCreateWithoutMembersInput, CommunityUncheckedCreateWithoutMembersInput>
-    connectOrCreate?: CommunityCreateOrConnectWithoutMembersInput
-    upsert?: CommunityUpsertWithoutMembersInput
-    disconnect?: CommunityWhereInput | boolean
-    delete?: CommunityWhereInput | boolean
-    connect?: CommunityWhereUniqueInput
-    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutMembersInput, CommunityUpdateWithoutMembersInput>, CommunityUncheckedUpdateWithoutMembersInput>
   }
 
   export type PostUpdateManyWithoutAuthorNestedInput = {
@@ -11727,6 +20321,58 @@ export namespace Prisma {
     deleteMany?: CommunityFollowScalarWhereInput | CommunityFollowScalarWhereInput[]
   }
 
+  export type UserBadgesUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput> | UserBadgesCreateWithoutUserInput[] | UserBadgesUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutUserInput | UserBadgesCreateOrConnectWithoutUserInput[]
+    upsert?: UserBadgesUpsertWithWhereUniqueWithoutUserInput | UserBadgesUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserBadgesCreateManyUserInputEnvelope
+    set?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    disconnect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    delete?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    update?: UserBadgesUpdateWithWhereUniqueWithoutUserInput | UserBadgesUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserBadgesUpdateManyWithWhereWithoutUserInput | UserBadgesUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+  }
+
+  export type PortfolioUpdateOneWithoutUserNestedInput = {
+    create?: XOR<PortfolioCreateWithoutUserInput, PortfolioUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PortfolioCreateOrConnectWithoutUserInput
+    upsert?: PortfolioUpsertWithoutUserInput
+    disconnect?: PortfolioWhereInput | boolean
+    delete?: PortfolioWhereInput | boolean
+    connect?: PortfolioWhereUniqueInput
+    update?: XOR<XOR<PortfolioUpdateToOneWithWhereWithoutUserInput, PortfolioUpdateWithoutUserInput>, PortfolioUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EventUpdateManyWithoutWinnerNestedInput = {
+    create?: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput> | EventCreateWithoutWinnerInput[] | EventUncheckedCreateWithoutWinnerInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutWinnerInput | EventCreateOrConnectWithoutWinnerInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutWinnerInput | EventUpsertWithWhereUniqueWithoutWinnerInput[]
+    createMany?: EventCreateManyWinnerInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutWinnerInput | EventUpdateWithWhereUniqueWithoutWinnerInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutWinnerInput | EventUpdateManyWithWhereWithoutWinnerInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type CommunityMemberUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput> | CommunityMemberCreateWithoutUserInput[] | CommunityMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutUserInput | CommunityMemberCreateOrConnectWithoutUserInput[]
+    upsert?: CommunityMemberUpsertWithWhereUniqueWithoutUserInput | CommunityMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CommunityMemberCreateManyUserInputEnvelope
+    set?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    disconnect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    delete?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    update?: CommunityMemberUpdateWithWhereUniqueWithoutUserInput | CommunityMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CommunityMemberUpdateManyWithWhereWithoutUserInput | CommunityMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -11797,17 +20443,80 @@ export namespace Prisma {
     deleteMany?: CommunityFollowScalarWhereInput | CommunityFollowScalarWhereInput[]
   }
 
+  export type UserBadgesUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput> | UserBadgesCreateWithoutUserInput[] | UserBadgesUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutUserInput | UserBadgesCreateOrConnectWithoutUserInput[]
+    upsert?: UserBadgesUpsertWithWhereUniqueWithoutUserInput | UserBadgesUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserBadgesCreateManyUserInputEnvelope
+    set?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    disconnect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    delete?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    update?: UserBadgesUpdateWithWhereUniqueWithoutUserInput | UserBadgesUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserBadgesUpdateManyWithWhereWithoutUserInput | UserBadgesUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutWinnerNestedInput = {
+    create?: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput> | EventCreateWithoutWinnerInput[] | EventUncheckedCreateWithoutWinnerInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutWinnerInput | EventCreateOrConnectWithoutWinnerInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutWinnerInput | EventUpsertWithWhereUniqueWithoutWinnerInput[]
+    createMany?: EventCreateManyWinnerInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutWinnerInput | EventUpdateWithWhereUniqueWithoutWinnerInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutWinnerInput | EventUpdateManyWithWhereWithoutWinnerInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type CommunityMemberUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput> | CommunityMemberCreateWithoutUserInput[] | CommunityMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutUserInput | CommunityMemberCreateOrConnectWithoutUserInput[]
+    upsert?: CommunityMemberUpsertWithWhereUniqueWithoutUserInput | CommunityMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CommunityMemberCreateManyUserInputEnvelope
+    set?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    disconnect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    delete?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    update?: CommunityMemberUpdateWithWhereUniqueWithoutUserInput | CommunityMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CommunityMemberUpdateManyWithWhereWithoutUserInput | CommunityMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutMemberOfInput = {
+    create?: XOR<UserCreateWithoutMemberOfInput, UserUncheckedCreateWithoutMemberOfInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMemberOfInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CommunityCreateNestedOneWithoutCommunityMembersInput = {
+    create?: XOR<CommunityCreateWithoutCommunityMembersInput, CommunityUncheckedCreateWithoutCommunityMembersInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutCommunityMembersInput
+    connect?: CommunityWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutMemberOfNestedInput = {
+    create?: XOR<UserCreateWithoutMemberOfInput, UserUncheckedCreateWithoutMemberOfInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMemberOfInput
+    upsert?: UserUpsertWithoutMemberOfInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMemberOfInput, UserUpdateWithoutMemberOfInput>, UserUncheckedUpdateWithoutMemberOfInput>
+  }
+
+  export type CommunityUpdateOneRequiredWithoutCommunityMembersNestedInput = {
+    create?: XOR<CommunityCreateWithoutCommunityMembersInput, CommunityUncheckedCreateWithoutCommunityMembersInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutCommunityMembersInput
+    upsert?: CommunityUpsertWithoutCommunityMembersInput
+    connect?: CommunityWhereUniqueInput
+    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutCommunityMembersInput, CommunityUpdateWithoutCommunityMembersInput>, CommunityUncheckedUpdateWithoutCommunityMembersInput>
+  }
+
   export type UserCreateNestedOneWithoutCreatedCommunitiesInput = {
     create?: XOR<UserCreateWithoutCreatedCommunitiesInput, UserUncheckedCreateWithoutCreatedCommunitiesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedCommunitiesInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type UserCreateNestedManyWithoutCommunityInput = {
-    create?: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput> | UserCreateWithoutCommunityInput[] | UserUncheckedCreateWithoutCommunityInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutCommunityInput | UserCreateOrConnectWithoutCommunityInput[]
-    createMany?: UserCreateManyCommunityInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type PostCreateNestedManyWithoutCommunityInput = {
@@ -11824,11 +20533,18 @@ export namespace Prisma {
     connect?: CommunityFollowWhereUniqueInput | CommunityFollowWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutCommunityInput = {
-    create?: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput> | UserCreateWithoutCommunityInput[] | UserUncheckedCreateWithoutCommunityInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutCommunityInput | UserCreateOrConnectWithoutCommunityInput[]
-    createMany?: UserCreateManyCommunityInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type EventCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput> | EventCreateWithoutCommunityInput[] | EventUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCommunityInput | EventCreateOrConnectWithoutCommunityInput[]
+    createMany?: EventCreateManyCommunityInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type CommunityMemberCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput> | CommunityMemberCreateWithoutCommunityInput[] | CommunityMemberUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutCommunityInput | CommunityMemberCreateOrConnectWithoutCommunityInput[]
+    createMany?: CommunityMemberCreateManyCommunityInputEnvelope
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
   }
 
   export type PostUncheckedCreateNestedManyWithoutCommunityInput = {
@@ -11845,26 +20561,26 @@ export namespace Prisma {
     connect?: CommunityFollowWhereUniqueInput | CommunityFollowWhereUniqueInput[]
   }
 
+  export type EventUncheckedCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput> | EventCreateWithoutCommunityInput[] | EventUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCommunityInput | EventCreateOrConnectWithoutCommunityInput[]
+    createMany?: EventCreateManyCommunityInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput> | CommunityMemberCreateWithoutCommunityInput[] | CommunityMemberUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutCommunityInput | CommunityMemberCreateOrConnectWithoutCommunityInput[]
+    createMany?: CommunityMemberCreateManyCommunityInputEnvelope
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput = {
     create?: XOR<UserCreateWithoutCreatedCommunitiesInput, UserUncheckedCreateWithoutCreatedCommunitiesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedCommunitiesInput
     upsert?: UserUpsertWithoutCreatedCommunitiesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedCommunitiesInput, UserUpdateWithoutCreatedCommunitiesInput>, UserUncheckedUpdateWithoutCreatedCommunitiesInput>
-  }
-
-  export type UserUpdateManyWithoutCommunityNestedInput = {
-    create?: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput> | UserCreateWithoutCommunityInput[] | UserUncheckedCreateWithoutCommunityInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutCommunityInput | UserCreateOrConnectWithoutCommunityInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutCommunityInput | UserUpsertWithWhereUniqueWithoutCommunityInput[]
-    createMany?: UserCreateManyCommunityInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutCommunityInput | UserUpdateWithWhereUniqueWithoutCommunityInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutCommunityInput | UserUpdateManyWithWhereWithoutCommunityInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type PostUpdateManyWithoutCommunityNestedInput = {
@@ -11895,18 +20611,32 @@ export namespace Prisma {
     deleteMany?: CommunityFollowScalarWhereInput | CommunityFollowScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutCommunityNestedInput = {
-    create?: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput> | UserCreateWithoutCommunityInput[] | UserUncheckedCreateWithoutCommunityInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutCommunityInput | UserCreateOrConnectWithoutCommunityInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutCommunityInput | UserUpsertWithWhereUniqueWithoutCommunityInput[]
-    createMany?: UserCreateManyCommunityInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutCommunityInput | UserUpdateWithWhereUniqueWithoutCommunityInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutCommunityInput | UserUpdateManyWithWhereWithoutCommunityInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type EventUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput> | EventCreateWithoutCommunityInput[] | EventUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCommunityInput | EventCreateOrConnectWithoutCommunityInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutCommunityInput | EventUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: EventCreateManyCommunityInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutCommunityInput | EventUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutCommunityInput | EventUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type CommunityMemberUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput> | CommunityMemberCreateWithoutCommunityInput[] | CommunityMemberUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutCommunityInput | CommunityMemberCreateOrConnectWithoutCommunityInput[]
+    upsert?: CommunityMemberUpsertWithWhereUniqueWithoutCommunityInput | CommunityMemberUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: CommunityMemberCreateManyCommunityInputEnvelope
+    set?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    disconnect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    delete?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    update?: CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput | CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: CommunityMemberUpdateManyWithWhereWithoutCommunityInput | CommunityMemberUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
   }
 
   export type PostUncheckedUpdateManyWithoutCommunityNestedInput = {
@@ -11937,57 +20667,62 @@ export namespace Prisma {
     deleteMany?: CommunityFollowScalarWhereInput | CommunityFollowScalarWhereInput[]
   }
 
-  export type PostCreateNestedManyWithoutMediaInput = {
-    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput> | PostCreateWithoutMediaInput[] | PostUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMediaInput | PostCreateOrConnectWithoutMediaInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  export type EventUncheckedUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput> | EventCreateWithoutCommunityInput[] | EventUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCommunityInput | EventCreateOrConnectWithoutCommunityInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutCommunityInput | EventUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: EventCreateManyCommunityInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutCommunityInput | EventUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutCommunityInput | EventUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
-  export type PostUncheckedCreateNestedManyWithoutMediaInput = {
-    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput> | PostCreateWithoutMediaInput[] | PostUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMediaInput | PostCreateOrConnectWithoutMediaInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  export type CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput> | CommunityMemberCreateWithoutCommunityInput[] | CommunityMemberUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CommunityMemberCreateOrConnectWithoutCommunityInput | CommunityMemberCreateOrConnectWithoutCommunityInput[]
+    upsert?: CommunityMemberUpsertWithWhereUniqueWithoutCommunityInput | CommunityMemberUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: CommunityMemberCreateManyCommunityInputEnvelope
+    set?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    disconnect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    delete?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+    update?: CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput | CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: CommunityMemberUpdateManyWithWhereWithoutCommunityInput | CommunityMemberUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+  }
+
+  export type PostCreateNestedOneWithoutMediaInput = {
+    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PostCreateOrConnectWithoutMediaInput
+    connect?: PostWhereUniqueInput
   }
 
   export type EnumMediaTypeFieldUpdateOperationsInput = {
     set?: $Enums.MediaType
   }
 
-  export type PostUpdateManyWithoutMediaNestedInput = {
-    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput> | PostCreateWithoutMediaInput[] | PostUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMediaInput | PostCreateOrConnectWithoutMediaInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutMediaInput | PostUpsertWithWhereUniqueWithoutMediaInput[]
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutMediaInput | PostUpdateWithWhereUniqueWithoutMediaInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutMediaInput | PostUpdateManyWithWhereWithoutMediaInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type PostUncheckedUpdateManyWithoutMediaNestedInput = {
-    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput> | PostCreateWithoutMediaInput[] | PostUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMediaInput | PostCreateOrConnectWithoutMediaInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutMediaInput | PostUpsertWithWhereUniqueWithoutMediaInput[]
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutMediaInput | PostUpdateWithWhereUniqueWithoutMediaInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutMediaInput | PostUpdateManyWithWhereWithoutMediaInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  export type PostUpdateOneRequiredWithoutMediaNestedInput = {
+    create?: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PostCreateOrConnectWithoutMediaInput
+    upsert?: PostUpsertWithoutMediaInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutMediaInput, PostUpdateWithoutMediaInput>, PostUncheckedUpdateWithoutMediaInput>
   }
 
   export type MediaCreateNestedManyWithoutPostInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
+    createMany?: MediaCreateManyPostInputEnvelope
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
   }
 
-  export type UserCreateNestedOneWithoutPostInput = {
-    create?: XOR<UserCreateWithoutPostInput, UserUncheckedCreateWithoutPostInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPostInput
+  export type UserCreateNestedOneWithoutPostsInput = {
+    create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostsInput
     connect?: UserWhereUniqueInput
   }
 
@@ -12011,9 +20746,17 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
+  export type PostBadgesCreateNestedManyWithoutPostInput = {
+    create?: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput> | PostBadgesCreateWithoutPostInput[] | PostBadgesUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutPostInput | PostBadgesCreateOrConnectWithoutPostInput[]
+    createMany?: PostBadgesCreateManyPostInputEnvelope
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+  }
+
   export type MediaUncheckedCreateNestedManyWithoutPostInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
+    createMany?: MediaCreateManyPostInputEnvelope
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
   }
 
@@ -12031,10 +20774,18 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
+  export type PostBadgesUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput> | PostBadgesCreateWithoutPostInput[] | PostBadgesUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutPostInput | PostBadgesCreateOrConnectWithoutPostInput[]
+    createMany?: PostBadgesCreateManyPostInputEnvelope
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+  }
+
   export type MediaUpdateManyWithoutPostNestedInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
     upsert?: MediaUpsertWithWhereUniqueWithoutPostInput | MediaUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: MediaCreateManyPostInputEnvelope
     set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
     disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
     delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
@@ -12044,12 +20795,12 @@ export namespace Prisma {
     deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
   }
 
-  export type UserUpdateOneRequiredWithoutPostNestedInput = {
-    create?: XOR<UserCreateWithoutPostInput, UserUncheckedCreateWithoutPostInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPostInput
-    upsert?: UserUpsertWithoutPostInput
+  export type UserUpdateOneRequiredWithoutPostsNestedInput = {
+    create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostsInput
+    upsert?: UserUpsertWithoutPostsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostInput, UserUpdateWithoutPostInput>, UserUncheckedUpdateWithoutPostInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostsInput, UserUpdateWithoutPostsInput>, UserUncheckedUpdateWithoutPostsInput>
   }
 
   export type CommunityUpdateOneRequiredWithoutPostsNestedInput = {
@@ -12088,10 +20839,25 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
+  export type PostBadgesUpdateManyWithoutPostNestedInput = {
+    create?: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput> | PostBadgesCreateWithoutPostInput[] | PostBadgesUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutPostInput | PostBadgesCreateOrConnectWithoutPostInput[]
+    upsert?: PostBadgesUpsertWithWhereUniqueWithoutPostInput | PostBadgesUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: PostBadgesCreateManyPostInputEnvelope
+    set?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    disconnect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    delete?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    update?: PostBadgesUpdateWithWhereUniqueWithoutPostInput | PostBadgesUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: PostBadgesUpdateManyWithWhereWithoutPostInput | PostBadgesUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+  }
+
   export type MediaUncheckedUpdateManyWithoutPostNestedInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
     upsert?: MediaUpsertWithWhereUniqueWithoutPostInput | MediaUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: MediaCreateManyPostInputEnvelope
     set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
     disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
     delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
@@ -12129,9 +20895,23 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutLikeInput = {
-    create?: XOR<UserCreateWithoutLikeInput, UserUncheckedCreateWithoutLikeInput>
-    connectOrCreate?: UserCreateOrConnectWithoutLikeInput
+  export type PostBadgesUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput> | PostBadgesCreateWithoutPostInput[] | PostBadgesUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutPostInput | PostBadgesCreateOrConnectWithoutPostInput[]
+    upsert?: PostBadgesUpsertWithWhereUniqueWithoutPostInput | PostBadgesUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: PostBadgesCreateManyPostInputEnvelope
+    set?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    disconnect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    delete?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    update?: PostBadgesUpdateWithWhereUniqueWithoutPostInput | PostBadgesUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: PostBadgesUpdateManyWithWhereWithoutPostInput | PostBadgesUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutLikesInput = {
+    create?: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLikesInput
     connect?: UserWhereUniqueInput
   }
 
@@ -12147,12 +20927,12 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutLikeNestedInput = {
-    create?: XOR<UserCreateWithoutLikeInput, UserUncheckedCreateWithoutLikeInput>
-    connectOrCreate?: UserCreateOrConnectWithoutLikeInput
-    upsert?: UserUpsertWithoutLikeInput
+  export type UserUpdateOneRequiredWithoutLikesNestedInput = {
+    create?: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLikesInput
+    upsert?: UserUpsertWithoutLikesInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLikeInput, UserUpdateWithoutLikeInput>, UserUncheckedUpdateWithoutLikeInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLikesInput, UserUpdateWithoutLikesInput>, UserUncheckedUpdateWithoutLikesInput>
   }
 
   export type PostUpdateOneRequiredWithoutLikesNestedInput = {
@@ -12173,9 +20953,9 @@ export namespace Prisma {
     update?: XOR<XOR<CommentUpdateToOneWithWhereWithoutLikesInput, CommentUpdateWithoutLikesInput>, CommentUncheckedUpdateWithoutLikesInput>
   }
 
-  export type UserCreateNestedOneWithoutCommentInput = {
-    create?: XOR<UserCreateWithoutCommentInput, UserUncheckedCreateWithoutCommentInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCommentInput
+  export type UserCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommentsInput
     connect?: UserWhereUniqueInput
   }
 
@@ -12219,12 +20999,12 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
-  export type UserUpdateOneRequiredWithoutCommentNestedInput = {
-    create?: XOR<UserCreateWithoutCommentInput, UserUncheckedCreateWithoutCommentInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCommentInput
-    upsert?: UserUpsertWithoutCommentInput
+  export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommentsInput
+    upsert?: UserUpsertWithoutCommentsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommentInput, UserUpdateWithoutCommentInput>, UserUncheckedUpdateWithoutCommentInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommentsInput, UserUpdateWithoutCommentsInput>, UserUncheckedUpdateWithoutCommentsInput>
   }
 
   export type PostUpdateOneRequiredWithoutCommentsNestedInput = {
@@ -12301,9 +21081,9 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
-  export type CommunityCreateNestedOneWithoutFollowsInput = {
-    create?: XOR<CommunityCreateWithoutFollowsInput, CommunityUncheckedCreateWithoutFollowsInput>
-    connectOrCreate?: CommunityCreateOrConnectWithoutFollowsInput
+  export type CommunityCreateNestedOneWithoutFollowersInput = {
+    create?: XOR<CommunityCreateWithoutFollowersInput, CommunityUncheckedCreateWithoutFollowersInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutFollowersInput
     connect?: CommunityWhereUniqueInput
   }
 
@@ -12313,12 +21093,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type CommunityUpdateOneRequiredWithoutFollowsNestedInput = {
-    create?: XOR<CommunityCreateWithoutFollowsInput, CommunityUncheckedCreateWithoutFollowsInput>
-    connectOrCreate?: CommunityCreateOrConnectWithoutFollowsInput
-    upsert?: CommunityUpsertWithoutFollowsInput
+  export type CommunityUpdateOneRequiredWithoutFollowersNestedInput = {
+    create?: XOR<CommunityCreateWithoutFollowersInput, CommunityUncheckedCreateWithoutFollowersInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutFollowersInput
+    upsert?: CommunityUpsertWithoutFollowersInput
     connect?: CommunityWhereUniqueInput
-    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutFollowsInput, CommunityUpdateWithoutFollowsInput>, CommunityUncheckedUpdateWithoutFollowsInput>
+    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutFollowersInput, CommunityUpdateWithoutFollowersInput>, CommunityUncheckedUpdateWithoutFollowersInput>
   }
 
   export type UserUpdateOneRequiredWithoutFollowsNestedInput = {
@@ -12327,6 +21107,216 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutFollowsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowsInput, UserUpdateWithoutFollowsInput>, UserUncheckedUpdateWithoutFollowsInput>
+  }
+
+  export type PostBadgesCreateNestedManyWithoutBadgeInput = {
+    create?: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput> | PostBadgesCreateWithoutBadgeInput[] | PostBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutBadgeInput | PostBadgesCreateOrConnectWithoutBadgeInput[]
+    createMany?: PostBadgesCreateManyBadgeInputEnvelope
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+  }
+
+  export type UserBadgesCreateNestedManyWithoutBadgeInput = {
+    create?: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput> | UserBadgesCreateWithoutBadgeInput[] | UserBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutBadgeInput | UserBadgesCreateOrConnectWithoutBadgeInput[]
+    createMany?: UserBadgesCreateManyBadgeInputEnvelope
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+  }
+
+  export type PostBadgesUncheckedCreateNestedManyWithoutBadgeInput = {
+    create?: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput> | PostBadgesCreateWithoutBadgeInput[] | PostBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutBadgeInput | PostBadgesCreateOrConnectWithoutBadgeInput[]
+    createMany?: PostBadgesCreateManyBadgeInputEnvelope
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+  }
+
+  export type UserBadgesUncheckedCreateNestedManyWithoutBadgeInput = {
+    create?: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput> | UserBadgesCreateWithoutBadgeInput[] | UserBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutBadgeInput | UserBadgesCreateOrConnectWithoutBadgeInput[]
+    createMany?: UserBadgesCreateManyBadgeInputEnvelope
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type PostBadgesUpdateManyWithoutBadgeNestedInput = {
+    create?: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput> | PostBadgesCreateWithoutBadgeInput[] | PostBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutBadgeInput | PostBadgesCreateOrConnectWithoutBadgeInput[]
+    upsert?: PostBadgesUpsertWithWhereUniqueWithoutBadgeInput | PostBadgesUpsertWithWhereUniqueWithoutBadgeInput[]
+    createMany?: PostBadgesCreateManyBadgeInputEnvelope
+    set?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    disconnect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    delete?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    update?: PostBadgesUpdateWithWhereUniqueWithoutBadgeInput | PostBadgesUpdateWithWhereUniqueWithoutBadgeInput[]
+    updateMany?: PostBadgesUpdateManyWithWhereWithoutBadgeInput | PostBadgesUpdateManyWithWhereWithoutBadgeInput[]
+    deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+  }
+
+  export type UserBadgesUpdateManyWithoutBadgeNestedInput = {
+    create?: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput> | UserBadgesCreateWithoutBadgeInput[] | UserBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutBadgeInput | UserBadgesCreateOrConnectWithoutBadgeInput[]
+    upsert?: UserBadgesUpsertWithWhereUniqueWithoutBadgeInput | UserBadgesUpsertWithWhereUniqueWithoutBadgeInput[]
+    createMany?: UserBadgesCreateManyBadgeInputEnvelope
+    set?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    disconnect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    delete?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    update?: UserBadgesUpdateWithWhereUniqueWithoutBadgeInput | UserBadgesUpdateWithWhereUniqueWithoutBadgeInput[]
+    updateMany?: UserBadgesUpdateManyWithWhereWithoutBadgeInput | UserBadgesUpdateManyWithWhereWithoutBadgeInput[]
+    deleteMany?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+  }
+
+  export type PostBadgesUncheckedUpdateManyWithoutBadgeNestedInput = {
+    create?: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput> | PostBadgesCreateWithoutBadgeInput[] | PostBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: PostBadgesCreateOrConnectWithoutBadgeInput | PostBadgesCreateOrConnectWithoutBadgeInput[]
+    upsert?: PostBadgesUpsertWithWhereUniqueWithoutBadgeInput | PostBadgesUpsertWithWhereUniqueWithoutBadgeInput[]
+    createMany?: PostBadgesCreateManyBadgeInputEnvelope
+    set?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    disconnect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    delete?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+    update?: PostBadgesUpdateWithWhereUniqueWithoutBadgeInput | PostBadgesUpdateWithWhereUniqueWithoutBadgeInput[]
+    updateMany?: PostBadgesUpdateManyWithWhereWithoutBadgeInput | PostBadgesUpdateManyWithWhereWithoutBadgeInput[]
+    deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+  }
+
+  export type UserBadgesUncheckedUpdateManyWithoutBadgeNestedInput = {
+    create?: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput> | UserBadgesCreateWithoutBadgeInput[] | UserBadgesUncheckedCreateWithoutBadgeInput[]
+    connectOrCreate?: UserBadgesCreateOrConnectWithoutBadgeInput | UserBadgesCreateOrConnectWithoutBadgeInput[]
+    upsert?: UserBadgesUpsertWithWhereUniqueWithoutBadgeInput | UserBadgesUpsertWithWhereUniqueWithoutBadgeInput[]
+    createMany?: UserBadgesCreateManyBadgeInputEnvelope
+    set?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    disconnect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    delete?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    connect?: UserBadgesWhereUniqueInput | UserBadgesWhereUniqueInput[]
+    update?: UserBadgesUpdateWithWhereUniqueWithoutBadgeInput | UserBadgesUpdateWithWhereUniqueWithoutBadgeInput[]
+    updateMany?: UserBadgesUpdateManyWithWhereWithoutBadgeInput | UserBadgesUpdateManyWithWhereWithoutBadgeInput[]
+    deleteMany?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+  }
+
+  export type PostCreateNestedOneWithoutPostBadgesInput = {
+    create?: XOR<PostCreateWithoutPostBadgesInput, PostUncheckedCreateWithoutPostBadgesInput>
+    connectOrCreate?: PostCreateOrConnectWithoutPostBadgesInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type BadgeCreateNestedOneWithoutPostBadgesInput = {
+    create?: XOR<BadgeCreateWithoutPostBadgesInput, BadgeUncheckedCreateWithoutPostBadgesInput>
+    connectOrCreate?: BadgeCreateOrConnectWithoutPostBadgesInput
+    connect?: BadgeWhereUniqueInput
+  }
+
+  export type PostUpdateOneRequiredWithoutPostBadgesNestedInput = {
+    create?: XOR<PostCreateWithoutPostBadgesInput, PostUncheckedCreateWithoutPostBadgesInput>
+    connectOrCreate?: PostCreateOrConnectWithoutPostBadgesInput
+    upsert?: PostUpsertWithoutPostBadgesInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutPostBadgesInput, PostUpdateWithoutPostBadgesInput>, PostUncheckedUpdateWithoutPostBadgesInput>
+  }
+
+  export type BadgeUpdateOneRequiredWithoutPostBadgesNestedInput = {
+    create?: XOR<BadgeCreateWithoutPostBadgesInput, BadgeUncheckedCreateWithoutPostBadgesInput>
+    connectOrCreate?: BadgeCreateOrConnectWithoutPostBadgesInput
+    upsert?: BadgeUpsertWithoutPostBadgesInput
+    connect?: BadgeWhereUniqueInput
+    update?: XOR<XOR<BadgeUpdateToOneWithWhereWithoutPostBadgesInput, BadgeUpdateWithoutPostBadgesInput>, BadgeUncheckedUpdateWithoutPostBadgesInput>
+  }
+
+  export type UserCreateNestedOneWithoutUserBadgesInput = {
+    create?: XOR<UserCreateWithoutUserBadgesInput, UserUncheckedCreateWithoutUserBadgesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserBadgesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BadgeCreateNestedOneWithoutUserBadgesInput = {
+    create?: XOR<BadgeCreateWithoutUserBadgesInput, BadgeUncheckedCreateWithoutUserBadgesInput>
+    connectOrCreate?: BadgeCreateOrConnectWithoutUserBadgesInput
+    connect?: BadgeWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUserBadgesNestedInput = {
+    create?: XOR<UserCreateWithoutUserBadgesInput, UserUncheckedCreateWithoutUserBadgesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserBadgesInput
+    upsert?: UserUpsertWithoutUserBadgesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserBadgesInput, UserUpdateWithoutUserBadgesInput>, UserUncheckedUpdateWithoutUserBadgesInput>
+  }
+
+  export type BadgeUpdateOneRequiredWithoutUserBadgesNestedInput = {
+    create?: XOR<BadgeCreateWithoutUserBadgesInput, BadgeUncheckedCreateWithoutUserBadgesInput>
+    connectOrCreate?: BadgeCreateOrConnectWithoutUserBadgesInput
+    upsert?: BadgeUpsertWithoutUserBadgesInput
+    connect?: BadgeWhereUniqueInput
+    update?: XOR<XOR<BadgeUpdateToOneWithWhereWithoutUserBadgesInput, BadgeUpdateWithoutUserBadgesInput>, BadgeUncheckedUpdateWithoutUserBadgesInput>
+  }
+
+  export type UserCreateNestedOneWithoutPortfolioInput = {
+    create?: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUncheckedCreateNestedOneWithoutPortfolioInput = {
+    create?: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutPortfolioNestedInput = {
+    create?: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioInput
+    upsert?: UserUpsertWithoutPortfolioInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPortfolioInput, UserUpdateWithoutPortfolioInput>, UserUncheckedUpdateWithoutPortfolioInput>
+  }
+
+  export type UserUncheckedUpdateOneWithoutPortfolioNestedInput = {
+    create?: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioInput
+    upsert?: UserUpsertWithoutPortfolioInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPortfolioInput, UserUpdateWithoutPortfolioInput>, UserUncheckedUpdateWithoutPortfolioInput>
+  }
+
+  export type UserCreateNestedOneWithoutEventsWonInput = {
+    create?: XOR<UserCreateWithoutEventsWonInput, UserUncheckedCreateWithoutEventsWonInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsWonInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CommunityCreateNestedOneWithoutEventsInput = {
+    create?: XOR<CommunityCreateWithoutEventsInput, CommunityUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutEventsInput
+    connect?: CommunityWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutEventsWonNestedInput = {
+    create?: XOR<UserCreateWithoutEventsWonInput, UserUncheckedCreateWithoutEventsWonInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsWonInput
+    upsert?: UserUpsertWithoutEventsWonInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventsWonInput, UserUpdateWithoutEventsWonInput>, UserUncheckedUpdateWithoutEventsWonInput>
+  }
+
+  export type CommunityUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<CommunityCreateWithoutEventsInput, CommunityUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutEventsInput
+    upsert?: CommunityUpsertWithoutEventsInput
+    connect?: CommunityWhereUniqueInput
+    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutEventsInput, CommunityUpdateWithoutEventsInput>, CommunityUncheckedUpdateWithoutEventsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12489,37 +21479,31 @@ export namespace Prisma {
     _max?: NestedEnumMediaTypeFilter<$PrismaModel>
   }
 
-  export type CommunityCreateWithoutMembersInput = {
-    id?: string
-    name: string
-    slug: string
-    description: string
-    image?: string | null
-    banner: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
-    posts?: PostCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowCreateNestedManyWithoutCommunityInput
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type CommunityUncheckedCreateWithoutMembersInput = {
-    id?: string
-    createdById: string
-    name: string
-    slug: string
-    description: string
-    image?: string | null
-    banner: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
-  }
-
-  export type CommunityCreateOrConnectWithoutMembersInput = {
-    where: CommunityWhereUniqueInput
-    create: XOR<CommunityCreateWithoutMembersInput, CommunityUncheckedCreateWithoutMembersInput>
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type PostCreateWithoutAuthorInput = {
@@ -12533,6 +21517,7 @@ export namespace Prisma {
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
@@ -12546,6 +21531,7 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutAuthorInput = {
@@ -12625,9 +21611,10 @@ export namespace Prisma {
     banner: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: UserCreateNestedManyWithoutCommunityInput
     posts?: PostCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutCreatedByInput = {
@@ -12639,9 +21626,10 @@ export namespace Prisma {
     banner: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: UserUncheckedCreateNestedManyWithoutCommunityInput
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutCreatedByInput = {
@@ -12658,7 +21646,7 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    community: CommunityCreateNestedOneWithoutFollowsInput
+    community: CommunityCreateNestedOneWithoutFollowersInput
   }
 
   export type CommunityFollowUncheckedCreateWithoutUserInput = {
@@ -12678,43 +21666,109 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CommunityUpsertWithoutMembersInput = {
-    update: XOR<CommunityUpdateWithoutMembersInput, CommunityUncheckedUpdateWithoutMembersInput>
-    create: XOR<CommunityCreateWithoutMembersInput, CommunityUncheckedCreateWithoutMembersInput>
-    where?: CommunityWhereInput
+  export type UserBadgesCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    badge: BadgeCreateNestedOneWithoutUserBadgesInput
   }
 
-  export type CommunityUpdateToOneWithWhereWithoutMembersInput = {
-    where?: CommunityWhereInput
-    data: XOR<CommunityUpdateWithoutMembersInput, CommunityUncheckedUpdateWithoutMembersInput>
+  export type UserBadgesUncheckedCreateWithoutUserInput = {
+    id?: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type CommunityUpdateWithoutMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    banner?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
-    posts?: PostUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+  export type UserBadgesCreateOrConnectWithoutUserInput = {
+    where: UserBadgesWhereUniqueInput
+    create: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput>
   }
 
-  export type CommunityUncheckedUpdateWithoutMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    banner?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+  export type UserBadgesCreateManyUserInputEnvelope = {
+    data: UserBadgesCreateManyUserInput | UserBadgesCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PortfolioCreateWithoutUserInput = {
+    id?: string
+    userId: string
+    bio: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioUncheckedCreateWithoutUserInput = {
+    id?: string
+    userId: string
+    bio: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioCreateOrConnectWithoutUserInput = {
+    where: PortfolioWhereUniqueInput
+    create: XOR<PortfolioCreateWithoutUserInput, PortfolioUncheckedCreateWithoutUserInput>
+  }
+
+  export type EventCreateWithoutWinnerInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    community: CommunityCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutWinnerInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+  }
+
+  export type EventCreateOrConnectWithoutWinnerInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput>
+  }
+
+  export type EventCreateManyWinnerInputEnvelope = {
+    data: EventCreateManyWinnerInput | EventCreateManyWinnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CommunityMemberCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+    community: CommunityCreateNestedOneWithoutCommunityMembersInput
+  }
+
+  export type CommunityMemberUncheckedCreateWithoutUserInput = {
+    id?: string
+    communityId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+  }
+
+  export type CommunityMemberCreateOrConnectWithoutUserInput = {
+    where: CommunityMemberWhereUniqueInput
+    create: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type CommunityMemberCreateManyUserInputEnvelope = {
+    data: CommunityMemberCreateManyUserInput | CommunityMemberCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
@@ -12862,6 +21916,296 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CommunityFollow"> | Date | string
   }
 
+  export type UserBadgesUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserBadgesWhereUniqueInput
+    update: XOR<UserBadgesUpdateWithoutUserInput, UserBadgesUncheckedUpdateWithoutUserInput>
+    create: XOR<UserBadgesCreateWithoutUserInput, UserBadgesUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserBadgesUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserBadgesWhereUniqueInput
+    data: XOR<UserBadgesUpdateWithoutUserInput, UserBadgesUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserBadgesUpdateManyWithWhereWithoutUserInput = {
+    where: UserBadgesScalarWhereInput
+    data: XOR<UserBadgesUpdateManyMutationInput, UserBadgesUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserBadgesScalarWhereInput = {
+    AND?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+    OR?: UserBadgesScalarWhereInput[]
+    NOT?: UserBadgesScalarWhereInput | UserBadgesScalarWhereInput[]
+    id?: StringFilter<"UserBadges"> | string
+    userId?: StringFilter<"UserBadges"> | string
+    badgeId?: StringFilter<"UserBadges"> | string
+    createdAt?: DateTimeFilter<"UserBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"UserBadges"> | Date | string
+  }
+
+  export type PortfolioUpsertWithoutUserInput = {
+    update: XOR<PortfolioUpdateWithoutUserInput, PortfolioUncheckedUpdateWithoutUserInput>
+    create: XOR<PortfolioCreateWithoutUserInput, PortfolioUncheckedCreateWithoutUserInput>
+    where?: PortfolioWhereInput
+  }
+
+  export type PortfolioUpdateToOneWithWhereWithoutUserInput = {
+    where?: PortfolioWhereInput
+    data: XOR<PortfolioUpdateWithoutUserInput, PortfolioUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PortfolioUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventUpsertWithWhereUniqueWithoutWinnerInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutWinnerInput, EventUncheckedUpdateWithoutWinnerInput>
+    create: XOR<EventCreateWithoutWinnerInput, EventUncheckedCreateWithoutWinnerInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutWinnerInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutWinnerInput, EventUncheckedUpdateWithoutWinnerInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutWinnerInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutWinnerInput>
+  }
+
+  export type EventScalarWhereInput = {
+    AND?: EventScalarWhereInput | EventScalarWhereInput[]
+    OR?: EventScalarWhereInput[]
+    NOT?: EventScalarWhereInput | EventScalarWhereInput[]
+    id?: StringFilter<"Event"> | string
+    name?: StringFilter<"Event"> | string
+    description?: StringFilter<"Event"> | string
+    image?: StringFilter<"Event"> | string
+    winnerId?: StringNullableFilter<"Event"> | string | null
+    startDate?: DateTimeFilter<"Event"> | Date | string
+    endDate?: DateTimeFilter<"Event"> | Date | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+    communityId?: StringFilter<"Event"> | string
+  }
+
+  export type CommunityMemberUpsertWithWhereUniqueWithoutUserInput = {
+    where: CommunityMemberWhereUniqueInput
+    update: XOR<CommunityMemberUpdateWithoutUserInput, CommunityMemberUncheckedUpdateWithoutUserInput>
+    create: XOR<CommunityMemberCreateWithoutUserInput, CommunityMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type CommunityMemberUpdateWithWhereUniqueWithoutUserInput = {
+    where: CommunityMemberWhereUniqueInput
+    data: XOR<CommunityMemberUpdateWithoutUserInput, CommunityMemberUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CommunityMemberUpdateManyWithWhereWithoutUserInput = {
+    where: CommunityMemberScalarWhereInput
+    data: XOR<CommunityMemberUpdateManyMutationInput, CommunityMemberUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CommunityMemberScalarWhereInput = {
+    AND?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+    OR?: CommunityMemberScalarWhereInput[]
+    NOT?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+    id?: StringFilter<"CommunityMember"> | string
+    userId?: StringFilter<"CommunityMember"> | string
+    communityId?: StringFilter<"CommunityMember"> | string
+    createdAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunityMember"> | Date | string
+    role?: EnumRoleFilter<"CommunityMember"> | $Enums.Role
+  }
+
+  export type UserCreateWithoutMemberOfInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+  }
+
+  export type UserUncheckedCreateWithoutMemberOfInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+  }
+
+  export type UserCreateOrConnectWithoutMemberOfInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMemberOfInput, UserUncheckedCreateWithoutMemberOfInput>
+  }
+
+  export type CommunityCreateWithoutCommunityMembersInput = {
+    id?: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
+    posts?: PostCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityUncheckedCreateWithoutCommunityMembersInput = {
+    id?: string
+    createdById: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityCreateOrConnectWithoutCommunityMembersInput = {
+    where: CommunityWhereUniqueInput
+    create: XOR<CommunityCreateWithoutCommunityMembersInput, CommunityUncheckedCreateWithoutCommunityMembersInput>
+  }
+
+  export type UserUpsertWithoutMemberOfInput = {
+    update: XOR<UserUpdateWithoutMemberOfInput, UserUncheckedUpdateWithoutMemberOfInput>
+    create: XOR<UserCreateWithoutMemberOfInput, UserUncheckedCreateWithoutMemberOfInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMemberOfInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMemberOfInput, UserUncheckedUpdateWithoutMemberOfInput>
+  }
+
+  export type UserUpdateWithoutMemberOfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMemberOfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+  }
+
+  export type CommunityUpsertWithoutCommunityMembersInput = {
+    update: XOR<CommunityUpdateWithoutCommunityMembersInput, CommunityUncheckedUpdateWithoutCommunityMembersInput>
+    create: XOR<CommunityCreateWithoutCommunityMembersInput, CommunityUncheckedCreateWithoutCommunityMembersInput>
+    where?: CommunityWhereInput
+  }
+
+  export type CommunityUpdateToOneWithWhereWithoutCommunityMembersInput = {
+    where?: CommunityWhereInput
+    data: XOR<CommunityUpdateWithoutCommunityMembersInput, CommunityUncheckedUpdateWithoutCommunityMembersInput>
+  }
+
+  export type CommunityUpdateWithoutCommunityMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
+    posts?: PostUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+  }
+
+  export type CommunityUncheckedUpdateWithoutCommunityMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+  }
+
   export type UserCreateWithoutCreatedCommunitiesInput = {
     id?: string
     username: string
@@ -12873,11 +22217,14 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Like?: LikeCreateNestedManyWithoutUserInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
     follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCommunitiesInput = {
@@ -12889,64 +22236,21 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCommunitiesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutCreatedCommunitiesInput, UserUncheckedCreateWithoutCreatedCommunitiesInput>
-  }
-
-  export type UserCreateWithoutCommunityInput = {
-    id?: string
-    username: string
-    email: string
-    image?: string | null
-    password: string
-    name: string
-    provider?: $Enums.CredentialProvider
-    role?: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Like?: LikeCreateNestedManyWithoutUserInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
-    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
-    follows?: CommunityFollowCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCommunityInput = {
-    id?: string
-    username: string
-    email: string
-    image?: string | null
-    password: string
-    name: string
-    provider?: $Enums.CredentialProvider
-    role?: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
-    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
-    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCommunityInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput>
-  }
-
-  export type UserCreateManyCommunityInputEnvelope = {
-    data: UserCreateManyCommunityInput | UserCreateManyCommunityInput[]
-    skipDuplicates?: boolean
   }
 
   export type PostCreateWithoutCommunityInput = {
@@ -12957,9 +22261,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: MediaCreateNestedManyWithoutPostInput
-    author: UserCreateNestedOneWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommunityInput = {
@@ -12973,6 +22278,7 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCommunityInput = {
@@ -13009,6 +22315,66 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventCreateWithoutCommunityInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    winner?: UserCreateNestedOneWithoutEventsWonInput
+  }
+
+  export type EventUncheckedCreateWithoutCommunityInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    winnerId?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventCreateOrConnectWithoutCommunityInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type EventCreateManyCommunityInputEnvelope = {
+    data: EventCreateManyCommunityInput | EventCreateManyCommunityInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CommunityMemberCreateWithoutCommunityInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+    user: UserCreateNestedOneWithoutMemberOfInput
+  }
+
+  export type CommunityMemberUncheckedCreateWithoutCommunityInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+  }
+
+  export type CommunityMemberCreateOrConnectWithoutCommunityInput = {
+    where: CommunityMemberWhereUniqueInput
+    create: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type CommunityMemberCreateManyCommunityInputEnvelope = {
+    data: CommunityMemberCreateManyCommunityInput | CommunityMemberCreateManyCommunityInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCreatedCommunitiesInput = {
     update: XOR<UserUpdateWithoutCreatedCommunitiesInput, UserUncheckedUpdateWithoutCreatedCommunitiesInput>
     create: XOR<UserCreateWithoutCreatedCommunitiesInput, UserUncheckedCreateWithoutCreatedCommunitiesInput>
@@ -13031,11 +22397,14 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
     follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCommunitiesInput = {
@@ -13047,46 +22416,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUpsertWithWhereUniqueWithoutCommunityInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutCommunityInput, UserUncheckedUpdateWithoutCommunityInput>
-    create: XOR<UserCreateWithoutCommunityInput, UserUncheckedCreateWithoutCommunityInput>
-  }
-
-  export type UserUpdateWithWhereUniqueWithoutCommunityInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutCommunityInput, UserUncheckedUpdateWithoutCommunityInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutCommunityInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutCommunityInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    image?: StringNullableFilter<"User"> | string | null
-    password?: StringFilter<"User"> | string
-    name?: StringFilter<"User"> | string
-    provider?: EnumCredentialProviderFilter<"User"> | $Enums.CredentialProvider
-    role?: EnumRoleFilter<"User"> | $Enums.Role
-    communityId?: StringNullableFilter<"User"> | string | null
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostUpsertWithWhereUniqueWithoutCommunityInput = {
@@ -13121,6 +22460,38 @@ export namespace Prisma {
     data: XOR<CommunityFollowUpdateManyMutationInput, CommunityFollowUncheckedUpdateManyWithoutCommunityInput>
   }
 
+  export type EventUpsertWithWhereUniqueWithoutCommunityInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutCommunityInput, EventUncheckedUpdateWithoutCommunityInput>
+    create: XOR<EventCreateWithoutCommunityInput, EventUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutCommunityInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutCommunityInput, EventUncheckedUpdateWithoutCommunityInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutCommunityInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutCommunityInput>
+  }
+
+  export type CommunityMemberUpsertWithWhereUniqueWithoutCommunityInput = {
+    where: CommunityMemberWhereUniqueInput
+    update: XOR<CommunityMemberUpdateWithoutCommunityInput, CommunityMemberUncheckedUpdateWithoutCommunityInput>
+    create: XOR<CommunityMemberCreateWithoutCommunityInput, CommunityMemberUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput = {
+    where: CommunityMemberWhereUniqueInput
+    data: XOR<CommunityMemberUpdateWithoutCommunityInput, CommunityMemberUncheckedUpdateWithoutCommunityInput>
+  }
+
+  export type CommunityMemberUpdateManyWithWhereWithoutCommunityInput = {
+    where: CommunityMemberScalarWhereInput
+    data: XOR<CommunityMemberUpdateManyMutationInput, CommunityMemberUncheckedUpdateManyWithoutCommunityInput>
+  }
+
   export type PostCreateWithoutMediaInput = {
     id?: string
     title: string
@@ -13128,10 +22499,11 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutMediaInput = {
@@ -13145,6 +22517,7 @@ export namespace Prisma {
     communityId: string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutMediaInput = {
@@ -13152,20 +22525,43 @@ export namespace Prisma {
     create: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput>
   }
 
-  export type PostUpsertWithWhereUniqueWithoutMediaInput = {
-    where: PostWhereUniqueInput
+  export type PostUpsertWithoutMediaInput = {
     update: XOR<PostUpdateWithoutMediaInput, PostUncheckedUpdateWithoutMediaInput>
     create: XOR<PostCreateWithoutMediaInput, PostUncheckedCreateWithoutMediaInput>
+    where?: PostWhereInput
   }
 
-  export type PostUpdateWithWhereUniqueWithoutMediaInput = {
-    where: PostWhereUniqueInput
+  export type PostUpdateToOneWithWhereWithoutMediaInput = {
+    where?: PostWhereInput
     data: XOR<PostUpdateWithoutMediaInput, PostUncheckedUpdateWithoutMediaInput>
   }
 
-  export type PostUpdateManyWithWhereWithoutMediaInput = {
-    where: PostScalarWhereInput
-    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutMediaInput>
+  export type PostUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type MediaCreateWithoutPostInput = {
@@ -13189,7 +22585,12 @@ export namespace Prisma {
     create: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput>
   }
 
-  export type UserCreateWithoutPostInput = {
+  export type MediaCreateManyPostInputEnvelope = {
+    data: MediaCreateManyPostInput | MediaCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutPostsInput = {
     id?: string
     username: string
     email: string
@@ -13200,14 +22601,17 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Like?: LikeCreateNestedManyWithoutUserInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutPostInput = {
+  export type UserUncheckedCreateWithoutPostsInput = {
     id?: string
     username: string
     email: string
@@ -13216,18 +22620,21 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioId?: string | null
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type UserCreateOrConnectWithoutPostInput = {
+  export type UserCreateOrConnectWithoutPostsInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutPostInput, UserUncheckedCreateWithoutPostInput>
+    create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
   }
 
   export type CommunityCreateWithoutPostsInput = {
@@ -13240,8 +22647,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
-    members?: UserCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutPostsInput = {
@@ -13254,8 +22662,9 @@ export namespace Prisma {
     banner: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: UserUncheckedCreateNestedManyWithoutCommunityInput
-    follows?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutPostsInput = {
@@ -13267,7 +22676,7 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutLikeInput
+    user: UserCreateNestedOneWithoutLikesInput
     comment?: CommentCreateNestedOneWithoutLikesInput
   }
 
@@ -13294,7 +22703,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutCommentInput
+    author: UserCreateNestedOneWithoutCommentsInput
     parent?: CommentCreateNestedOneWithoutCommentsInput
     likes?: LikeCreateNestedManyWithoutCommentInput
     comments?: CommentCreateNestedManyWithoutParentInput
@@ -13318,6 +22727,30 @@ export namespace Prisma {
 
   export type CommentCreateManyPostInputEnvelope = {
     data: CommentCreateManyPostInput | CommentCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PostBadgesCreateWithoutPostInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    badge: BadgeCreateNestedOneWithoutPostBadgesInput
+  }
+
+  export type PostBadgesUncheckedCreateWithoutPostInput = {
+    id?: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesCreateOrConnectWithoutPostInput = {
+    where: PostBadgesWhereUniqueInput
+    create: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput>
+  }
+
+  export type PostBadgesCreateManyPostInputEnvelope = {
+    data: PostBadgesCreateManyPostInput | PostBadgesCreateManyPostInput[]
     skipDuplicates?: boolean
   }
 
@@ -13346,20 +22779,21 @@ export namespace Prisma {
     type?: EnumMediaTypeFilter<"Media"> | $Enums.MediaType
     createdAt?: DateTimeFilter<"Media"> | Date | string
     updatedAt?: DateTimeFilter<"Media"> | Date | string
+    postId?: StringFilter<"Media"> | string
   }
 
-  export type UserUpsertWithoutPostInput = {
-    update: XOR<UserUpdateWithoutPostInput, UserUncheckedUpdateWithoutPostInput>
-    create: XOR<UserCreateWithoutPostInput, UserUncheckedCreateWithoutPostInput>
+  export type UserUpsertWithoutPostsInput = {
+    update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
+    create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutPostInput = {
+  export type UserUpdateToOneWithWhereWithoutPostsInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutPostInput, UserUncheckedUpdateWithoutPostInput>
+    data: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
   }
 
-  export type UserUpdateWithoutPostInput = {
+  export type UserUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13370,14 +22804,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutPostInput = {
+  export type UserUncheckedUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13386,13 +22823,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CommunityUpsertWithoutPostsInput = {
@@ -13416,8 +22856,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
-    members?: UserUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutPostsInput = {
@@ -13430,8 +22871,9 @@ export namespace Prisma {
     banner?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: UserUncheckedUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type LikeUpsertWithWhereUniqueWithoutPostInput = {
@@ -13466,7 +22908,34 @@ export namespace Prisma {
     data: XOR<CommentUpdateManyMutationInput, CommentUncheckedUpdateManyWithoutPostInput>
   }
 
-  export type UserCreateWithoutLikeInput = {
+  export type PostBadgesUpsertWithWhereUniqueWithoutPostInput = {
+    where: PostBadgesWhereUniqueInput
+    update: XOR<PostBadgesUpdateWithoutPostInput, PostBadgesUncheckedUpdateWithoutPostInput>
+    create: XOR<PostBadgesCreateWithoutPostInput, PostBadgesUncheckedCreateWithoutPostInput>
+  }
+
+  export type PostBadgesUpdateWithWhereUniqueWithoutPostInput = {
+    where: PostBadgesWhereUniqueInput
+    data: XOR<PostBadgesUpdateWithoutPostInput, PostBadgesUncheckedUpdateWithoutPostInput>
+  }
+
+  export type PostBadgesUpdateManyWithWhereWithoutPostInput = {
+    where: PostBadgesScalarWhereInput
+    data: XOR<PostBadgesUpdateManyMutationInput, PostBadgesUncheckedUpdateManyWithoutPostInput>
+  }
+
+  export type PostBadgesScalarWhereInput = {
+    AND?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+    OR?: PostBadgesScalarWhereInput[]
+    NOT?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+    id?: StringFilter<"PostBadges"> | string
+    postId?: StringFilter<"PostBadges"> | string
+    badgeId?: StringFilter<"PostBadges"> | string
+    createdAt?: DateTimeFilter<"PostBadges"> | Date | string
+    updatedAt?: DateTimeFilter<"PostBadges"> | Date | string
+  }
+
+  export type UserCreateWithoutLikesInput = {
     id?: string
     username: string
     email: string
@@ -13477,14 +22946,17 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutLikeInput = {
+  export type UserUncheckedCreateWithoutLikesInput = {
     id?: string
     username: string
     email: string
@@ -13493,18 +22965,21 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type UserCreateOrConnectWithoutLikeInput = {
+  export type UserCreateOrConnectWithoutLikesInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutLikeInput, UserUncheckedCreateWithoutLikeInput>
+    create: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
   }
 
   export type PostCreateWithoutLikesInput = {
@@ -13515,9 +22990,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: MediaCreateNestedManyWithoutPostInput
-    author: UserCreateNestedOneWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
     community: CommunityCreateNestedOneWithoutPostsInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutLikesInput = {
@@ -13531,6 +23007,7 @@ export namespace Prisma {
     communityId: string
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutLikesInput = {
@@ -13543,7 +23020,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutCommentInput
+    author: UserCreateNestedOneWithoutCommentsInput
     post: PostCreateNestedOneWithoutCommentsInput
     parent?: CommentCreateNestedOneWithoutCommentsInput
     comments?: CommentCreateNestedManyWithoutParentInput
@@ -13565,18 +23042,18 @@ export namespace Prisma {
     create: XOR<CommentCreateWithoutLikesInput, CommentUncheckedCreateWithoutLikesInput>
   }
 
-  export type UserUpsertWithoutLikeInput = {
-    update: XOR<UserUpdateWithoutLikeInput, UserUncheckedUpdateWithoutLikeInput>
-    create: XOR<UserCreateWithoutLikeInput, UserUncheckedCreateWithoutLikeInput>
+  export type UserUpsertWithoutLikesInput = {
+    update: XOR<UserUpdateWithoutLikesInput, UserUncheckedUpdateWithoutLikesInput>
+    create: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutLikeInput = {
+  export type UserUpdateToOneWithWhereWithoutLikesInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutLikeInput, UserUncheckedUpdateWithoutLikeInput>
+    data: XOR<UserUpdateWithoutLikesInput, UserUncheckedUpdateWithoutLikesInput>
   }
 
-  export type UserUpdateWithoutLikeInput = {
+  export type UserUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13587,14 +23064,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutLikeInput = {
+  export type UserUncheckedUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13603,13 +23083,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostUpsertWithoutLikesInput = {
@@ -13631,9 +23114,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: MediaUpdateManyWithoutPostNestedInput
-    author?: UserUpdateOneRequiredWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutLikesInput = {
@@ -13647,6 +23131,7 @@ export namespace Prisma {
     communityId?: StringFieldUpdateOperationsInput | string
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type CommentUpsertWithoutLikesInput = {
@@ -13665,7 +23150,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutCommentNestedInput
+    author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
     parent?: CommentUpdateOneWithoutCommentsNestedInput
     comments?: CommentUpdateManyWithoutParentNestedInput
@@ -13682,7 +23167,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutParentNestedInput
   }
 
-  export type UserCreateWithoutCommentInput = {
+  export type UserCreateWithoutCommentsInput = {
     id?: string
     username: string
     email: string
@@ -13693,14 +23178,17 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Like?: LikeCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
     createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutCommentInput = {
+  export type UserUncheckedCreateWithoutCommentsInput = {
     id?: string
     username: string
     email: string
@@ -13709,18 +23197,21 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type UserCreateOrConnectWithoutCommentInput = {
+  export type UserCreateOrConnectWithoutCommentsInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCommentInput, UserUncheckedCreateWithoutCommentInput>
+    create: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
   }
 
   export type PostCreateWithoutCommentsInput = {
@@ -13731,9 +23222,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: MediaCreateNestedManyWithoutPostInput
-    author: UserCreateNestedOneWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
@@ -13747,6 +23239,7 @@ export namespace Prisma {
     communityId: string
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCommentsInput = {
@@ -13759,7 +23252,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutCommentInput
+    author: UserCreateNestedOneWithoutCommentsInput
     post: PostCreateNestedOneWithoutCommentsInput
     parent?: CommentCreateNestedOneWithoutCommentsInput
     likes?: LikeCreateNestedManyWithoutCommentInput
@@ -13785,7 +23278,7 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutLikeInput
+    user: UserCreateNestedOneWithoutLikesInput
     post: PostCreateNestedOneWithoutLikesInput
   }
 
@@ -13812,7 +23305,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutCommentInput
+    author: UserCreateNestedOneWithoutCommentsInput
     post: PostCreateNestedOneWithoutCommentsInput
     likes?: LikeCreateNestedManyWithoutCommentInput
     comments?: CommentCreateNestedManyWithoutParentInput
@@ -13839,18 +23332,18 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutCommentInput = {
-    update: XOR<UserUpdateWithoutCommentInput, UserUncheckedUpdateWithoutCommentInput>
-    create: XOR<UserCreateWithoutCommentInput, UserUncheckedCreateWithoutCommentInput>
+  export type UserUpsertWithoutCommentsInput = {
+    update: XOR<UserUpdateWithoutCommentsInput, UserUncheckedUpdateWithoutCommentsInput>
+    create: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutCommentInput = {
+  export type UserUpdateToOneWithWhereWithoutCommentsInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCommentInput, UserUncheckedUpdateWithoutCommentInput>
+    data: XOR<UserUpdateWithoutCommentsInput, UserUncheckedUpdateWithoutCommentsInput>
   }
 
-  export type UserUpdateWithoutCommentInput = {
+  export type UserUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13861,14 +23354,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
     createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutCommentInput = {
+  export type UserUncheckedUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -13877,13 +23373,16 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostUpsertWithoutCommentsInput = {
@@ -13905,9 +23404,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: MediaUpdateManyWithoutPostNestedInput
-    author?: UserUpdateOneRequiredWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommentsInput = {
@@ -13921,6 +23421,7 @@ export namespace Prisma {
     communityId?: StringFieldUpdateOperationsInput | string
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type CommentUpsertWithoutCommentsInput = {
@@ -13939,7 +23440,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutCommentNestedInput
+    author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
     parent?: CommentUpdateOneWithoutCommentsNestedInput
     likes?: LikeUpdateManyWithoutCommentNestedInput
@@ -13988,7 +23489,7 @@ export namespace Prisma {
     data: XOR<CommentUpdateManyMutationInput, CommentUncheckedUpdateManyWithoutParentInput>
   }
 
-  export type CommunityCreateWithoutFollowsInput = {
+  export type CommunityCreateWithoutFollowersInput = {
     id?: string
     name: string
     slug: string
@@ -13998,11 +23499,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
-    members?: UserCreateNestedManyWithoutCommunityInput
     posts?: PostCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
   }
 
-  export type CommunityUncheckedCreateWithoutFollowsInput = {
+  export type CommunityUncheckedCreateWithoutFollowersInput = {
     id?: string
     createdById: string
     name: string
@@ -14012,13 +23514,14 @@ export namespace Prisma {
     banner: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: UserUncheckedCreateNestedManyWithoutCommunityInput
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
   }
 
-  export type CommunityCreateOrConnectWithoutFollowsInput = {
+  export type CommunityCreateOrConnectWithoutFollowersInput = {
     where: CommunityWhereUniqueInput
-    create: XOR<CommunityCreateWithoutFollowsInput, CommunityUncheckedCreateWithoutFollowsInput>
+    create: XOR<CommunityCreateWithoutFollowersInput, CommunityUncheckedCreateWithoutFollowersInput>
   }
 
   export type UserCreateWithoutFollowsInput = {
@@ -14032,11 +23535,14 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
-    community?: CommunityCreateNestedOneWithoutMembersInput
-    Post?: PostCreateNestedManyWithoutAuthorInput
-    Like?: LikeCreateNestedManyWithoutUserInput
-    Comment?: CommentCreateNestedManyWithoutAuthorInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowsInput = {
@@ -14048,13 +23554,16 @@ export namespace Prisma {
     name: string
     provider?: $Enums.CredentialProvider
     role?: $Enums.Role
-    communityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Post?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    Like?: LikeUncheckedCreateNestedManyWithoutUserInput
-    Comment?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowsInput = {
@@ -14062,18 +23571,18 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutFollowsInput, UserUncheckedCreateWithoutFollowsInput>
   }
 
-  export type CommunityUpsertWithoutFollowsInput = {
-    update: XOR<CommunityUpdateWithoutFollowsInput, CommunityUncheckedUpdateWithoutFollowsInput>
-    create: XOR<CommunityCreateWithoutFollowsInput, CommunityUncheckedCreateWithoutFollowsInput>
+  export type CommunityUpsertWithoutFollowersInput = {
+    update: XOR<CommunityUpdateWithoutFollowersInput, CommunityUncheckedUpdateWithoutFollowersInput>
+    create: XOR<CommunityCreateWithoutFollowersInput, CommunityUncheckedCreateWithoutFollowersInput>
     where?: CommunityWhereInput
   }
 
-  export type CommunityUpdateToOneWithWhereWithoutFollowsInput = {
+  export type CommunityUpdateToOneWithWhereWithoutFollowersInput = {
     where?: CommunityWhereInput
-    data: XOR<CommunityUpdateWithoutFollowsInput, CommunityUncheckedUpdateWithoutFollowsInput>
+    data: XOR<CommunityUpdateWithoutFollowersInput, CommunityUncheckedUpdateWithoutFollowersInput>
   }
 
-  export type CommunityUpdateWithoutFollowsInput = {
+  export type CommunityUpdateWithoutFollowersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -14083,11 +23592,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
-    members?: UserUpdateManyWithoutCommunityNestedInput
     posts?: PostUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
   }
 
-  export type CommunityUncheckedUpdateWithoutFollowsInput = {
+  export type CommunityUncheckedUpdateWithoutFollowersInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdById?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -14097,8 +23607,9 @@ export namespace Prisma {
     banner?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: UserUncheckedUpdateManyWithoutCommunityNestedInput
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type UserUpsertWithoutFollowsInput = {
@@ -14123,11 +23634,14 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneWithoutMembersNestedInput
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowsInput = {
@@ -14139,13 +23653,680 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    communityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PostBadgesCreateWithoutBadgeInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutPostBadgesInput
+  }
+
+  export type PostBadgesUncheckedCreateWithoutBadgeInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesCreateOrConnectWithoutBadgeInput = {
+    where: PostBadgesWhereUniqueInput
+    create: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput>
+  }
+
+  export type PostBadgesCreateManyBadgeInputEnvelope = {
+    data: PostBadgesCreateManyBadgeInput | PostBadgesCreateManyBadgeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserBadgesCreateWithoutBadgeInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUserBadgesInput
+  }
+
+  export type UserBadgesUncheckedCreateWithoutBadgeInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserBadgesCreateOrConnectWithoutBadgeInput = {
+    where: UserBadgesWhereUniqueInput
+    create: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput>
+  }
+
+  export type UserBadgesCreateManyBadgeInputEnvelope = {
+    data: UserBadgesCreateManyBadgeInput | UserBadgesCreateManyBadgeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PostBadgesUpsertWithWhereUniqueWithoutBadgeInput = {
+    where: PostBadgesWhereUniqueInput
+    update: XOR<PostBadgesUpdateWithoutBadgeInput, PostBadgesUncheckedUpdateWithoutBadgeInput>
+    create: XOR<PostBadgesCreateWithoutBadgeInput, PostBadgesUncheckedCreateWithoutBadgeInput>
+  }
+
+  export type PostBadgesUpdateWithWhereUniqueWithoutBadgeInput = {
+    where: PostBadgesWhereUniqueInput
+    data: XOR<PostBadgesUpdateWithoutBadgeInput, PostBadgesUncheckedUpdateWithoutBadgeInput>
+  }
+
+  export type PostBadgesUpdateManyWithWhereWithoutBadgeInput = {
+    where: PostBadgesScalarWhereInput
+    data: XOR<PostBadgesUpdateManyMutationInput, PostBadgesUncheckedUpdateManyWithoutBadgeInput>
+  }
+
+  export type UserBadgesUpsertWithWhereUniqueWithoutBadgeInput = {
+    where: UserBadgesWhereUniqueInput
+    update: XOR<UserBadgesUpdateWithoutBadgeInput, UserBadgesUncheckedUpdateWithoutBadgeInput>
+    create: XOR<UserBadgesCreateWithoutBadgeInput, UserBadgesUncheckedCreateWithoutBadgeInput>
+  }
+
+  export type UserBadgesUpdateWithWhereUniqueWithoutBadgeInput = {
+    where: UserBadgesWhereUniqueInput
+    data: XOR<UserBadgesUpdateWithoutBadgeInput, UserBadgesUncheckedUpdateWithoutBadgeInput>
+  }
+
+  export type UserBadgesUpdateManyWithWhereWithoutBadgeInput = {
+    where: UserBadgesScalarWhereInput
+    data: XOR<UserBadgesUpdateManyMutationInput, UserBadgesUncheckedUpdateManyWithoutBadgeInput>
+  }
+
+  export type PostCreateWithoutPostBadgesInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    media?: MediaCreateNestedManyWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
+    community: CommunityCreateNestedOneWithoutPostsInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    comments?: CommentCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutPostBadgesInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+    media?: MediaUncheckedCreateNestedManyWithoutPostInput
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutPostBadgesInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutPostBadgesInput, PostUncheckedCreateWithoutPostBadgesInput>
+  }
+
+  export type BadgeCreateWithoutPostBadgesInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userBadges?: UserBadgesCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeUncheckedCreateWithoutPostBadgesInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeCreateOrConnectWithoutPostBadgesInput = {
+    where: BadgeWhereUniqueInput
+    create: XOR<BadgeCreateWithoutPostBadgesInput, BadgeUncheckedCreateWithoutPostBadgesInput>
+  }
+
+  export type PostUpsertWithoutPostBadgesInput = {
+    update: XOR<PostUpdateWithoutPostBadgesInput, PostUncheckedUpdateWithoutPostBadgesInput>
+    create: XOR<PostCreateWithoutPostBadgesInput, PostUncheckedCreateWithoutPostBadgesInput>
+    where?: PostWhereInput
+  }
+
+  export type PostUpdateToOneWithWhereWithoutPostBadgesInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutPostBadgesInput, PostUncheckedUpdateWithoutPostBadgesInput>
+  }
+
+  export type PostUpdateWithoutPostBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: MediaUpdateManyWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutPostBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    media?: MediaUncheckedUpdateManyWithoutPostNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type BadgeUpsertWithoutPostBadgesInput = {
+    update: XOR<BadgeUpdateWithoutPostBadgesInput, BadgeUncheckedUpdateWithoutPostBadgesInput>
+    create: XOR<BadgeCreateWithoutPostBadgesInput, BadgeUncheckedCreateWithoutPostBadgesInput>
+    where?: BadgeWhereInput
+  }
+
+  export type BadgeUpdateToOneWithWhereWithoutPostBadgesInput = {
+    where?: BadgeWhereInput
+    data: XOR<BadgeUpdateWithoutPostBadgesInput, BadgeUncheckedUpdateWithoutPostBadgesInput>
+  }
+
+  export type BadgeUpdateWithoutPostBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userBadges?: UserBadgesUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type BadgeUncheckedUpdateWithoutPostBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type UserCreateWithoutUserBadgesInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUserBadgesInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUserBadgesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserBadgesInput, UserUncheckedCreateWithoutUserBadgesInput>
+  }
+
+  export type BadgeCreateWithoutUserBadgesInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postBadges?: PostBadgesCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeUncheckedCreateWithoutUserBadgesInput = {
+    id?: string
+    name: string
+    description: string
+    slug: string
+    type: string
+    price: number
+    image: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutBadgeInput
+  }
+
+  export type BadgeCreateOrConnectWithoutUserBadgesInput = {
+    where: BadgeWhereUniqueInput
+    create: XOR<BadgeCreateWithoutUserBadgesInput, BadgeUncheckedCreateWithoutUserBadgesInput>
+  }
+
+  export type UserUpsertWithoutUserBadgesInput = {
+    update: XOR<UserUpdateWithoutUserBadgesInput, UserUncheckedUpdateWithoutUserBadgesInput>
+    create: XOR<UserCreateWithoutUserBadgesInput, UserUncheckedCreateWithoutUserBadgesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserBadgesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserBadgesInput, UserUncheckedUpdateWithoutUserBadgesInput>
+  }
+
+  export type UserUpdateWithoutUserBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUserBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BadgeUpsertWithoutUserBadgesInput = {
+    update: XOR<BadgeUpdateWithoutUserBadgesInput, BadgeUncheckedUpdateWithoutUserBadgesInput>
+    create: XOR<BadgeCreateWithoutUserBadgesInput, BadgeUncheckedCreateWithoutUserBadgesInput>
+    where?: BadgeWhereInput
+  }
+
+  export type BadgeUpdateToOneWithWhereWithoutUserBadgesInput = {
+    where?: BadgeWhereInput
+    data: XOR<BadgeUpdateWithoutUserBadgesInput, BadgeUncheckedUpdateWithoutUserBadgesInput>
+  }
+
+  export type BadgeUpdateWithoutUserBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postBadges?: PostBadgesUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type BadgeUncheckedUpdateWithoutUserBadgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    image?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutBadgeNestedInput
+  }
+
+  export type UserCreateWithoutPortfolioInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPortfolioInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPortfolioInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+  }
+
+  export type UserUpsertWithoutPortfolioInput = {
+    update: XOR<UserUpdateWithoutPortfolioInput, UserUncheckedUpdateWithoutPortfolioInput>
+    create: XOR<UserCreateWithoutPortfolioInput, UserUncheckedCreateWithoutPortfolioInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPortfolioInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPortfolioInput, UserUncheckedUpdateWithoutPortfolioInput>
+  }
+
+  export type UserUpdateWithoutPortfolioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPortfolioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutEventsWonInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEventsWonInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEventsWonInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventsWonInput, UserUncheckedCreateWithoutEventsWonInput>
+  }
+
+  export type CommunityCreateWithoutEventsInput = {
+    id?: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
+    posts?: PostCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityUncheckedCreateWithoutEventsInput = {
+    id?: string
+    createdById: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityCreateOrConnectWithoutEventsInput = {
+    where: CommunityWhereUniqueInput
+    create: XOR<CommunityCreateWithoutEventsInput, CommunityUncheckedCreateWithoutEventsInput>
+  }
+
+  export type UserUpsertWithoutEventsWonInput = {
+    update: XOR<UserUpdateWithoutEventsWonInput, UserUncheckedUpdateWithoutEventsWonInput>
+    create: XOR<UserCreateWithoutEventsWonInput, UserUncheckedCreateWithoutEventsWonInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventsWonInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventsWonInput, UserUncheckedUpdateWithoutEventsWonInput>
+  }
+
+  export type UserUpdateWithoutEventsWonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventsWonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CommunityUpsertWithoutEventsInput = {
+    update: XOR<CommunityUpdateWithoutEventsInput, CommunityUncheckedUpdateWithoutEventsInput>
+    create: XOR<CommunityCreateWithoutEventsInput, CommunityUncheckedCreateWithoutEventsInput>
+    where?: CommunityWhereInput
+  }
+
+  export type CommunityUpdateToOneWithWhereWithoutEventsInput = {
+    where?: CommunityWhereInput
+    data: XOR<CommunityUpdateWithoutEventsInput, CommunityUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type CommunityUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
+    posts?: PostUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+  }
+
+  export type CommunityUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type PostCreateManyAuthorInput = {
@@ -14193,6 +24374,33 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type UserBadgesCreateManyUserInput = {
+    id?: string
+    badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventCreateManyWinnerInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+  }
+
+  export type CommunityMemberCreateManyUserInput = {
+    id?: string
+    communityId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
+  }
+
   export type PostUpdateWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -14204,6 +24412,7 @@ export namespace Prisma {
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
@@ -14217,6 +24426,7 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutAuthorInput = {
@@ -14293,9 +24503,10 @@ export namespace Prisma {
     banner?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: UserUpdateManyWithoutCommunityNestedInput
     posts?: PostUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutCreatedByInput = {
@@ -14307,9 +24518,10 @@ export namespace Prisma {
     banner?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: UserUncheckedUpdateManyWithoutCommunityNestedInput
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
-    follows?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateManyWithoutCreatedByInput = {
@@ -14327,7 +24539,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    community?: CommunityUpdateOneRequiredWithoutFollowsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutFollowersNestedInput
   }
 
   export type CommunityFollowUncheckedUpdateWithoutUserInput = {
@@ -14344,17 +24556,85 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserCreateManyCommunityInput = {
-    id?: string
-    username: string
-    email: string
-    image?: string | null
-    password: string
-    name: string
-    provider?: $Enums.CredentialProvider
-    role?: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type UserBadgesUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    badge?: BadgeUpdateOneRequiredWithoutUserBadgesNestedInput
+  }
+
+  export type UserBadgesUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventUpdateWithoutWinnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    community?: CommunityUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutWinnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventUncheckedUpdateManyWithoutWinnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CommunityMemberUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    community?: CommunityUpdateOneRequiredWithoutCommunityMembersNestedInput
+  }
+
+  export type CommunityMemberUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type CommunityMemberUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type PostCreateManyCommunityInput = {
@@ -14374,53 +24654,24 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type UserUpdateWithoutCommunityInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUpdateManyWithoutUserNestedInput
-    Comment?: CommentUpdateManyWithoutAuthorNestedInput
-    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
-    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+  export type EventCreateManyCommunityInput = {
+    id?: string
+    name: string
+    description: string
+    image: string
+    winnerId?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type UserUncheckedUpdateWithoutCommunityInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Post?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    Like?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
-    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
-    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateManyWithoutCommunityInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type CommunityMemberCreateManyCommunityInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.Role
   }
 
   export type PostUpdateWithoutCommunityInput = {
@@ -14431,9 +24682,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: MediaUpdateManyWithoutPostNestedInput
-    author?: UserUpdateOneRequiredWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommunityInput = {
@@ -14447,6 +24699,7 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutCommunityInput = {
@@ -14480,41 +24733,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PostUpdateWithoutMediaInput = {
+  export type EventUpdateWithoutCommunityInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutPostNestedInput
-    community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
-    likes?: LikeUpdateManyWithoutPostNestedInput
-    comments?: CommentUpdateManyWithoutPostNestedInput
+    winner?: UserUpdateOneWithoutEventsWonNestedInput
   }
 
-  export type PostUncheckedUpdateWithoutMediaInput = {
+  export type EventUncheckedUpdateWithoutCommunityInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    communityId?: StringFieldUpdateOperationsInput | string
-    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
-    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
   }
 
-  export type PostUncheckedUpdateManyWithoutMediaInput = {
+  export type EventUncheckedUpdateManyWithoutCommunityInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    communityId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CommunityMemberUpdateWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    user?: UserUpdateOneRequiredWithoutMemberOfNestedInput
+  }
+
+  export type CommunityMemberUncheckedUpdateWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type CommunityMemberUncheckedUpdateManyWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type MediaCreateManyPostInput = {
+    id?: string
+    url: string
+    type: $Enums.MediaType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type LikeCreateManyPostInput = {
@@ -14530,6 +24814,13 @@ export namespace Prisma {
     content: string
     authorId: string
     parentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesCreateManyPostInput = {
+    id?: string
+    badgeId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14562,7 +24853,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutLikeNestedInput
+    user?: UserUpdateOneRequiredWithoutLikesNestedInput
     comment?: CommentUpdateOneWithoutLikesNestedInput
   }
 
@@ -14587,7 +24878,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutCommentNestedInput
+    author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     parent?: CommentUpdateOneWithoutCommentsNestedInput
     likes?: LikeUpdateManyWithoutCommentNestedInput
     comments?: CommentUpdateManyWithoutParentNestedInput
@@ -14613,6 +24904,27 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PostBadgesUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    badge?: BadgeUpdateOneRequiredWithoutPostBadgesNestedInput
+  }
+
+  export type PostBadgesUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesUncheckedUpdateManyWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LikeCreateManyCommentInput = {
     id?: string
     userId: string
@@ -14634,7 +24946,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutLikeNestedInput
+    user?: UserUpdateOneRequiredWithoutLikesNestedInput
     post?: PostUpdateOneRequiredWithoutLikesNestedInput
   }
 
@@ -14659,7 +24971,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutCommentNestedInput
+    author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
     likes?: LikeUpdateManyWithoutCommentNestedInput
     comments?: CommentUpdateManyWithoutParentNestedInput
@@ -14681,6 +24993,62 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesCreateManyBadgeInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserBadgesCreateManyBadgeInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostBadgesUpdateWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutPostBadgesNestedInput
+  }
+
+  export type PostBadgesUncheckedUpdateWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostBadgesUncheckedUpdateManyWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesUpdateWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserBadgesNestedInput
+  }
+
+  export type UserBadgesUncheckedUpdateWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserBadgesUncheckedUpdateManyWithoutBadgeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

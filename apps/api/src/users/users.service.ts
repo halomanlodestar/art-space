@@ -1,4 +1,4 @@
-import { UsersRepository } from './../repositories/users.repository';
+import { UsersRepository } from '../repositories/users.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import argon from 'argon2';
@@ -31,19 +31,26 @@ export class UsersService {
   async findByUsername(username: string) {
     return await this.userRepository.findByUsername(username, {
       include: {
-        community: {
+        memberOf: {
           select: {
-            id: true,
-            name: true,
-            slug: true,
-            image: true,
-          },
-        },
+            community: {
+              select: {
+                image: true,
+                slug: true,
+                name: true,
+                _count: {
+                  select: {
+                    followers: true,
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       omit: {
         id: true,
         email: true,
-        communityId: true,
         password: true,
         provider: true,
       },

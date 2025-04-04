@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   async signIn(user: SafeUser): Promise<SessionPayload> {
-    const { id, username, email, name, role, image, communityId } = user;
+    const { id, username, email, name, role, image } = user;
 
     const refreshToken = await this.jwtService.signAsync(
       { id, username },
@@ -63,7 +63,7 @@ export class AuthService {
     return {
       refreshToken,
       accessToken,
-      user: { id, username, email, name, role, image, communityId },
+      user: { id, username, email, name, role, image },
     };
   }
 

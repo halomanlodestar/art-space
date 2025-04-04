@@ -17,6 +17,11 @@
 			"cache": false,
 			"persistent": true
 		},
+		"db:migrate": {
+			"dependsOn": ["^db:migrate"],
+			"inputs": ["prisma/schema.prisma"],
+			"env": ["DATABASE_URL"]
+		},
 		"db:generate": {
 			"dependsOn": ["^db:generate"],
 			"inputs": ["prisma/schema.prisma"]

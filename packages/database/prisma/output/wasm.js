@@ -17,12 +17,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.4.1
- * Query Engine version: a9055b89e58b4b5bfb59600785423b1db3d0e75d
+ * Prisma Client JS version: 6.5.0
+ * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
  */
 Prisma.prismaVersion = {
-  client: "6.4.1",
-  engine: "a9055b89e58b4b5bfb59600785423b1db3d0e75d"
+  client: "6.5.0",
+  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -126,9 +126,18 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   provider: 'provider',
   role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  portfolioId: 'portfolioId'
+};
+
+exports.Prisma.CommunityMemberScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
   communityId: 'communityId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role'
 };
 
 exports.Prisma.CommunityScalarFieldEnum = {
@@ -148,7 +157,8 @@ exports.Prisma.MediaScalarFieldEnum = {
   url: 'url',
   type: 'type',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  postId: 'postId'
 };
 
 exports.Prisma.PostScalarFieldEnum = {
@@ -189,6 +199,55 @@ exports.Prisma.CommunityFollowScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BadgeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  slug: 'slug',
+  type: 'type',
+  price: 'price',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PostBadgesScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  badgeId: 'badgeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserBadgesScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  badgeId: 'badgeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PortfolioScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  bio: 'bio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  image: 'image',
+  winnerId: 'winnerId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  communityId: 'communityId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -223,12 +282,18 @@ exports.MediaType = exports.$Enums.MediaType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  CommunityMember: 'CommunityMember',
   Community: 'Community',
   Media: 'Media',
   Post: 'Post',
   Like: 'Like',
   Comment: 'Comment',
-  CommunityFollow: 'CommunityFollow'
+  CommunityFollow: 'CommunityFollow',
+  Badge: 'Badge',
+  PostBadges: 'PostBadges',
+  UserBadges: 'UserBadges',
+  Portfolio: 'Portfolio',
+  Event: 'Event'
 };
 
 /**
