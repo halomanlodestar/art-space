@@ -14,6 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum Role {
   USER
   COMMUNITY_CREATOR
@@ -33,26 +39,30 @@ enum CredentialProvider {
 }
 
 model User {
-  id                 String             @id @default(cuid())
-  username           String             @unique
-  email              String             @unique
-  image              String?
-  password           String
-  name               String
-  provider           CredentialProvider @default(EMAIL)
-  role               Role               @default(USER)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  posts              Post[]
-  likes              Like[]
-  comments           Comment[]
-  createdCommunities Community[]        @relation("createdCommunities")
-  follows            CommunityFollow[]
-  userBadges         UserBadges[]
-  portfolioId        String?            @unique
-  portfolio          Portfolio?         @relation(fields: [portfolioId], references: [id])
-  eventsWon          Event[]
-  memberOf           CommunityMember[]
+  id                   String               @id @default(cuid())
+  username             String               @unique
+  email                String               @unique
+  image                String?
+  password             String
+  name                 String
+  provider             CredentialProvider   @default(EMAIL)
+  role                 Role                 @default(USER)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  posts                Post[]
+  likes                Like[]
+  comments             Comment[]
+  createdCommunities   Community[]          @relation("createdCommunities")
+  follows              CommunityFollow[]
+  userBadges           UserBadges[]
+  portfolioId          String?              @unique
+  portfolio            Portfolio?           @relation(fields: [portfolioId], references: [id])
+  eventsWon            Event[]
+  memberOf             CommunityMember[]
+  flaggedPosts         PostFlag[]
+  bookmarks            Bookmark[]
+  createdApplications  CreatorApplication[] @relation("CreatedApplications")
+  reviewedApplications CreatorApplication[] @relation("ReviewedApplications")
 }
 
 model CommunityMember {
@@ -69,20 +79,21 @@ model CommunityMember {
 }
 
 model Community {
-  id               String            @id @default(cuid())
-  createdById      String
-  createdBy        User              @relation(fields: [createdById], references: [id], map: "createdCommunities", name: "createdCommunities")
-  name             String            @unique
-  slug             String            @unique
-  description      String
-  image            String?
-  banner           String
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  posts            Post[]
-  followers        CommunityFollow[]
-  events           Event[]
-  communityMembers CommunityMember[]
+  id                 String               @id @default(cuid())
+  createdById        String
+  createdBy          User                 @relation(fields: [createdById], references: [id], map: "createdCommunities", name: "createdCommunities")
+  name               String               @unique
+  slug               String               @unique
+  description        String
+  image              String?
+  banner             String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  posts              Post[]
+  followers          CommunityFollow[]
+  events             Event[]
+  communityMembers   CommunityMember[]
+  CreatorApplication CreatorApplication[]
 }
 
 model Media {
@@ -96,20 +107,22 @@ model Media {
 }
 
 model Post {
-  id          String       @id @default(cuid())
-  title       String
-  slug        String       @unique
-  description String
-  media       Media[]
-  authorId    String
-  author      User         @relation(fields: [authorId], references: [id])
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  communityId String
-  community   Community    @relation(fields: [communityId], references: [id])
-  likes       Like[]
-  comments    Comment[]
-  postBadges  PostBadges[]
+  id           String       @id @default(cuid())
+  title        String
+  slug         String       @unique
+  description  String
+  media        Media[]
+  authorId     String
+  author       User         @relation(fields: [authorId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  communityId  String
+  community    Community    @relation(fields: [communityId], references: [id])
+  likes        Like[]
+  comments     Comment[]
+  postBadges   PostBadges[]
+  postFlags    PostFlag[]
+  bookmarkedBy Bookmark[]
 }
 
 model Like {
@@ -211,4 +224,45 @@ model Event {
   updatedAt   DateTime  @updatedAt
   communityId String
   community   Community @relation(fields: [communityId], references: [id])
+}
+
+model PostFlag {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([postId, userId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, postId])
+}
+
+model CreatorApplication {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], name: "CreatedApplications", map: "CreatedApplications")
+  communityId  String
+  community    Community      @relation(fields: [communityId], references: [id])
+  status       ApprovalStatus @default(PENDING)
+  message      String?
+  reason       String?
+  reviewedById String?
+  reviewedBy   User?          @relation(fields: [reviewedById], references: [id], name: "ReviewedApplications", map: "ReviewedApplications")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@unique([userId, communityId])
 }

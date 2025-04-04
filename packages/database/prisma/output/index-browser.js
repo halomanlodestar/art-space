@@ -248,6 +248,34 @@ exports.Prisma.EventScalarFieldEnum = {
   communityId: 'communityId'
 };
 
+exports.Prisma.PostFlagScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BookmarkScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CreatorApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  communityId: 'communityId',
+  status: 'status',
+  message: 'message',
+  reason: 'reason',
+  reviewedById: 'reviewedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -280,6 +308,12 @@ exports.MediaType = exports.$Enums.MediaType = {
   VIDEO: 'VIDEO'
 };
 
+exports.ApprovalStatus = exports.$Enums.ApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   CommunityMember: 'CommunityMember',
@@ -293,7 +327,10 @@ exports.Prisma.ModelName = {
   PostBadges: 'PostBadges',
   UserBadges: 'UserBadges',
   Portfolio: 'Portfolio',
-  Event: 'Event'
+  Event: 'Event',
+  PostFlag: 'PostFlag',
+  Bookmark: 'Bookmark',
+  CreatorApplication: 'CreatorApplication'
 };
 
 /**

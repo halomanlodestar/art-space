@@ -78,12 +78,36 @@ export type Portfolio = $Result.DefaultSelection<Prisma.$PortfolioPayload>
  * 
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
+/**
+ * Model PostFlag
+ * 
+ */
+export type PostFlag = $Result.DefaultSelection<Prisma.$PostFlagPayload>
+/**
+ * Model Bookmark
+ * 
+ */
+export type Bookmark = $Result.DefaultSelection<Prisma.$BookmarkPayload>
+/**
+ * Model CreatorApplication
+ * 
+ */
+export type CreatorApplication = $Result.DefaultSelection<Prisma.$CreatorApplicationPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const Role: {
+  export const ApprovalStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
+
+
+export const Role: {
   USER: 'USER',
   COMMUNITY_CREATOR: 'COMMUNITY_CREATOR',
   COMMUNITY_ADMIN: 'COMMUNITY_ADMIN',
@@ -110,6 +134,10 @@ export const CredentialProvider: {
 export type CredentialProvider = (typeof CredentialProvider)[keyof typeof CredentialProvider]
 
 }
+
+export type ApprovalStatus = $Enums.ApprovalStatus
+
+export const ApprovalStatus: typeof $Enums.ApprovalStatus
 
 export type Role = $Enums.Role
 
@@ -377,6 +405,36 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.postFlag`: Exposes CRUD operations for the **PostFlag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PostFlags
+    * const postFlags = await prisma.postFlag.findMany()
+    * ```
+    */
+  get postFlag(): Prisma.PostFlagDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bookmark`: Exposes CRUD operations for the **Bookmark** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Bookmarks
+    * const bookmarks = await prisma.bookmark.findMany()
+    * ```
+    */
+  get bookmark(): Prisma.BookmarkDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.creatorApplication`: Exposes CRUD operations for the **CreatorApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CreatorApplications
+    * const creatorApplications = await prisma.creatorApplication.findMany()
+    * ```
+    */
+  get creatorApplication(): Prisma.CreatorApplicationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -829,7 +887,10 @@ export namespace Prisma {
     PostBadges: 'PostBadges',
     UserBadges: 'UserBadges',
     Portfolio: 'Portfolio',
-    Event: 'Event'
+    Event: 'Event',
+    PostFlag: 'PostFlag',
+    Bookmark: 'Bookmark',
+    CreatorApplication: 'CreatorApplication'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -848,7 +909,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "communityMember" | "community" | "media" | "post" | "like" | "comment" | "communityFollow" | "badge" | "postBadges" | "userBadges" | "portfolio" | "event"
+      modelProps: "user" | "communityMember" | "community" | "media" | "post" | "like" | "comment" | "communityFollow" | "badge" | "postBadges" | "userBadges" | "portfolio" | "event" | "postFlag" | "bookmark" | "creatorApplication"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1814,6 +1875,228 @@ export namespace Prisma {
           }
         }
       }
+      PostFlag: {
+        payload: Prisma.$PostFlagPayload<ExtArgs>
+        fields: Prisma.PostFlagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PostFlagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PostFlagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          findFirst: {
+            args: Prisma.PostFlagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PostFlagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          findMany: {
+            args: Prisma.PostFlagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>[]
+          }
+          create: {
+            args: Prisma.PostFlagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          createMany: {
+            args: Prisma.PostFlagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PostFlagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>[]
+          }
+          delete: {
+            args: Prisma.PostFlagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          update: {
+            args: Prisma.PostFlagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          deleteMany: {
+            args: Prisma.PostFlagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PostFlagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PostFlagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>[]
+          }
+          upsert: {
+            args: Prisma.PostFlagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostFlagPayload>
+          }
+          aggregate: {
+            args: Prisma.PostFlagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePostFlag>
+          }
+          groupBy: {
+            args: Prisma.PostFlagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PostFlagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PostFlagCountArgs<ExtArgs>
+            result: $Utils.Optional<PostFlagCountAggregateOutputType> | number
+          }
+        }
+      }
+      Bookmark: {
+        payload: Prisma.$BookmarkPayload<ExtArgs>
+        fields: Prisma.BookmarkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookmarkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookmarkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          findFirst: {
+            args: Prisma.BookmarkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookmarkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          findMany: {
+            args: Prisma.BookmarkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+          }
+          create: {
+            args: Prisma.BookmarkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          createMany: {
+            args: Prisma.BookmarkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookmarkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+          }
+          delete: {
+            args: Prisma.BookmarkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          update: {
+            args: Prisma.BookmarkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          deleteMany: {
+            args: Prisma.BookmarkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookmarkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookmarkUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+          }
+          upsert: {
+            args: Prisma.BookmarkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkPayload>
+          }
+          aggregate: {
+            args: Prisma.BookmarkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookmark>
+          }
+          groupBy: {
+            args: Prisma.BookmarkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookmarkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookmarkCountArgs<ExtArgs>
+            result: $Utils.Optional<BookmarkCountAggregateOutputType> | number
+          }
+        }
+      }
+      CreatorApplication: {
+        payload: Prisma.$CreatorApplicationPayload<ExtArgs>
+        fields: Prisma.CreatorApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CreatorApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CreatorApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.CreatorApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CreatorApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.CreatorApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.CreatorApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.CreatorApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CreatorApplicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>[]
+          }
+          delete: {
+            args: Prisma.CreatorApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          update: {
+            args: Prisma.CreatorApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.CreatorApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CreatorApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CreatorApplicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.CreatorApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.CreatorApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCreatorApplication>
+          }
+          groupBy: {
+            args: Prisma.CreatorApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CreatorApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CreatorApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<CreatorApplicationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1911,6 +2194,9 @@ export namespace Prisma {
     userBadges?: UserBadgesOmit
     portfolio?: PortfolioOmit
     event?: EventOmit
+    postFlag?: PostFlagOmit
+    bookmark?: BookmarkOmit
+    creatorApplication?: CreatorApplicationOmit
   }
 
   /* Types for Logging */
@@ -2013,6 +2299,10 @@ export namespace Prisma {
     userBadges: number
     eventsWon: number
     memberOf: number
+    flaggedPosts: number
+    bookmarks: number
+    createdApplications: number
+    reviewedApplications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2024,6 +2314,10 @@ export namespace Prisma {
     userBadges?: boolean | UserCountOutputTypeCountUserBadgesArgs
     eventsWon?: boolean | UserCountOutputTypeCountEventsWonArgs
     memberOf?: boolean | UserCountOutputTypeCountMemberOfArgs
+    flaggedPosts?: boolean | UserCountOutputTypeCountFlaggedPostsArgs
+    bookmarks?: boolean | UserCountOutputTypeCountBookmarksArgs
+    createdApplications?: boolean | UserCountOutputTypeCountCreatedApplicationsArgs
+    reviewedApplications?: boolean | UserCountOutputTypeCountReviewedApplicationsArgs
   }
 
   // Custom InputTypes
@@ -2093,6 +2387,34 @@ export namespace Prisma {
     where?: CommunityMemberWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFlaggedPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostFlagWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBookmarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreatorApplicationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreatorApplicationWhereInput
+  }
+
 
   /**
    * Count Type CommunityCountOutputType
@@ -2103,6 +2425,7 @@ export namespace Prisma {
     followers: number
     events: number
     communityMembers: number
+    CreatorApplication: number
   }
 
   export type CommunityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2110,6 +2433,7 @@ export namespace Prisma {
     followers?: boolean | CommunityCountOutputTypeCountFollowersArgs
     events?: boolean | CommunityCountOutputTypeCountEventsArgs
     communityMembers?: boolean | CommunityCountOutputTypeCountCommunityMembersArgs
+    CreatorApplication?: boolean | CommunityCountOutputTypeCountCreatorApplicationArgs
   }
 
   // Custom InputTypes
@@ -2151,6 +2475,13 @@ export namespace Prisma {
     where?: CommunityMemberWhereInput
   }
 
+  /**
+   * CommunityCountOutputType without action
+   */
+  export type CommunityCountOutputTypeCountCreatorApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreatorApplicationWhereInput
+  }
+
 
   /**
    * Count Type PostCountOutputType
@@ -2161,6 +2492,8 @@ export namespace Prisma {
     likes: number
     comments: number
     postBadges: number
+    postFlags: number
+    bookmarkedBy: number
   }
 
   export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2168,6 +2501,8 @@ export namespace Prisma {
     likes?: boolean | PostCountOutputTypeCountLikesArgs
     comments?: boolean | PostCountOutputTypeCountCommentsArgs
     postBadges?: boolean | PostCountOutputTypeCountPostBadgesArgs
+    postFlags?: boolean | PostCountOutputTypeCountPostFlagsArgs
+    bookmarkedBy?: boolean | PostCountOutputTypeCountBookmarkedByArgs
   }
 
   // Custom InputTypes
@@ -2207,6 +2542,20 @@ export namespace Prisma {
    */
   export type PostCountOutputTypeCountPostBadgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostBadgesWhereInput
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountPostFlagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostFlagWhereInput
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountBookmarkedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkWhereInput
   }
 
 
@@ -2515,6 +2864,10 @@ export namespace Prisma {
     portfolio?: boolean | User$portfolioArgs<ExtArgs>
     eventsWon?: boolean | User$eventsWonArgs<ExtArgs>
     memberOf?: boolean | User$memberOfArgs<ExtArgs>
+    flaggedPosts?: boolean | User$flaggedPostsArgs<ExtArgs>
+    bookmarks?: boolean | User$bookmarksArgs<ExtArgs>
+    createdApplications?: boolean | User$createdApplicationsArgs<ExtArgs>
+    reviewedApplications?: boolean | User$reviewedApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2573,6 +2926,10 @@ export namespace Prisma {
     portfolio?: boolean | User$portfolioArgs<ExtArgs>
     eventsWon?: boolean | User$eventsWonArgs<ExtArgs>
     memberOf?: boolean | User$memberOfArgs<ExtArgs>
+    flaggedPosts?: boolean | User$flaggedPostsArgs<ExtArgs>
+    bookmarks?: boolean | User$bookmarksArgs<ExtArgs>
+    createdApplications?: boolean | User$createdApplicationsArgs<ExtArgs>
+    reviewedApplications?: boolean | User$reviewedApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2594,6 +2951,10 @@ export namespace Prisma {
       portfolio: Prisma.$PortfolioPayload<ExtArgs> | null
       eventsWon: Prisma.$EventPayload<ExtArgs>[]
       memberOf: Prisma.$CommunityMemberPayload<ExtArgs>[]
+      flaggedPosts: Prisma.$PostFlagPayload<ExtArgs>[]
+      bookmarks: Prisma.$BookmarkPayload<ExtArgs>[]
+      createdApplications: Prisma.$CreatorApplicationPayload<ExtArgs>[]
+      reviewedApplications: Prisma.$CreatorApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3010,6 +3371,10 @@ export namespace Prisma {
     portfolio<T extends User$portfolioArgs<ExtArgs> = {}>(args?: Subset<T, User$portfolioArgs<ExtArgs>>): Prisma__PortfolioClient<$Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     eventsWon<T extends User$eventsWonArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsWonArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     memberOf<T extends User$memberOfArgs<ExtArgs> = {}>(args?: Subset<T, User$memberOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flaggedPosts<T extends User$flaggedPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$flaggedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bookmarks<T extends User$bookmarksArgs<ExtArgs> = {}>(args?: Subset<T, User$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdApplications<T extends User$createdApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewedApplications<T extends User$reviewedApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3654,6 +4019,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
+   * User.flaggedPosts
+   */
+  export type User$flaggedPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    where?: PostFlagWhereInput
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    cursor?: PostFlagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostFlagScalarFieldEnum | PostFlagScalarFieldEnum[]
+  }
+
+  /**
+   * User.bookmarks
+   */
+  export type User$bookmarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    where?: BookmarkWhereInput
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    cursor?: BookmarkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdApplications
+   */
+  export type User$createdApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    where?: CreatorApplicationWhereInput
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    cursor?: CreatorApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviewedApplications
+   */
+  export type User$reviewedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    where?: CreatorApplicationWhereInput
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    cursor?: CreatorApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
   }
 
   /**
@@ -4955,6 +5416,7 @@ export namespace Prisma {
     followers?: boolean | Community$followersArgs<ExtArgs>
     events?: boolean | Community$eventsArgs<ExtArgs>
     communityMembers?: boolean | Community$communityMembersArgs<ExtArgs>
+    CreatorApplication?: boolean | Community$CreatorApplicationArgs<ExtArgs>
     _count?: boolean | CommunityCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["community"]>
 
@@ -5003,6 +5465,7 @@ export namespace Prisma {
     followers?: boolean | Community$followersArgs<ExtArgs>
     events?: boolean | Community$eventsArgs<ExtArgs>
     communityMembers?: boolean | Community$communityMembersArgs<ExtArgs>
+    CreatorApplication?: boolean | Community$CreatorApplicationArgs<ExtArgs>
     _count?: boolean | CommunityCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CommunityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5020,6 +5483,7 @@ export namespace Prisma {
       followers: Prisma.$CommunityFollowPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
       communityMembers: Prisma.$CommunityMemberPayload<ExtArgs>[]
+      CreatorApplication: Prisma.$CreatorApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5430,6 +5894,7 @@ export namespace Prisma {
     followers<T extends Community$followersArgs<ExtArgs> = {}>(args?: Subset<T, Community$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Community$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Community$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     communityMembers<T extends Community$communityMembersArgs<ExtArgs> = {}>(args?: Subset<T, Community$communityMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    CreatorApplication<T extends Community$CreatorApplicationArgs<ExtArgs> = {}>(args?: Subset<T, Community$CreatorApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5957,6 +6422,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommunityMemberScalarFieldEnum | CommunityMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Community.CreatorApplication
+   */
+  export type Community$CreatorApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    where?: CreatorApplicationWhereInput
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    cursor?: CreatorApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
   }
 
   /**
@@ -7243,6 +7732,8 @@ export namespace Prisma {
     likes?: boolean | Post$likesArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
     postBadges?: boolean | Post$postBadgesArgs<ExtArgs>
+    postFlags?: boolean | Post$postFlagsArgs<ExtArgs>
+    bookmarkedBy?: boolean | Post$bookmarkedByArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -7291,6 +7782,8 @@ export namespace Prisma {
     likes?: boolean | Post$likesArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
     postBadges?: boolean | Post$postBadgesArgs<ExtArgs>
+    postFlags?: boolean | Post$postFlagsArgs<ExtArgs>
+    bookmarkedBy?: boolean | Post$bookmarkedByArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7311,6 +7804,8 @@ export namespace Prisma {
       likes: Prisma.$LikePayload<ExtArgs>[]
       comments: Prisma.$CommentPayload<ExtArgs>[]
       postBadges: Prisma.$PostBadgesPayload<ExtArgs>[]
+      postFlags: Prisma.$PostFlagPayload<ExtArgs>[]
+      bookmarkedBy: Prisma.$BookmarkPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7721,6 +8216,8 @@ export namespace Prisma {
     likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     postBadges<T extends Post$postBadgesArgs<ExtArgs> = {}>(args?: Subset<T, Post$postBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostBadgesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    postFlags<T extends Post$postFlagsArgs<ExtArgs> = {}>(args?: Subset<T, Post$postFlagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bookmarkedBy<T extends Post$bookmarkedByArgs<ExtArgs> = {}>(args?: Subset<T, Post$bookmarkedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8247,6 +8744,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostBadgesScalarFieldEnum | PostBadgesScalarFieldEnum[]
+  }
+
+  /**
+   * Post.postFlags
+   */
+  export type Post$postFlagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    where?: PostFlagWhereInput
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    cursor?: PostFlagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostFlagScalarFieldEnum | PostFlagScalarFieldEnum[]
+  }
+
+  /**
+   * Post.bookmarkedBy
+   */
+  export type Post$bookmarkedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    where?: BookmarkWhereInput
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    cursor?: BookmarkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
   }
 
   /**
@@ -17147,6 +17692,3283 @@ export namespace Prisma {
 
 
   /**
+   * Model PostFlag
+   */
+
+  export type AggregatePostFlag = {
+    _count: PostFlagCountAggregateOutputType | null
+    _min: PostFlagMinAggregateOutputType | null
+    _max: PostFlagMaxAggregateOutputType | null
+  }
+
+  export type PostFlagMinAggregateOutputType = {
+    id: string | null
+    postId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostFlagMaxAggregateOutputType = {
+    id: string | null
+    postId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostFlagCountAggregateOutputType = {
+    id: number
+    postId: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PostFlagMinAggregateInputType = {
+    id?: true
+    postId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostFlagMaxAggregateInputType = {
+    id?: true
+    postId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostFlagCountAggregateInputType = {
+    id?: true
+    postId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PostFlagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostFlag to aggregate.
+     */
+    where?: PostFlagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostFlags to fetch.
+     */
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PostFlagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostFlags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostFlags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PostFlags
+    **/
+    _count?: true | PostFlagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PostFlagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PostFlagMaxAggregateInputType
+  }
+
+  export type GetPostFlagAggregateType<T extends PostFlagAggregateArgs> = {
+        [P in keyof T & keyof AggregatePostFlag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePostFlag[P]>
+      : GetScalarType<T[P], AggregatePostFlag[P]>
+  }
+
+
+
+
+  export type PostFlagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostFlagWhereInput
+    orderBy?: PostFlagOrderByWithAggregationInput | PostFlagOrderByWithAggregationInput[]
+    by: PostFlagScalarFieldEnum[] | PostFlagScalarFieldEnum
+    having?: PostFlagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PostFlagCountAggregateInputType | true
+    _min?: PostFlagMinAggregateInputType
+    _max?: PostFlagMaxAggregateInputType
+  }
+
+  export type PostFlagGroupByOutputType = {
+    id: string
+    postId: string
+    userId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PostFlagCountAggregateOutputType | null
+    _min: PostFlagMinAggregateOutputType | null
+    _max: PostFlagMaxAggregateOutputType | null
+  }
+
+  type GetPostFlagGroupByPayload<T extends PostFlagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PostFlagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PostFlagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PostFlagGroupByOutputType[P]>
+            : GetScalarType<T[P], PostFlagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PostFlagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postFlag"]>
+
+  export type PostFlagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postFlag"]>
+
+  export type PostFlagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["postFlag"]>
+
+  export type PostFlagSelectScalar = {
+    id?: boolean
+    postId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PostFlagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["postFlag"]>
+  export type PostFlagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PostFlagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PostFlagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PostFlagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PostFlag"
+    objects: {
+      post: Prisma.$PostPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      postId: string
+      userId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["postFlag"]>
+    composites: {}
+  }
+
+  type PostFlagGetPayload<S extends boolean | null | undefined | PostFlagDefaultArgs> = $Result.GetResult<Prisma.$PostFlagPayload, S>
+
+  type PostFlagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PostFlagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PostFlagCountAggregateInputType | true
+    }
+
+  export interface PostFlagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PostFlag'], meta: { name: 'PostFlag' } }
+    /**
+     * Find zero or one PostFlag that matches the filter.
+     * @param {PostFlagFindUniqueArgs} args - Arguments to find a PostFlag
+     * @example
+     * // Get one PostFlag
+     * const postFlag = await prisma.postFlag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PostFlagFindUniqueArgs>(args: SelectSubset<T, PostFlagFindUniqueArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PostFlag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PostFlagFindUniqueOrThrowArgs} args - Arguments to find a PostFlag
+     * @example
+     * // Get one PostFlag
+     * const postFlag = await prisma.postFlag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PostFlagFindUniqueOrThrowArgs>(args: SelectSubset<T, PostFlagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostFlag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagFindFirstArgs} args - Arguments to find a PostFlag
+     * @example
+     * // Get one PostFlag
+     * const postFlag = await prisma.postFlag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PostFlagFindFirstArgs>(args?: SelectSubset<T, PostFlagFindFirstArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostFlag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagFindFirstOrThrowArgs} args - Arguments to find a PostFlag
+     * @example
+     * // Get one PostFlag
+     * const postFlag = await prisma.postFlag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PostFlagFindFirstOrThrowArgs>(args?: SelectSubset<T, PostFlagFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PostFlags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PostFlags
+     * const postFlags = await prisma.postFlag.findMany()
+     * 
+     * // Get first 10 PostFlags
+     * const postFlags = await prisma.postFlag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const postFlagWithIdOnly = await prisma.postFlag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PostFlagFindManyArgs>(args?: SelectSubset<T, PostFlagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PostFlag.
+     * @param {PostFlagCreateArgs} args - Arguments to create a PostFlag.
+     * @example
+     * // Create one PostFlag
+     * const PostFlag = await prisma.postFlag.create({
+     *   data: {
+     *     // ... data to create a PostFlag
+     *   }
+     * })
+     * 
+     */
+    create<T extends PostFlagCreateArgs>(args: SelectSubset<T, PostFlagCreateArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PostFlags.
+     * @param {PostFlagCreateManyArgs} args - Arguments to create many PostFlags.
+     * @example
+     * // Create many PostFlags
+     * const postFlag = await prisma.postFlag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PostFlagCreateManyArgs>(args?: SelectSubset<T, PostFlagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PostFlags and returns the data saved in the database.
+     * @param {PostFlagCreateManyAndReturnArgs} args - Arguments to create many PostFlags.
+     * @example
+     * // Create many PostFlags
+     * const postFlag = await prisma.postFlag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PostFlags and only return the `id`
+     * const postFlagWithIdOnly = await prisma.postFlag.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PostFlagCreateManyAndReturnArgs>(args?: SelectSubset<T, PostFlagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PostFlag.
+     * @param {PostFlagDeleteArgs} args - Arguments to delete one PostFlag.
+     * @example
+     * // Delete one PostFlag
+     * const PostFlag = await prisma.postFlag.delete({
+     *   where: {
+     *     // ... filter to delete one PostFlag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PostFlagDeleteArgs>(args: SelectSubset<T, PostFlagDeleteArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PostFlag.
+     * @param {PostFlagUpdateArgs} args - Arguments to update one PostFlag.
+     * @example
+     * // Update one PostFlag
+     * const postFlag = await prisma.postFlag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PostFlagUpdateArgs>(args: SelectSubset<T, PostFlagUpdateArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PostFlags.
+     * @param {PostFlagDeleteManyArgs} args - Arguments to filter PostFlags to delete.
+     * @example
+     * // Delete a few PostFlags
+     * const { count } = await prisma.postFlag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PostFlagDeleteManyArgs>(args?: SelectSubset<T, PostFlagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostFlags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PostFlags
+     * const postFlag = await prisma.postFlag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PostFlagUpdateManyArgs>(args: SelectSubset<T, PostFlagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostFlags and returns the data updated in the database.
+     * @param {PostFlagUpdateManyAndReturnArgs} args - Arguments to update many PostFlags.
+     * @example
+     * // Update many PostFlags
+     * const postFlag = await prisma.postFlag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PostFlags and only return the `id`
+     * const postFlagWithIdOnly = await prisma.postFlag.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PostFlagUpdateManyAndReturnArgs>(args: SelectSubset<T, PostFlagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PostFlag.
+     * @param {PostFlagUpsertArgs} args - Arguments to update or create a PostFlag.
+     * @example
+     * // Update or create a PostFlag
+     * const postFlag = await prisma.postFlag.upsert({
+     *   create: {
+     *     // ... data to create a PostFlag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PostFlag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PostFlagUpsertArgs>(args: SelectSubset<T, PostFlagUpsertArgs<ExtArgs>>): Prisma__PostFlagClient<$Result.GetResult<Prisma.$PostFlagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PostFlags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagCountArgs} args - Arguments to filter PostFlags to count.
+     * @example
+     * // Count the number of PostFlags
+     * const count = await prisma.postFlag.count({
+     *   where: {
+     *     // ... the filter for the PostFlags we want to count
+     *   }
+     * })
+    **/
+    count<T extends PostFlagCountArgs>(
+      args?: Subset<T, PostFlagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PostFlagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PostFlag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PostFlagAggregateArgs>(args: Subset<T, PostFlagAggregateArgs>): Prisma.PrismaPromise<GetPostFlagAggregateType<T>>
+
+    /**
+     * Group by PostFlag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFlagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PostFlagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PostFlagGroupByArgs['orderBy'] }
+        : { orderBy?: PostFlagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PostFlagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostFlagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PostFlag model
+   */
+  readonly fields: PostFlagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PostFlag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PostFlagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PostFlag model
+   */ 
+  interface PostFlagFieldRefs {
+    readonly id: FieldRef<"PostFlag", 'String'>
+    readonly postId: FieldRef<"PostFlag", 'String'>
+    readonly userId: FieldRef<"PostFlag", 'String'>
+    readonly createdAt: FieldRef<"PostFlag", 'DateTime'>
+    readonly updatedAt: FieldRef<"PostFlag", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PostFlag findUnique
+   */
+  export type PostFlagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter, which PostFlag to fetch.
+     */
+    where: PostFlagWhereUniqueInput
+  }
+
+  /**
+   * PostFlag findUniqueOrThrow
+   */
+  export type PostFlagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter, which PostFlag to fetch.
+     */
+    where: PostFlagWhereUniqueInput
+  }
+
+  /**
+   * PostFlag findFirst
+   */
+  export type PostFlagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter, which PostFlag to fetch.
+     */
+    where?: PostFlagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostFlags to fetch.
+     */
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostFlags.
+     */
+    cursor?: PostFlagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostFlags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostFlags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostFlags.
+     */
+    distinct?: PostFlagScalarFieldEnum | PostFlagScalarFieldEnum[]
+  }
+
+  /**
+   * PostFlag findFirstOrThrow
+   */
+  export type PostFlagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter, which PostFlag to fetch.
+     */
+    where?: PostFlagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostFlags to fetch.
+     */
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostFlags.
+     */
+    cursor?: PostFlagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostFlags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostFlags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostFlags.
+     */
+    distinct?: PostFlagScalarFieldEnum | PostFlagScalarFieldEnum[]
+  }
+
+  /**
+   * PostFlag findMany
+   */
+  export type PostFlagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter, which PostFlags to fetch.
+     */
+    where?: PostFlagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostFlags to fetch.
+     */
+    orderBy?: PostFlagOrderByWithRelationInput | PostFlagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PostFlags.
+     */
+    cursor?: PostFlagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostFlags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostFlags.
+     */
+    skip?: number
+    distinct?: PostFlagScalarFieldEnum | PostFlagScalarFieldEnum[]
+  }
+
+  /**
+   * PostFlag create
+   */
+  export type PostFlagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PostFlag.
+     */
+    data: XOR<PostFlagCreateInput, PostFlagUncheckedCreateInput>
+  }
+
+  /**
+   * PostFlag createMany
+   */
+  export type PostFlagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PostFlags.
+     */
+    data: PostFlagCreateManyInput | PostFlagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PostFlag createManyAndReturn
+   */
+  export type PostFlagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * The data used to create many PostFlags.
+     */
+    data: PostFlagCreateManyInput | PostFlagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PostFlag update
+   */
+  export type PostFlagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PostFlag.
+     */
+    data: XOR<PostFlagUpdateInput, PostFlagUncheckedUpdateInput>
+    /**
+     * Choose, which PostFlag to update.
+     */
+    where: PostFlagWhereUniqueInput
+  }
+
+  /**
+   * PostFlag updateMany
+   */
+  export type PostFlagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PostFlags.
+     */
+    data: XOR<PostFlagUpdateManyMutationInput, PostFlagUncheckedUpdateManyInput>
+    /**
+     * Filter which PostFlags to update
+     */
+    where?: PostFlagWhereInput
+    /**
+     * Limit how many PostFlags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostFlag updateManyAndReturn
+   */
+  export type PostFlagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * The data used to update PostFlags.
+     */
+    data: XOR<PostFlagUpdateManyMutationInput, PostFlagUncheckedUpdateManyInput>
+    /**
+     * Filter which PostFlags to update
+     */
+    where?: PostFlagWhereInput
+    /**
+     * Limit how many PostFlags to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PostFlag upsert
+   */
+  export type PostFlagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PostFlag to update in case it exists.
+     */
+    where: PostFlagWhereUniqueInput
+    /**
+     * In case the PostFlag found by the `where` argument doesn't exist, create a new PostFlag with this data.
+     */
+    create: XOR<PostFlagCreateInput, PostFlagUncheckedCreateInput>
+    /**
+     * In case the PostFlag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PostFlagUpdateInput, PostFlagUncheckedUpdateInput>
+  }
+
+  /**
+   * PostFlag delete
+   */
+  export type PostFlagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+    /**
+     * Filter which PostFlag to delete.
+     */
+    where: PostFlagWhereUniqueInput
+  }
+
+  /**
+   * PostFlag deleteMany
+   */
+  export type PostFlagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostFlags to delete
+     */
+    where?: PostFlagWhereInput
+    /**
+     * Limit how many PostFlags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostFlag without action
+   */
+  export type PostFlagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostFlag
+     */
+    select?: PostFlagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostFlag
+     */
+    omit?: PostFlagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostFlagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Bookmark
+   */
+
+  export type AggregateBookmark = {
+    _count: BookmarkCountAggregateOutputType | null
+    _min: BookmarkMinAggregateOutputType | null
+    _max: BookmarkMaxAggregateOutputType | null
+  }
+
+  export type BookmarkMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    postId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BookmarkMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    postId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BookmarkCountAggregateOutputType = {
+    id: number
+    userId: number
+    postId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BookmarkMinAggregateInputType = {
+    id?: true
+    userId?: true
+    postId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BookmarkMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    postId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BookmarkCountAggregateInputType = {
+    id?: true
+    userId?: true
+    postId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BookmarkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Bookmark to aggregate.
+     */
+    where?: BookmarkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookmarks to fetch.
+     */
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookmarkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookmarks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookmarks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Bookmarks
+    **/
+    _count?: true | BookmarkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookmarkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookmarkMaxAggregateInputType
+  }
+
+  export type GetBookmarkAggregateType<T extends BookmarkAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookmark]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookmark[P]>
+      : GetScalarType<T[P], AggregateBookmark[P]>
+  }
+
+
+
+
+  export type BookmarkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkWhereInput
+    orderBy?: BookmarkOrderByWithAggregationInput | BookmarkOrderByWithAggregationInput[]
+    by: BookmarkScalarFieldEnum[] | BookmarkScalarFieldEnum
+    having?: BookmarkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookmarkCountAggregateInputType | true
+    _min?: BookmarkMinAggregateInputType
+    _max?: BookmarkMaxAggregateInputType
+  }
+
+  export type BookmarkGroupByOutputType = {
+    id: string
+    userId: string
+    postId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: BookmarkCountAggregateOutputType | null
+    _min: BookmarkMinAggregateOutputType | null
+    _max: BookmarkMaxAggregateOutputType | null
+  }
+
+  type GetBookmarkGroupByPayload<T extends BookmarkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookmarkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookmarkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookmarkGroupByOutputType[P]>
+            : GetScalarType<T[P], BookmarkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookmarkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmark"]>
+
+  export type BookmarkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmark"]>
+
+  export type BookmarkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmark"]>
+
+  export type BookmarkSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BookmarkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "postId" | "createdAt" | "updatedAt", ExtArgs["result"]["bookmark"]>
+  export type BookmarkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+  export type BookmarkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+  export type BookmarkIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+
+  export type $BookmarkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Bookmark"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      post: Prisma.$PostPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      postId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bookmark"]>
+    composites: {}
+  }
+
+  type BookmarkGetPayload<S extends boolean | null | undefined | BookmarkDefaultArgs> = $Result.GetResult<Prisma.$BookmarkPayload, S>
+
+  type BookmarkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookmarkFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookmarkCountAggregateInputType | true
+    }
+
+  export interface BookmarkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Bookmark'], meta: { name: 'Bookmark' } }
+    /**
+     * Find zero or one Bookmark that matches the filter.
+     * @param {BookmarkFindUniqueArgs} args - Arguments to find a Bookmark
+     * @example
+     * // Get one Bookmark
+     * const bookmark = await prisma.bookmark.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookmarkFindUniqueArgs>(args: SelectSubset<T, BookmarkFindUniqueArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Bookmark that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookmarkFindUniqueOrThrowArgs} args - Arguments to find a Bookmark
+     * @example
+     * // Get one Bookmark
+     * const bookmark = await prisma.bookmark.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookmarkFindUniqueOrThrowArgs>(args: SelectSubset<T, BookmarkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bookmark that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFindFirstArgs} args - Arguments to find a Bookmark
+     * @example
+     * // Get one Bookmark
+     * const bookmark = await prisma.bookmark.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookmarkFindFirstArgs>(args?: SelectSubset<T, BookmarkFindFirstArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bookmark that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFindFirstOrThrowArgs} args - Arguments to find a Bookmark
+     * @example
+     * // Get one Bookmark
+     * const bookmark = await prisma.bookmark.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookmarkFindFirstOrThrowArgs>(args?: SelectSubset<T, BookmarkFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Bookmarks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Bookmarks
+     * const bookmarks = await prisma.bookmark.findMany()
+     * 
+     * // Get first 10 Bookmarks
+     * const bookmarks = await prisma.bookmark.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookmarkWithIdOnly = await prisma.bookmark.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookmarkFindManyArgs>(args?: SelectSubset<T, BookmarkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Bookmark.
+     * @param {BookmarkCreateArgs} args - Arguments to create a Bookmark.
+     * @example
+     * // Create one Bookmark
+     * const Bookmark = await prisma.bookmark.create({
+     *   data: {
+     *     // ... data to create a Bookmark
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookmarkCreateArgs>(args: SelectSubset<T, BookmarkCreateArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Bookmarks.
+     * @param {BookmarkCreateManyArgs} args - Arguments to create many Bookmarks.
+     * @example
+     * // Create many Bookmarks
+     * const bookmark = await prisma.bookmark.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookmarkCreateManyArgs>(args?: SelectSubset<T, BookmarkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Bookmarks and returns the data saved in the database.
+     * @param {BookmarkCreateManyAndReturnArgs} args - Arguments to create many Bookmarks.
+     * @example
+     * // Create many Bookmarks
+     * const bookmark = await prisma.bookmark.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Bookmarks and only return the `id`
+     * const bookmarkWithIdOnly = await prisma.bookmark.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookmarkCreateManyAndReturnArgs>(args?: SelectSubset<T, BookmarkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Bookmark.
+     * @param {BookmarkDeleteArgs} args - Arguments to delete one Bookmark.
+     * @example
+     * // Delete one Bookmark
+     * const Bookmark = await prisma.bookmark.delete({
+     *   where: {
+     *     // ... filter to delete one Bookmark
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookmarkDeleteArgs>(args: SelectSubset<T, BookmarkDeleteArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Bookmark.
+     * @param {BookmarkUpdateArgs} args - Arguments to update one Bookmark.
+     * @example
+     * // Update one Bookmark
+     * const bookmark = await prisma.bookmark.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookmarkUpdateArgs>(args: SelectSubset<T, BookmarkUpdateArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Bookmarks.
+     * @param {BookmarkDeleteManyArgs} args - Arguments to filter Bookmarks to delete.
+     * @example
+     * // Delete a few Bookmarks
+     * const { count } = await prisma.bookmark.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookmarkDeleteManyArgs>(args?: SelectSubset<T, BookmarkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bookmarks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Bookmarks
+     * const bookmark = await prisma.bookmark.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookmarkUpdateManyArgs>(args: SelectSubset<T, BookmarkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bookmarks and returns the data updated in the database.
+     * @param {BookmarkUpdateManyAndReturnArgs} args - Arguments to update many Bookmarks.
+     * @example
+     * // Update many Bookmarks
+     * const bookmark = await prisma.bookmark.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Bookmarks and only return the `id`
+     * const bookmarkWithIdOnly = await prisma.bookmark.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookmarkUpdateManyAndReturnArgs>(args: SelectSubset<T, BookmarkUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Bookmark.
+     * @param {BookmarkUpsertArgs} args - Arguments to update or create a Bookmark.
+     * @example
+     * // Update or create a Bookmark
+     * const bookmark = await prisma.bookmark.upsert({
+     *   create: {
+     *     // ... data to create a Bookmark
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Bookmark we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookmarkUpsertArgs>(args: SelectSubset<T, BookmarkUpsertArgs<ExtArgs>>): Prisma__BookmarkClient<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Bookmarks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkCountArgs} args - Arguments to filter Bookmarks to count.
+     * @example
+     * // Count the number of Bookmarks
+     * const count = await prisma.bookmark.count({
+     *   where: {
+     *     // ... the filter for the Bookmarks we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookmarkCountArgs>(
+      args?: Subset<T, BookmarkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookmarkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Bookmark.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookmarkAggregateArgs>(args: Subset<T, BookmarkAggregateArgs>): Prisma.PrismaPromise<GetBookmarkAggregateType<T>>
+
+    /**
+     * Group by Bookmark.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookmarkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookmarkGroupByArgs['orderBy'] }
+        : { orderBy?: BookmarkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookmarkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookmarkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Bookmark model
+   */
+  readonly fields: BookmarkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Bookmark.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookmarkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Bookmark model
+   */ 
+  interface BookmarkFieldRefs {
+    readonly id: FieldRef<"Bookmark", 'String'>
+    readonly userId: FieldRef<"Bookmark", 'String'>
+    readonly postId: FieldRef<"Bookmark", 'String'>
+    readonly createdAt: FieldRef<"Bookmark", 'DateTime'>
+    readonly updatedAt: FieldRef<"Bookmark", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Bookmark findUnique
+   */
+  export type BookmarkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookmark to fetch.
+     */
+    where: BookmarkWhereUniqueInput
+  }
+
+  /**
+   * Bookmark findUniqueOrThrow
+   */
+  export type BookmarkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookmark to fetch.
+     */
+    where: BookmarkWhereUniqueInput
+  }
+
+  /**
+   * Bookmark findFirst
+   */
+  export type BookmarkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookmark to fetch.
+     */
+    where?: BookmarkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookmarks to fetch.
+     */
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Bookmarks.
+     */
+    cursor?: BookmarkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookmarks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookmarks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Bookmarks.
+     */
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
+  }
+
+  /**
+   * Bookmark findFirstOrThrow
+   */
+  export type BookmarkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookmark to fetch.
+     */
+    where?: BookmarkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookmarks to fetch.
+     */
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Bookmarks.
+     */
+    cursor?: BookmarkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookmarks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookmarks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Bookmarks.
+     */
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
+  }
+
+  /**
+   * Bookmark findMany
+   */
+  export type BookmarkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookmarks to fetch.
+     */
+    where?: BookmarkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookmarks to fetch.
+     */
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Bookmarks.
+     */
+    cursor?: BookmarkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookmarks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookmarks.
+     */
+    skip?: number
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
+  }
+
+  /**
+   * Bookmark create
+   */
+  export type BookmarkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Bookmark.
+     */
+    data: XOR<BookmarkCreateInput, BookmarkUncheckedCreateInput>
+  }
+
+  /**
+   * Bookmark createMany
+   */
+  export type BookmarkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Bookmarks.
+     */
+    data: BookmarkCreateManyInput | BookmarkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Bookmark createManyAndReturn
+   */
+  export type BookmarkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * The data used to create many Bookmarks.
+     */
+    data: BookmarkCreateManyInput | BookmarkCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Bookmark update
+   */
+  export type BookmarkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Bookmark.
+     */
+    data: XOR<BookmarkUpdateInput, BookmarkUncheckedUpdateInput>
+    /**
+     * Choose, which Bookmark to update.
+     */
+    where: BookmarkWhereUniqueInput
+  }
+
+  /**
+   * Bookmark updateMany
+   */
+  export type BookmarkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Bookmarks.
+     */
+    data: XOR<BookmarkUpdateManyMutationInput, BookmarkUncheckedUpdateManyInput>
+    /**
+     * Filter which Bookmarks to update
+     */
+    where?: BookmarkWhereInput
+    /**
+     * Limit how many Bookmarks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Bookmark updateManyAndReturn
+   */
+  export type BookmarkUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * The data used to update Bookmarks.
+     */
+    data: XOR<BookmarkUpdateManyMutationInput, BookmarkUncheckedUpdateManyInput>
+    /**
+     * Filter which Bookmarks to update
+     */
+    where?: BookmarkWhereInput
+    /**
+     * Limit how many Bookmarks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Bookmark upsert
+   */
+  export type BookmarkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Bookmark to update in case it exists.
+     */
+    where: BookmarkWhereUniqueInput
+    /**
+     * In case the Bookmark found by the `where` argument doesn't exist, create a new Bookmark with this data.
+     */
+    create: XOR<BookmarkCreateInput, BookmarkUncheckedCreateInput>
+    /**
+     * In case the Bookmark was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookmarkUpdateInput, BookmarkUncheckedUpdateInput>
+  }
+
+  /**
+   * Bookmark delete
+   */
+  export type BookmarkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
+     * Filter which Bookmark to delete.
+     */
+    where: BookmarkWhereUniqueInput
+  }
+
+  /**
+   * Bookmark deleteMany
+   */
+  export type BookmarkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Bookmarks to delete
+     */
+    where?: BookmarkWhereInput
+    /**
+     * Limit how many Bookmarks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Bookmark without action
+   */
+  export type BookmarkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CreatorApplication
+   */
+
+  export type AggregateCreatorApplication = {
+    _count: CreatorApplicationCountAggregateOutputType | null
+    _min: CreatorApplicationMinAggregateOutputType | null
+    _max: CreatorApplicationMaxAggregateOutputType | null
+  }
+
+  export type CreatorApplicationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    communityId: string | null
+    status: $Enums.ApprovalStatus | null
+    message: string | null
+    reason: string | null
+    reviewedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CreatorApplicationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    communityId: string | null
+    status: $Enums.ApprovalStatus | null
+    message: string | null
+    reason: string | null
+    reviewedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CreatorApplicationCountAggregateOutputType = {
+    id: number
+    userId: number
+    communityId: number
+    status: number
+    message: number
+    reason: number
+    reviewedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CreatorApplicationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    status?: true
+    message?: true
+    reason?: true
+    reviewedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CreatorApplicationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    status?: true
+    message?: true
+    reason?: true
+    reviewedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CreatorApplicationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    communityId?: true
+    status?: true
+    message?: true
+    reason?: true
+    reviewedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CreatorApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreatorApplication to aggregate.
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorApplications to fetch.
+     */
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CreatorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CreatorApplications
+    **/
+    _count?: true | CreatorApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CreatorApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CreatorApplicationMaxAggregateInputType
+  }
+
+  export type GetCreatorApplicationAggregateType<T extends CreatorApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateCreatorApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCreatorApplication[P]>
+      : GetScalarType<T[P], AggregateCreatorApplication[P]>
+  }
+
+
+
+
+  export type CreatorApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreatorApplicationWhereInput
+    orderBy?: CreatorApplicationOrderByWithAggregationInput | CreatorApplicationOrderByWithAggregationInput[]
+    by: CreatorApplicationScalarFieldEnum[] | CreatorApplicationScalarFieldEnum
+    having?: CreatorApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CreatorApplicationCountAggregateInputType | true
+    _min?: CreatorApplicationMinAggregateInputType
+    _max?: CreatorApplicationMaxAggregateInputType
+  }
+
+  export type CreatorApplicationGroupByOutputType = {
+    id: string
+    userId: string
+    communityId: string
+    status: $Enums.ApprovalStatus
+    message: string | null
+    reason: string | null
+    reviewedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CreatorApplicationCountAggregateOutputType | null
+    _min: CreatorApplicationMinAggregateOutputType | null
+    _max: CreatorApplicationMaxAggregateOutputType | null
+  }
+
+  type GetCreatorApplicationGroupByPayload<T extends CreatorApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CreatorApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CreatorApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CreatorApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], CreatorApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CreatorApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    status?: boolean
+    message?: boolean
+    reason?: boolean
+    reviewedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorApplication"]>
+
+  export type CreatorApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    status?: boolean
+    message?: boolean
+    reason?: boolean
+    reviewedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorApplication"]>
+
+  export type CreatorApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    status?: boolean
+    message?: boolean
+    reason?: boolean
+    reviewedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorApplication"]>
+
+  export type CreatorApplicationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    communityId?: boolean
+    status?: boolean
+    message?: boolean
+    reason?: boolean
+    reviewedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CreatorApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "communityId" | "status" | "message" | "reason" | "reviewedById" | "createdAt" | "updatedAt", ExtArgs["result"]["creatorApplication"]>
+  export type CreatorApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }
+  export type CreatorApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }
+  export type CreatorApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    community?: boolean | CommunityDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CreatorApplication$reviewedByArgs<ExtArgs>
+  }
+
+  export type $CreatorApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CreatorApplication"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      community: Prisma.$CommunityPayload<ExtArgs>
+      reviewedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      communityId: string
+      status: $Enums.ApprovalStatus
+      message: string | null
+      reason: string | null
+      reviewedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["creatorApplication"]>
+    composites: {}
+  }
+
+  type CreatorApplicationGetPayload<S extends boolean | null | undefined | CreatorApplicationDefaultArgs> = $Result.GetResult<Prisma.$CreatorApplicationPayload, S>
+
+  type CreatorApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CreatorApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CreatorApplicationCountAggregateInputType | true
+    }
+
+  export interface CreatorApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CreatorApplication'], meta: { name: 'CreatorApplication' } }
+    /**
+     * Find zero or one CreatorApplication that matches the filter.
+     * @param {CreatorApplicationFindUniqueArgs} args - Arguments to find a CreatorApplication
+     * @example
+     * // Get one CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CreatorApplicationFindUniqueArgs>(args: SelectSubset<T, CreatorApplicationFindUniqueArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CreatorApplication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CreatorApplicationFindUniqueOrThrowArgs} args - Arguments to find a CreatorApplication
+     * @example
+     * // Get one CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CreatorApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, CreatorApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CreatorApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationFindFirstArgs} args - Arguments to find a CreatorApplication
+     * @example
+     * // Get one CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CreatorApplicationFindFirstArgs>(args?: SelectSubset<T, CreatorApplicationFindFirstArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CreatorApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationFindFirstOrThrowArgs} args - Arguments to find a CreatorApplication
+     * @example
+     * // Get one CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CreatorApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, CreatorApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CreatorApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CreatorApplications
+     * const creatorApplications = await prisma.creatorApplication.findMany()
+     * 
+     * // Get first 10 CreatorApplications
+     * const creatorApplications = await prisma.creatorApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const creatorApplicationWithIdOnly = await prisma.creatorApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CreatorApplicationFindManyArgs>(args?: SelectSubset<T, CreatorApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CreatorApplication.
+     * @param {CreatorApplicationCreateArgs} args - Arguments to create a CreatorApplication.
+     * @example
+     * // Create one CreatorApplication
+     * const CreatorApplication = await prisma.creatorApplication.create({
+     *   data: {
+     *     // ... data to create a CreatorApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends CreatorApplicationCreateArgs>(args: SelectSubset<T, CreatorApplicationCreateArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CreatorApplications.
+     * @param {CreatorApplicationCreateManyArgs} args - Arguments to create many CreatorApplications.
+     * @example
+     * // Create many CreatorApplications
+     * const creatorApplication = await prisma.creatorApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CreatorApplicationCreateManyArgs>(args?: SelectSubset<T, CreatorApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CreatorApplications and returns the data saved in the database.
+     * @param {CreatorApplicationCreateManyAndReturnArgs} args - Arguments to create many CreatorApplications.
+     * @example
+     * // Create many CreatorApplications
+     * const creatorApplication = await prisma.creatorApplication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CreatorApplications and only return the `id`
+     * const creatorApplicationWithIdOnly = await prisma.creatorApplication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CreatorApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, CreatorApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CreatorApplication.
+     * @param {CreatorApplicationDeleteArgs} args - Arguments to delete one CreatorApplication.
+     * @example
+     * // Delete one CreatorApplication
+     * const CreatorApplication = await prisma.creatorApplication.delete({
+     *   where: {
+     *     // ... filter to delete one CreatorApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CreatorApplicationDeleteArgs>(args: SelectSubset<T, CreatorApplicationDeleteArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CreatorApplication.
+     * @param {CreatorApplicationUpdateArgs} args - Arguments to update one CreatorApplication.
+     * @example
+     * // Update one CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CreatorApplicationUpdateArgs>(args: SelectSubset<T, CreatorApplicationUpdateArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CreatorApplications.
+     * @param {CreatorApplicationDeleteManyArgs} args - Arguments to filter CreatorApplications to delete.
+     * @example
+     * // Delete a few CreatorApplications
+     * const { count } = await prisma.creatorApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CreatorApplicationDeleteManyArgs>(args?: SelectSubset<T, CreatorApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreatorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CreatorApplications
+     * const creatorApplication = await prisma.creatorApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CreatorApplicationUpdateManyArgs>(args: SelectSubset<T, CreatorApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreatorApplications and returns the data updated in the database.
+     * @param {CreatorApplicationUpdateManyAndReturnArgs} args - Arguments to update many CreatorApplications.
+     * @example
+     * // Update many CreatorApplications
+     * const creatorApplication = await prisma.creatorApplication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CreatorApplications and only return the `id`
+     * const creatorApplicationWithIdOnly = await prisma.creatorApplication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CreatorApplicationUpdateManyAndReturnArgs>(args: SelectSubset<T, CreatorApplicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CreatorApplication.
+     * @param {CreatorApplicationUpsertArgs} args - Arguments to update or create a CreatorApplication.
+     * @example
+     * // Update or create a CreatorApplication
+     * const creatorApplication = await prisma.creatorApplication.upsert({
+     *   create: {
+     *     // ... data to create a CreatorApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CreatorApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CreatorApplicationUpsertArgs>(args: SelectSubset<T, CreatorApplicationUpsertArgs<ExtArgs>>): Prisma__CreatorApplicationClient<$Result.GetResult<Prisma.$CreatorApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CreatorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationCountArgs} args - Arguments to filter CreatorApplications to count.
+     * @example
+     * // Count the number of CreatorApplications
+     * const count = await prisma.creatorApplication.count({
+     *   where: {
+     *     // ... the filter for the CreatorApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends CreatorApplicationCountArgs>(
+      args?: Subset<T, CreatorApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CreatorApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CreatorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CreatorApplicationAggregateArgs>(args: Subset<T, CreatorApplicationAggregateArgs>): Prisma.PrismaPromise<GetCreatorApplicationAggregateType<T>>
+
+    /**
+     * Group by CreatorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CreatorApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CreatorApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: CreatorApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CreatorApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCreatorApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CreatorApplication model
+   */
+  readonly fields: CreatorApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CreatorApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CreatorApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    community<T extends CommunityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CommunityDefaultArgs<ExtArgs>>): Prisma__CommunityClient<$Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewedBy<T extends CreatorApplication$reviewedByArgs<ExtArgs> = {}>(args?: Subset<T, CreatorApplication$reviewedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CreatorApplication model
+   */ 
+  interface CreatorApplicationFieldRefs {
+    readonly id: FieldRef<"CreatorApplication", 'String'>
+    readonly userId: FieldRef<"CreatorApplication", 'String'>
+    readonly communityId: FieldRef<"CreatorApplication", 'String'>
+    readonly status: FieldRef<"CreatorApplication", 'ApprovalStatus'>
+    readonly message: FieldRef<"CreatorApplication", 'String'>
+    readonly reason: FieldRef<"CreatorApplication", 'String'>
+    readonly reviewedById: FieldRef<"CreatorApplication", 'String'>
+    readonly createdAt: FieldRef<"CreatorApplication", 'DateTime'>
+    readonly updatedAt: FieldRef<"CreatorApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CreatorApplication findUnique
+   */
+  export type CreatorApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorApplication to fetch.
+     */
+    where: CreatorApplicationWhereUniqueInput
+  }
+
+  /**
+   * CreatorApplication findUniqueOrThrow
+   */
+  export type CreatorApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorApplication to fetch.
+     */
+    where: CreatorApplicationWhereUniqueInput
+  }
+
+  /**
+   * CreatorApplication findFirst
+   */
+  export type CreatorApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorApplication to fetch.
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorApplications to fetch.
+     */
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreatorApplications.
+     */
+    cursor?: CreatorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreatorApplications.
+     */
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorApplication findFirstOrThrow
+   */
+  export type CreatorApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorApplication to fetch.
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorApplications to fetch.
+     */
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreatorApplications.
+     */
+    cursor?: CreatorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreatorApplications.
+     */
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorApplication findMany
+   */
+  export type CreatorApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorApplications to fetch.
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorApplications to fetch.
+     */
+    orderBy?: CreatorApplicationOrderByWithRelationInput | CreatorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CreatorApplications.
+     */
+    cursor?: CreatorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorApplications.
+     */
+    skip?: number
+    distinct?: CreatorApplicationScalarFieldEnum | CreatorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorApplication create
+   */
+  export type CreatorApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CreatorApplication.
+     */
+    data: XOR<CreatorApplicationCreateInput, CreatorApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * CreatorApplication createMany
+   */
+  export type CreatorApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CreatorApplications.
+     */
+    data: CreatorApplicationCreateManyInput | CreatorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CreatorApplication createManyAndReturn
+   */
+  export type CreatorApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many CreatorApplications.
+     */
+    data: CreatorApplicationCreateManyInput | CreatorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreatorApplication update
+   */
+  export type CreatorApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CreatorApplication.
+     */
+    data: XOR<CreatorApplicationUpdateInput, CreatorApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which CreatorApplication to update.
+     */
+    where: CreatorApplicationWhereUniqueInput
+  }
+
+  /**
+   * CreatorApplication updateMany
+   */
+  export type CreatorApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CreatorApplications.
+     */
+    data: XOR<CreatorApplicationUpdateManyMutationInput, CreatorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which CreatorApplications to update
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * Limit how many CreatorApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CreatorApplication updateManyAndReturn
+   */
+  export type CreatorApplicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to update CreatorApplications.
+     */
+    data: XOR<CreatorApplicationUpdateManyMutationInput, CreatorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which CreatorApplications to update
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * Limit how many CreatorApplications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreatorApplication upsert
+   */
+  export type CreatorApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CreatorApplication to update in case it exists.
+     */
+    where: CreatorApplicationWhereUniqueInput
+    /**
+     * In case the CreatorApplication found by the `where` argument doesn't exist, create a new CreatorApplication with this data.
+     */
+    create: XOR<CreatorApplicationCreateInput, CreatorApplicationUncheckedCreateInput>
+    /**
+     * In case the CreatorApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CreatorApplicationUpdateInput, CreatorApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * CreatorApplication delete
+   */
+  export type CreatorApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter which CreatorApplication to delete.
+     */
+    where: CreatorApplicationWhereUniqueInput
+  }
+
+  /**
+   * CreatorApplication deleteMany
+   */
+  export type CreatorApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreatorApplications to delete
+     */
+    where?: CreatorApplicationWhereInput
+    /**
+     * Limit how many CreatorApplications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CreatorApplication.reviewedBy
+   */
+  export type CreatorApplication$reviewedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * CreatorApplication without action
+   */
+  export type CreatorApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorApplication
+     */
+    select?: CreatorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorApplication
+     */
+    omit?: CreatorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorApplicationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17330,6 +21152,43 @@ export namespace Prisma {
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
+  export const PostFlagScalarFieldEnum: {
+    id: 'id',
+    postId: 'postId',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PostFlagScalarFieldEnum = (typeof PostFlagScalarFieldEnum)[keyof typeof PostFlagScalarFieldEnum]
+
+
+  export const BookmarkScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    postId: 'postId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BookmarkScalarFieldEnum = (typeof BookmarkScalarFieldEnum)[keyof typeof BookmarkScalarFieldEnum]
+
+
+  export const CreatorApplicationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    communityId: 'communityId',
+    status: 'status',
+    message: 'message',
+    reason: 'reason',
+    reviewedById: 'reviewedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CreatorApplicationScalarFieldEnum = (typeof CreatorApplicationScalarFieldEnum)[keyof typeof CreatorApplicationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -17444,6 +21303,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ApprovalStatus'
+   */
+  export type EnumApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovalStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApprovalStatus[]'
+   */
+  export type ListEnumApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovalStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -17484,6 +21357,10 @@ export namespace Prisma {
     portfolio?: XOR<PortfolioNullableScalarRelationFilter, PortfolioWhereInput> | null
     eventsWon?: EventListRelationFilter
     memberOf?: CommunityMemberListRelationFilter
+    flaggedPosts?: PostFlagListRelationFilter
+    bookmarks?: BookmarkListRelationFilter
+    createdApplications?: CreatorApplicationListRelationFilter
+    reviewedApplications?: CreatorApplicationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -17507,6 +21384,10 @@ export namespace Prisma {
     portfolio?: PortfolioOrderByWithRelationInput
     eventsWon?: EventOrderByRelationAggregateInput
     memberOf?: CommunityMemberOrderByRelationAggregateInput
+    flaggedPosts?: PostFlagOrderByRelationAggregateInput
+    bookmarks?: BookmarkOrderByRelationAggregateInput
+    createdApplications?: CreatorApplicationOrderByRelationAggregateInput
+    reviewedApplications?: CreatorApplicationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -17533,6 +21414,10 @@ export namespace Prisma {
     portfolio?: XOR<PortfolioNullableScalarRelationFilter, PortfolioWhereInput> | null
     eventsWon?: EventListRelationFilter
     memberOf?: CommunityMemberListRelationFilter
+    flaggedPosts?: PostFlagListRelationFilter
+    bookmarks?: BookmarkListRelationFilter
+    createdApplications?: CreatorApplicationListRelationFilter
+    reviewedApplications?: CreatorApplicationListRelationFilter
   }, "id" | "username" | "email" | "portfolioId">
 
   export type UserOrderByWithAggregationInput = {
@@ -17651,6 +21536,7 @@ export namespace Prisma {
     followers?: CommunityFollowListRelationFilter
     events?: EventListRelationFilter
     communityMembers?: CommunityMemberListRelationFilter
+    CreatorApplication?: CreatorApplicationListRelationFilter
   }
 
   export type CommunityOrderByWithRelationInput = {
@@ -17668,6 +21554,7 @@ export namespace Prisma {
     followers?: CommunityFollowOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
     communityMembers?: CommunityMemberOrderByRelationAggregateInput
+    CreatorApplication?: CreatorApplicationOrderByRelationAggregateInput
   }
 
   export type CommunityWhereUniqueInput = Prisma.AtLeast<{
@@ -17688,6 +21575,7 @@ export namespace Prisma {
     followers?: CommunityFollowListRelationFilter
     events?: EventListRelationFilter
     communityMembers?: CommunityMemberListRelationFilter
+    CreatorApplication?: CreatorApplicationListRelationFilter
   }, "id" | "name" | "slug">
 
   export type CommunityOrderByWithAggregationInput = {
@@ -17798,6 +21686,8 @@ export namespace Prisma {
     likes?: LikeListRelationFilter
     comments?: CommentListRelationFilter
     postBadges?: PostBadgesListRelationFilter
+    postFlags?: PostFlagListRelationFilter
+    bookmarkedBy?: BookmarkListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
@@ -17815,6 +21705,8 @@ export namespace Prisma {
     likes?: LikeOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
     postBadges?: PostBadgesOrderByRelationAggregateInput
+    postFlags?: PostFlagOrderByRelationAggregateInput
+    bookmarkedBy?: BookmarkOrderByRelationAggregateInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -17835,6 +21727,8 @@ export namespace Prisma {
     likes?: LikeListRelationFilter
     comments?: CommentListRelationFilter
     postBadges?: PostBadgesListRelationFilter
+    postFlags?: PostFlagListRelationFilter
+    bookmarkedBy?: BookmarkListRelationFilter
   }, "id" | "slug">
 
   export type PostOrderByWithAggregationInput = {
@@ -18403,6 +22297,206 @@ export namespace Prisma {
     communityId?: StringWithAggregatesFilter<"Event"> | string
   }
 
+  export type PostFlagWhereInput = {
+    AND?: PostFlagWhereInput | PostFlagWhereInput[]
+    OR?: PostFlagWhereInput[]
+    NOT?: PostFlagWhereInput | PostFlagWhereInput[]
+    id?: StringFilter<"PostFlag"> | string
+    postId?: StringFilter<"PostFlag"> | string
+    userId?: StringFilter<"PostFlag"> | string
+    createdAt?: DateTimeFilter<"PostFlag"> | Date | string
+    updatedAt?: DateTimeFilter<"PostFlag"> | Date | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PostFlagOrderByWithRelationInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    post?: PostOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PostFlagWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    postId_userId?: PostFlagPostIdUserIdCompoundUniqueInput
+    AND?: PostFlagWhereInput | PostFlagWhereInput[]
+    OR?: PostFlagWhereInput[]
+    NOT?: PostFlagWhereInput | PostFlagWhereInput[]
+    postId?: StringFilter<"PostFlag"> | string
+    userId?: StringFilter<"PostFlag"> | string
+    createdAt?: DateTimeFilter<"PostFlag"> | Date | string
+    updatedAt?: DateTimeFilter<"PostFlag"> | Date | string
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "postId_userId">
+
+  export type PostFlagOrderByWithAggregationInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PostFlagCountOrderByAggregateInput
+    _max?: PostFlagMaxOrderByAggregateInput
+    _min?: PostFlagMinOrderByAggregateInput
+  }
+
+  export type PostFlagScalarWhereWithAggregatesInput = {
+    AND?: PostFlagScalarWhereWithAggregatesInput | PostFlagScalarWhereWithAggregatesInput[]
+    OR?: PostFlagScalarWhereWithAggregatesInput[]
+    NOT?: PostFlagScalarWhereWithAggregatesInput | PostFlagScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PostFlag"> | string
+    postId?: StringWithAggregatesFilter<"PostFlag"> | string
+    userId?: StringWithAggregatesFilter<"PostFlag"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PostFlag"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PostFlag"> | Date | string
+  }
+
+  export type BookmarkWhereInput = {
+    AND?: BookmarkWhereInput | BookmarkWhereInput[]
+    OR?: BookmarkWhereInput[]
+    NOT?: BookmarkWhereInput | BookmarkWhereInput[]
+    id?: StringFilter<"Bookmark"> | string
+    userId?: StringFilter<"Bookmark"> | string
+    postId?: StringFilter<"Bookmark"> | string
+    createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+    updatedAt?: DateTimeFilter<"Bookmark"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+  }
+
+  export type BookmarkOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    post?: PostOrderByWithRelationInput
+  }
+
+  export type BookmarkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_postId?: BookmarkUserIdPostIdCompoundUniqueInput
+    AND?: BookmarkWhereInput | BookmarkWhereInput[]
+    OR?: BookmarkWhereInput[]
+    NOT?: BookmarkWhereInput | BookmarkWhereInput[]
+    userId?: StringFilter<"Bookmark"> | string
+    postId?: StringFilter<"Bookmark"> | string
+    createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+    updatedAt?: DateTimeFilter<"Bookmark"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+  }, "id" | "userId_postId">
+
+  export type BookmarkOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BookmarkCountOrderByAggregateInput
+    _max?: BookmarkMaxOrderByAggregateInput
+    _min?: BookmarkMinOrderByAggregateInput
+  }
+
+  export type BookmarkScalarWhereWithAggregatesInput = {
+    AND?: BookmarkScalarWhereWithAggregatesInput | BookmarkScalarWhereWithAggregatesInput[]
+    OR?: BookmarkScalarWhereWithAggregatesInput[]
+    NOT?: BookmarkScalarWhereWithAggregatesInput | BookmarkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Bookmark"> | string
+    userId?: StringWithAggregatesFilter<"Bookmark"> | string
+    postId?: StringWithAggregatesFilter<"Bookmark"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Bookmark"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Bookmark"> | Date | string
+  }
+
+  export type CreatorApplicationWhereInput = {
+    AND?: CreatorApplicationWhereInput | CreatorApplicationWhereInput[]
+    OR?: CreatorApplicationWhereInput[]
+    NOT?: CreatorApplicationWhereInput | CreatorApplicationWhereInput[]
+    id?: StringFilter<"CreatorApplication"> | string
+    userId?: StringFilter<"CreatorApplication"> | string
+    communityId?: StringFilter<"CreatorApplication"> | string
+    status?: EnumApprovalStatusFilter<"CreatorApplication"> | $Enums.ApprovalStatus
+    message?: StringNullableFilter<"CreatorApplication"> | string | null
+    reason?: StringNullableFilter<"CreatorApplication"> | string | null
+    reviewedById?: StringNullableFilter<"CreatorApplication"> | string | null
+    createdAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type CreatorApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    community?: CommunityOrderByWithRelationInput
+    reviewedBy?: UserOrderByWithRelationInput
+  }
+
+  export type CreatorApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_communityId?: CreatorApplicationUserIdCommunityIdCompoundUniqueInput
+    AND?: CreatorApplicationWhereInput | CreatorApplicationWhereInput[]
+    OR?: CreatorApplicationWhereInput[]
+    NOT?: CreatorApplicationWhereInput | CreatorApplicationWhereInput[]
+    userId?: StringFilter<"CreatorApplication"> | string
+    communityId?: StringFilter<"CreatorApplication"> | string
+    status?: EnumApprovalStatusFilter<"CreatorApplication"> | $Enums.ApprovalStatus
+    message?: StringNullableFilter<"CreatorApplication"> | string | null
+    reason?: StringNullableFilter<"CreatorApplication"> | string | null
+    reviewedById?: StringNullableFilter<"CreatorApplication"> | string | null
+    createdAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    community?: XOR<CommunityScalarRelationFilter, CommunityWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "userId_communityId">
+
+  export type CreatorApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CreatorApplicationCountOrderByAggregateInput
+    _max?: CreatorApplicationMaxOrderByAggregateInput
+    _min?: CreatorApplicationMinOrderByAggregateInput
+  }
+
+  export type CreatorApplicationScalarWhereWithAggregatesInput = {
+    AND?: CreatorApplicationScalarWhereWithAggregatesInput | CreatorApplicationScalarWhereWithAggregatesInput[]
+    OR?: CreatorApplicationScalarWhereWithAggregatesInput[]
+    NOT?: CreatorApplicationScalarWhereWithAggregatesInput | CreatorApplicationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CreatorApplication"> | string
+    userId?: StringWithAggregatesFilter<"CreatorApplication"> | string
+    communityId?: StringWithAggregatesFilter<"CreatorApplication"> | string
+    status?: EnumApprovalStatusWithAggregatesFilter<"CreatorApplication"> | $Enums.ApprovalStatus
+    message?: StringNullableWithAggregatesFilter<"CreatorApplication"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"CreatorApplication"> | string | null
+    reviewedById?: StringNullableWithAggregatesFilter<"CreatorApplication"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CreatorApplication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CreatorApplication"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -18423,6 +22517,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -18445,6 +22543,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUpdateInput = {
@@ -18467,6 +22569,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -18489,6 +22595,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -18607,6 +22717,7 @@ export namespace Prisma {
     followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
     events?: EventCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateInput = {
@@ -18623,6 +22734,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
     events?: EventUncheckedCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUpdateInput = {
@@ -18639,6 +22751,7 @@ export namespace Prisma {
     followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
     events?: EventUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateInput = {
@@ -18655,6 +22768,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
     events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityCreateManyInput = {
@@ -18767,6 +22881,8 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -18782,6 +22898,8 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
@@ -18797,6 +22915,8 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -18812,6 +22932,8 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
@@ -19383,6 +23505,195 @@ export namespace Prisma {
     communityId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type PostFlagCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutPostFlagsInput
+    user: UserCreateNestedOneWithoutFlaggedPostsInput
+  }
+
+  export type PostFlagUncheckedCreateInput = {
+    id?: string
+    postId: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostFlagUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutPostFlagsNestedInput
+    user?: UserUpdateOneRequiredWithoutFlaggedPostsNestedInput
+  }
+
+  export type PostFlagUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostFlagCreateManyInput = {
+    id?: string
+    postId: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostFlagUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostFlagUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBookmarksInput
+    post: PostCreateNestedOneWithoutBookmarkedByInput
+  }
+
+  export type BookmarkUncheckedCreateInput = {
+    id?: string
+    userId: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookmarksNestedInput
+    post?: PostUpdateOneRequiredWithoutBookmarkedByNestedInput
+  }
+
+  export type BookmarkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkCreateManyInput = {
+    id?: string
+    userId: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationCreateInput = {
+    id?: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCreatedApplicationsInput
+    community: CommunityCreateNestedOneWithoutCreatorApplicationInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedApplicationsInput
+  }
+
+  export type CreatorApplicationUncheckedCreateInput = {
+    id?: string
+    userId: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCreatedApplicationsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutCreatorApplicationNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedApplicationsNestedInput
+  }
+
+  export type CreatorApplicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationCreateManyInput = {
+    id?: string
+    userId: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -19491,6 +23802,24 @@ export namespace Prisma {
     none?: CommunityMemberWhereInput
   }
 
+  export type PostFlagListRelationFilter = {
+    every?: PostFlagWhereInput
+    some?: PostFlagWhereInput
+    none?: PostFlagWhereInput
+  }
+
+  export type BookmarkListRelationFilter = {
+    every?: BookmarkWhereInput
+    some?: BookmarkWhereInput
+    none?: BookmarkWhereInput
+  }
+
+  export type CreatorApplicationListRelationFilter = {
+    every?: CreatorApplicationWhereInput
+    some?: CreatorApplicationWhereInput
+    none?: CreatorApplicationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -19525,6 +23854,18 @@ export namespace Prisma {
   }
 
   export type CommunityMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PostFlagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookmarkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CreatorApplicationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20113,6 +24454,122 @@ export namespace Prisma {
     communityId?: SortOrder
   }
 
+  export type PostFlagPostIdUserIdCompoundUniqueInput = {
+    postId: string
+    userId: string
+  }
+
+  export type PostFlagCountOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostFlagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostFlagMinOrderByAggregateInput = {
+    id?: SortOrder
+    postId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BookmarkUserIdPostIdCompoundUniqueInput = {
+    userId: string
+    postId: string
+  }
+
+  export type BookmarkCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BookmarkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BookmarkMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusFilter<$PrismaModel> | $Enums.ApprovalStatus
+  }
+
+  export type CreatorApplicationUserIdCommunityIdCompoundUniqueInput = {
+    userId: string
+    communityId: string
+  }
+
+  export type CreatorApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    reason?: SortOrder
+    reviewedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CreatorApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    reason?: SortOrder
+    reviewedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CreatorApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    communityId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    reason?: SortOrder
+    reviewedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumApprovalStatusFilter<$PrismaModel>
+  }
+
   export type PostCreateNestedManyWithoutAuthorInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -20175,6 +24632,34 @@ export namespace Prisma {
     connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
   }
 
+  export type PostFlagCreateNestedManyWithoutUserInput = {
+    create?: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput> | PostFlagCreateWithoutUserInput[] | PostFlagUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutUserInput | PostFlagCreateOrConnectWithoutUserInput[]
+    createMany?: PostFlagCreateManyUserInputEnvelope
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+  }
+
+  export type BookmarkCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput> | BookmarkCreateWithoutUserInput[] | BookmarkUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutUserInput | BookmarkCreateOrConnectWithoutUserInput[]
+    createMany?: BookmarkCreateManyUserInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
+  export type CreatorApplicationCreateNestedManyWithoutUserInput = {
+    create?: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput> | CreatorApplicationCreateWithoutUserInput[] | CreatorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutUserInput | CreatorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: CreatorApplicationCreateManyUserInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+  }
+
+  export type CreatorApplicationCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput> | CreatorApplicationCreateWithoutReviewedByInput[] | CreatorApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutReviewedByInput | CreatorApplicationCreateOrConnectWithoutReviewedByInput[]
+    createMany?: CreatorApplicationCreateManyReviewedByInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -20229,6 +24714,34 @@ export namespace Prisma {
     connectOrCreate?: CommunityMemberCreateOrConnectWithoutUserInput | CommunityMemberCreateOrConnectWithoutUserInput[]
     createMany?: CommunityMemberCreateManyUserInputEnvelope
     connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+  }
+
+  export type PostFlagUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput> | PostFlagCreateWithoutUserInput[] | PostFlagUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutUserInput | PostFlagCreateOrConnectWithoutUserInput[]
+    createMany?: PostFlagCreateManyUserInputEnvelope
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+  }
+
+  export type BookmarkUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput> | BookmarkCreateWithoutUserInput[] | BookmarkUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutUserInput | BookmarkCreateOrConnectWithoutUserInput[]
+    createMany?: BookmarkCreateManyUserInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
+  export type CreatorApplicationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput> | CreatorApplicationCreateWithoutUserInput[] | CreatorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutUserInput | CreatorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: CreatorApplicationCreateManyUserInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+  }
+
+  export type CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput> | CreatorApplicationCreateWithoutReviewedByInput[] | CreatorApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutReviewedByInput | CreatorApplicationCreateOrConnectWithoutReviewedByInput[]
+    createMany?: CreatorApplicationCreateManyReviewedByInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20373,6 +24886,62 @@ export namespace Prisma {
     deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
   }
 
+  export type PostFlagUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput> | PostFlagCreateWithoutUserInput[] | PostFlagUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutUserInput | PostFlagCreateOrConnectWithoutUserInput[]
+    upsert?: PostFlagUpsertWithWhereUniqueWithoutUserInput | PostFlagUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PostFlagCreateManyUserInputEnvelope
+    set?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    disconnect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    delete?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    update?: PostFlagUpdateWithWhereUniqueWithoutUserInput | PostFlagUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PostFlagUpdateManyWithWhereWithoutUserInput | PostFlagUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+  }
+
+  export type BookmarkUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput> | BookmarkCreateWithoutUserInput[] | BookmarkUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutUserInput | BookmarkCreateOrConnectWithoutUserInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutUserInput | BookmarkUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookmarkCreateManyUserInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutUserInput | BookmarkUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutUserInput | BookmarkUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
+  export type CreatorApplicationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput> | CreatorApplicationCreateWithoutUserInput[] | CreatorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutUserInput | CreatorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutUserInput | CreatorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CreatorApplicationCreateManyUserInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutUserInput | CreatorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutUserInput | CreatorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+  }
+
+  export type CreatorApplicationUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput> | CreatorApplicationCreateWithoutReviewedByInput[] | CreatorApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutReviewedByInput | CreatorApplicationCreateOrConnectWithoutReviewedByInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutReviewedByInput | CreatorApplicationUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: CreatorApplicationCreateManyReviewedByInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutReviewedByInput | CreatorApplicationUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutReviewedByInput | CreatorApplicationUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -20485,6 +25054,62 @@ export namespace Prisma {
     deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
   }
 
+  export type PostFlagUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput> | PostFlagCreateWithoutUserInput[] | PostFlagUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutUserInput | PostFlagCreateOrConnectWithoutUserInput[]
+    upsert?: PostFlagUpsertWithWhereUniqueWithoutUserInput | PostFlagUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PostFlagCreateManyUserInputEnvelope
+    set?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    disconnect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    delete?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    update?: PostFlagUpdateWithWhereUniqueWithoutUserInput | PostFlagUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PostFlagUpdateManyWithWhereWithoutUserInput | PostFlagUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput> | BookmarkCreateWithoutUserInput[] | BookmarkUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutUserInput | BookmarkCreateOrConnectWithoutUserInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutUserInput | BookmarkUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookmarkCreateManyUserInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutUserInput | BookmarkUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutUserInput | BookmarkUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput> | CreatorApplicationCreateWithoutUserInput[] | CreatorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutUserInput | CreatorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutUserInput | CreatorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CreatorApplicationCreateManyUserInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutUserInput | CreatorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutUserInput | CreatorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput> | CreatorApplicationCreateWithoutReviewedByInput[] | CreatorApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutReviewedByInput | CreatorApplicationCreateOrConnectWithoutReviewedByInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutReviewedByInput | CreatorApplicationUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: CreatorApplicationCreateManyReviewedByInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutReviewedByInput | CreatorApplicationUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutReviewedByInput | CreatorApplicationUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutMemberOfInput = {
     create?: XOR<UserCreateWithoutMemberOfInput, UserUncheckedCreateWithoutMemberOfInput>
     connectOrCreate?: UserCreateOrConnectWithoutMemberOfInput
@@ -20547,6 +25172,13 @@ export namespace Prisma {
     connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
   }
 
+  export type CreatorApplicationCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput> | CreatorApplicationCreateWithoutCommunityInput[] | CreatorApplicationUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutCommunityInput | CreatorApplicationCreateOrConnectWithoutCommunityInput[]
+    createMany?: CreatorApplicationCreateManyCommunityInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutCommunityInput = {
     create?: XOR<PostCreateWithoutCommunityInput, PostUncheckedCreateWithoutCommunityInput> | PostCreateWithoutCommunityInput[] | PostUncheckedCreateWithoutCommunityInput[]
     connectOrCreate?: PostCreateOrConnectWithoutCommunityInput | PostCreateOrConnectWithoutCommunityInput[]
@@ -20573,6 +25205,13 @@ export namespace Prisma {
     connectOrCreate?: CommunityMemberCreateOrConnectWithoutCommunityInput | CommunityMemberCreateOrConnectWithoutCommunityInput[]
     createMany?: CommunityMemberCreateManyCommunityInputEnvelope
     connect?: CommunityMemberWhereUniqueInput | CommunityMemberWhereUniqueInput[]
+  }
+
+  export type CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput = {
+    create?: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput> | CreatorApplicationCreateWithoutCommunityInput[] | CreatorApplicationUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutCommunityInput | CreatorApplicationCreateOrConnectWithoutCommunityInput[]
+    createMany?: CreatorApplicationCreateManyCommunityInputEnvelope
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput = {
@@ -20639,6 +25278,20 @@ export namespace Prisma {
     deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
   }
 
+  export type CreatorApplicationUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput> | CreatorApplicationCreateWithoutCommunityInput[] | CreatorApplicationUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutCommunityInput | CreatorApplicationCreateOrConnectWithoutCommunityInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutCommunityInput | CreatorApplicationUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: CreatorApplicationCreateManyCommunityInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutCommunityInput | CreatorApplicationUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutCommunityInput | CreatorApplicationUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutCommunityNestedInput = {
     create?: XOR<PostCreateWithoutCommunityInput, PostUncheckedCreateWithoutCommunityInput> | PostCreateWithoutCommunityInput[] | PostUncheckedCreateWithoutCommunityInput[]
     connectOrCreate?: PostCreateOrConnectWithoutCommunityInput | PostCreateOrConnectWithoutCommunityInput[]
@@ -20693,6 +25346,20 @@ export namespace Prisma {
     update?: CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput | CommunityMemberUpdateWithWhereUniqueWithoutCommunityInput[]
     updateMany?: CommunityMemberUpdateManyWithWhereWithoutCommunityInput | CommunityMemberUpdateManyWithWhereWithoutCommunityInput[]
     deleteMany?: CommunityMemberScalarWhereInput | CommunityMemberScalarWhereInput[]
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput = {
+    create?: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput> | CreatorApplicationCreateWithoutCommunityInput[] | CreatorApplicationUncheckedCreateWithoutCommunityInput[]
+    connectOrCreate?: CreatorApplicationCreateOrConnectWithoutCommunityInput | CreatorApplicationCreateOrConnectWithoutCommunityInput[]
+    upsert?: CreatorApplicationUpsertWithWhereUniqueWithoutCommunityInput | CreatorApplicationUpsertWithWhereUniqueWithoutCommunityInput[]
+    createMany?: CreatorApplicationCreateManyCommunityInputEnvelope
+    set?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    disconnect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    delete?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    connect?: CreatorApplicationWhereUniqueInput | CreatorApplicationWhereUniqueInput[]
+    update?: CreatorApplicationUpdateWithWhereUniqueWithoutCommunityInput | CreatorApplicationUpdateWithWhereUniqueWithoutCommunityInput[]
+    updateMany?: CreatorApplicationUpdateManyWithWhereWithoutCommunityInput | CreatorApplicationUpdateManyWithWhereWithoutCommunityInput[]
+    deleteMany?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
   }
 
   export type PostCreateNestedOneWithoutMediaInput = {
@@ -20753,6 +25420,20 @@ export namespace Prisma {
     connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
   }
 
+  export type PostFlagCreateNestedManyWithoutPostInput = {
+    create?: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput> | PostFlagCreateWithoutPostInput[] | PostFlagUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutPostInput | PostFlagCreateOrConnectWithoutPostInput[]
+    createMany?: PostFlagCreateManyPostInputEnvelope
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+  }
+
+  export type BookmarkCreateNestedManyWithoutPostInput = {
+    create?: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput> | BookmarkCreateWithoutPostInput[] | BookmarkUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutPostInput | BookmarkCreateOrConnectWithoutPostInput[]
+    createMany?: BookmarkCreateManyPostInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
   export type MediaUncheckedCreateNestedManyWithoutPostInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
@@ -20779,6 +25460,20 @@ export namespace Prisma {
     connectOrCreate?: PostBadgesCreateOrConnectWithoutPostInput | PostBadgesCreateOrConnectWithoutPostInput[]
     createMany?: PostBadgesCreateManyPostInputEnvelope
     connect?: PostBadgesWhereUniqueInput | PostBadgesWhereUniqueInput[]
+  }
+
+  export type PostFlagUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput> | PostFlagCreateWithoutPostInput[] | PostFlagUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutPostInput | PostFlagCreateOrConnectWithoutPostInput[]
+    createMany?: PostFlagCreateManyPostInputEnvelope
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+  }
+
+  export type BookmarkUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput> | BookmarkCreateWithoutPostInput[] | BookmarkUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutPostInput | BookmarkCreateOrConnectWithoutPostInput[]
+    createMany?: BookmarkCreateManyPostInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
   }
 
   export type MediaUpdateManyWithoutPostNestedInput = {
@@ -20853,6 +25548,34 @@ export namespace Prisma {
     deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
   }
 
+  export type PostFlagUpdateManyWithoutPostNestedInput = {
+    create?: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput> | PostFlagCreateWithoutPostInput[] | PostFlagUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutPostInput | PostFlagCreateOrConnectWithoutPostInput[]
+    upsert?: PostFlagUpsertWithWhereUniqueWithoutPostInput | PostFlagUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: PostFlagCreateManyPostInputEnvelope
+    set?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    disconnect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    delete?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    update?: PostFlagUpdateWithWhereUniqueWithoutPostInput | PostFlagUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: PostFlagUpdateManyWithWhereWithoutPostInput | PostFlagUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+  }
+
+  export type BookmarkUpdateManyWithoutPostNestedInput = {
+    create?: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput> | BookmarkCreateWithoutPostInput[] | BookmarkUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutPostInput | BookmarkCreateOrConnectWithoutPostInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutPostInput | BookmarkUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: BookmarkCreateManyPostInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutPostInput | BookmarkUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutPostInput | BookmarkUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
   export type MediaUncheckedUpdateManyWithoutPostNestedInput = {
     create?: XOR<MediaCreateWithoutPostInput, MediaUncheckedCreateWithoutPostInput> | MediaCreateWithoutPostInput[] | MediaUncheckedCreateWithoutPostInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutPostInput | MediaCreateOrConnectWithoutPostInput[]
@@ -20907,6 +25630,34 @@ export namespace Prisma {
     update?: PostBadgesUpdateWithWhereUniqueWithoutPostInput | PostBadgesUpdateWithWhereUniqueWithoutPostInput[]
     updateMany?: PostBadgesUpdateManyWithWhereWithoutPostInput | PostBadgesUpdateManyWithWhereWithoutPostInput[]
     deleteMany?: PostBadgesScalarWhereInput | PostBadgesScalarWhereInput[]
+  }
+
+  export type PostFlagUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput> | PostFlagCreateWithoutPostInput[] | PostFlagUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: PostFlagCreateOrConnectWithoutPostInput | PostFlagCreateOrConnectWithoutPostInput[]
+    upsert?: PostFlagUpsertWithWhereUniqueWithoutPostInput | PostFlagUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: PostFlagCreateManyPostInputEnvelope
+    set?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    disconnect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    delete?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    connect?: PostFlagWhereUniqueInput | PostFlagWhereUniqueInput[]
+    update?: PostFlagUpdateWithWhereUniqueWithoutPostInput | PostFlagUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: PostFlagUpdateManyWithWhereWithoutPostInput | PostFlagUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput> | BookmarkCreateWithoutPostInput[] | BookmarkUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutPostInput | BookmarkCreateOrConnectWithoutPostInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutPostInput | BookmarkUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: BookmarkCreateManyPostInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutPostInput | BookmarkUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutPostInput | BookmarkUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutLikesInput = {
@@ -21319,6 +26070,110 @@ export namespace Prisma {
     update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutEventsInput, CommunityUpdateWithoutEventsInput>, CommunityUncheckedUpdateWithoutEventsInput>
   }
 
+  export type PostCreateNestedOneWithoutPostFlagsInput = {
+    create?: XOR<PostCreateWithoutPostFlagsInput, PostUncheckedCreateWithoutPostFlagsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutPostFlagsInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFlaggedPostsInput = {
+    create?: XOR<UserCreateWithoutFlaggedPostsInput, UserUncheckedCreateWithoutFlaggedPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlaggedPostsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PostUpdateOneRequiredWithoutPostFlagsNestedInput = {
+    create?: XOR<PostCreateWithoutPostFlagsInput, PostUncheckedCreateWithoutPostFlagsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutPostFlagsInput
+    upsert?: PostUpsertWithoutPostFlagsInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutPostFlagsInput, PostUpdateWithoutPostFlagsInput>, PostUncheckedUpdateWithoutPostFlagsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFlaggedPostsNestedInput = {
+    create?: XOR<UserCreateWithoutFlaggedPostsInput, UserUncheckedCreateWithoutFlaggedPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlaggedPostsInput
+    upsert?: UserUpsertWithoutFlaggedPostsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlaggedPostsInput, UserUpdateWithoutFlaggedPostsInput>, UserUncheckedUpdateWithoutFlaggedPostsInput>
+  }
+
+  export type UserCreateNestedOneWithoutBookmarksInput = {
+    create?: XOR<UserCreateWithoutBookmarksInput, UserUncheckedCreateWithoutBookmarksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookmarksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PostCreateNestedOneWithoutBookmarkedByInput = {
+    create?: XOR<PostCreateWithoutBookmarkedByInput, PostUncheckedCreateWithoutBookmarkedByInput>
+    connectOrCreate?: PostCreateOrConnectWithoutBookmarkedByInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutBookmarksNestedInput = {
+    create?: XOR<UserCreateWithoutBookmarksInput, UserUncheckedCreateWithoutBookmarksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookmarksInput
+    upsert?: UserUpsertWithoutBookmarksInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBookmarksInput, UserUpdateWithoutBookmarksInput>, UserUncheckedUpdateWithoutBookmarksInput>
+  }
+
+  export type PostUpdateOneRequiredWithoutBookmarkedByNestedInput = {
+    create?: XOR<PostCreateWithoutBookmarkedByInput, PostUncheckedCreateWithoutBookmarkedByInput>
+    connectOrCreate?: PostCreateOrConnectWithoutBookmarkedByInput
+    upsert?: PostUpsertWithoutBookmarkedByInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutBookmarkedByInput, PostUpdateWithoutBookmarkedByInput>, PostUncheckedUpdateWithoutBookmarkedByInput>
+  }
+
+  export type UserCreateNestedOneWithoutCreatedApplicationsInput = {
+    create?: XOR<UserCreateWithoutCreatedApplicationsInput, UserUncheckedCreateWithoutCreatedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CommunityCreateNestedOneWithoutCreatorApplicationInput = {
+    create?: XOR<CommunityCreateWithoutCreatorApplicationInput, CommunityUncheckedCreateWithoutCreatorApplicationInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutCreatorApplicationInput
+    connect?: CommunityWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewedApplicationsInput = {
+    create?: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumApprovalStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ApprovalStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedApplicationsInput, UserUncheckedCreateWithoutCreatedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedApplicationsInput
+    upsert?: UserUpsertWithoutCreatedApplicationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedApplicationsInput, UserUpdateWithoutCreatedApplicationsInput>, UserUncheckedUpdateWithoutCreatedApplicationsInput>
+  }
+
+  export type CommunityUpdateOneRequiredWithoutCreatorApplicationNestedInput = {
+    create?: XOR<CommunityCreateWithoutCreatorApplicationInput, CommunityUncheckedCreateWithoutCreatorApplicationInput>
+    connectOrCreate?: CommunityCreateOrConnectWithoutCreatorApplicationInput
+    upsert?: CommunityUpsertWithoutCreatorApplicationInput
+    connect?: CommunityWhereUniqueInput
+    update?: XOR<XOR<CommunityUpdateToOneWithWhereWithoutCreatorApplicationInput, CommunityUpdateWithoutCreatorApplicationInput>, CommunityUncheckedUpdateWithoutCreatorApplicationInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedApplicationsInput
+    upsert?: UserUpsertWithoutReviewedApplicationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedApplicationsInput, UserUpdateWithoutReviewedApplicationsInput>, UserUncheckedUpdateWithoutReviewedApplicationsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -21506,6 +26361,23 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusFilter<$PrismaModel> | $Enums.ApprovalStatus
+  }
+
+  export type NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumApprovalStatusFilter<$PrismaModel>
+  }
+
   export type PostCreateWithoutAuthorInput = {
     id?: string
     title: string
@@ -21518,6 +26390,8 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
@@ -21532,6 +26406,8 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutAuthorInput = {
@@ -21615,6 +26491,7 @@ export namespace Prisma {
     followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
     events?: EventCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutCreatedByInput = {
@@ -21630,6 +26507,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
     events?: EventUncheckedCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutCreatedByInput = {
@@ -21768,6 +26646,118 @@ export namespace Prisma {
 
   export type CommunityMemberCreateManyUserInputEnvelope = {
     data: CommunityMemberCreateManyUserInput | CommunityMemberCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PostFlagCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutPostFlagsInput
+  }
+
+  export type PostFlagUncheckedCreateWithoutUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostFlagCreateOrConnectWithoutUserInput = {
+    where: PostFlagWhereUniqueInput
+    create: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput>
+  }
+
+  export type PostFlagCreateManyUserInputEnvelope = {
+    data: PostFlagCreateManyUserInput | PostFlagCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookmarkCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutBookmarkedByInput
+  }
+
+  export type BookmarkUncheckedCreateWithoutUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkCreateOrConnectWithoutUserInput = {
+    where: BookmarkWhereUniqueInput
+    create: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookmarkCreateManyUserInputEnvelope = {
+    data: BookmarkCreateManyUserInput | BookmarkCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CreatorApplicationCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    community: CommunityCreateNestedOneWithoutCreatorApplicationInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedApplicationsInput
+  }
+
+  export type CreatorApplicationUncheckedCreateWithoutUserInput = {
+    id?: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationCreateOrConnectWithoutUserInput = {
+    where: CreatorApplicationWhereUniqueInput
+    create: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type CreatorApplicationCreateManyUserInputEnvelope = {
+    data: CreatorApplicationCreateManyUserInput | CreatorApplicationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CreatorApplicationCreateWithoutReviewedByInput = {
+    id?: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCreatedApplicationsInput
+    community: CommunityCreateNestedOneWithoutCreatorApplicationInput
+  }
+
+  export type CreatorApplicationUncheckedCreateWithoutReviewedByInput = {
+    id?: string
+    userId: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationCreateOrConnectWithoutReviewedByInput = {
+    where: CreatorApplicationWhereUniqueInput
+    create: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type CreatorApplicationCreateManyReviewedByInputEnvelope = {
+    data: CreatorApplicationCreateManyReviewedByInput | CreatorApplicationCreateManyReviewedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -22030,6 +27020,107 @@ export namespace Prisma {
     role?: EnumRoleFilter<"CommunityMember"> | $Enums.Role
   }
 
+  export type PostFlagUpsertWithWhereUniqueWithoutUserInput = {
+    where: PostFlagWhereUniqueInput
+    update: XOR<PostFlagUpdateWithoutUserInput, PostFlagUncheckedUpdateWithoutUserInput>
+    create: XOR<PostFlagCreateWithoutUserInput, PostFlagUncheckedCreateWithoutUserInput>
+  }
+
+  export type PostFlagUpdateWithWhereUniqueWithoutUserInput = {
+    where: PostFlagWhereUniqueInput
+    data: XOR<PostFlagUpdateWithoutUserInput, PostFlagUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PostFlagUpdateManyWithWhereWithoutUserInput = {
+    where: PostFlagScalarWhereInput
+    data: XOR<PostFlagUpdateManyMutationInput, PostFlagUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PostFlagScalarWhereInput = {
+    AND?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+    OR?: PostFlagScalarWhereInput[]
+    NOT?: PostFlagScalarWhereInput | PostFlagScalarWhereInput[]
+    id?: StringFilter<"PostFlag"> | string
+    postId?: StringFilter<"PostFlag"> | string
+    userId?: StringFilter<"PostFlag"> | string
+    createdAt?: DateTimeFilter<"PostFlag"> | Date | string
+    updatedAt?: DateTimeFilter<"PostFlag"> | Date | string
+  }
+
+  export type BookmarkUpsertWithWhereUniqueWithoutUserInput = {
+    where: BookmarkWhereUniqueInput
+    update: XOR<BookmarkUpdateWithoutUserInput, BookmarkUncheckedUpdateWithoutUserInput>
+    create: XOR<BookmarkCreateWithoutUserInput, BookmarkUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookmarkUpdateWithWhereUniqueWithoutUserInput = {
+    where: BookmarkWhereUniqueInput
+    data: XOR<BookmarkUpdateWithoutUserInput, BookmarkUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BookmarkUpdateManyWithWhereWithoutUserInput = {
+    where: BookmarkScalarWhereInput
+    data: XOR<BookmarkUpdateManyMutationInput, BookmarkUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BookmarkScalarWhereInput = {
+    AND?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+    OR?: BookmarkScalarWhereInput[]
+    NOT?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+    id?: StringFilter<"Bookmark"> | string
+    userId?: StringFilter<"Bookmark"> | string
+    postId?: StringFilter<"Bookmark"> | string
+    createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+    updatedAt?: DateTimeFilter<"Bookmark"> | Date | string
+  }
+
+  export type CreatorApplicationUpsertWithWhereUniqueWithoutUserInput = {
+    where: CreatorApplicationWhereUniqueInput
+    update: XOR<CreatorApplicationUpdateWithoutUserInput, CreatorApplicationUncheckedUpdateWithoutUserInput>
+    create: XOR<CreatorApplicationCreateWithoutUserInput, CreatorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type CreatorApplicationUpdateWithWhereUniqueWithoutUserInput = {
+    where: CreatorApplicationWhereUniqueInput
+    data: XOR<CreatorApplicationUpdateWithoutUserInput, CreatorApplicationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CreatorApplicationUpdateManyWithWhereWithoutUserInput = {
+    where: CreatorApplicationScalarWhereInput
+    data: XOR<CreatorApplicationUpdateManyMutationInput, CreatorApplicationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CreatorApplicationScalarWhereInput = {
+    AND?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+    OR?: CreatorApplicationScalarWhereInput[]
+    NOT?: CreatorApplicationScalarWhereInput | CreatorApplicationScalarWhereInput[]
+    id?: StringFilter<"CreatorApplication"> | string
+    userId?: StringFilter<"CreatorApplication"> | string
+    communityId?: StringFilter<"CreatorApplication"> | string
+    status?: EnumApprovalStatusFilter<"CreatorApplication"> | $Enums.ApprovalStatus
+    message?: StringNullableFilter<"CreatorApplication"> | string | null
+    reason?: StringNullableFilter<"CreatorApplication"> | string | null
+    reviewedById?: StringNullableFilter<"CreatorApplication"> | string | null
+    createdAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"CreatorApplication"> | Date | string
+  }
+
+  export type CreatorApplicationUpsertWithWhereUniqueWithoutReviewedByInput = {
+    where: CreatorApplicationWhereUniqueInput
+    update: XOR<CreatorApplicationUpdateWithoutReviewedByInput, CreatorApplicationUncheckedUpdateWithoutReviewedByInput>
+    create: XOR<CreatorApplicationCreateWithoutReviewedByInput, CreatorApplicationUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type CreatorApplicationUpdateWithWhereUniqueWithoutReviewedByInput = {
+    where: CreatorApplicationWhereUniqueInput
+    data: XOR<CreatorApplicationUpdateWithoutReviewedByInput, CreatorApplicationUncheckedUpdateWithoutReviewedByInput>
+  }
+
+  export type CreatorApplicationUpdateManyWithWhereWithoutReviewedByInput = {
+    where: CreatorApplicationScalarWhereInput
+    data: XOR<CreatorApplicationUpdateManyMutationInput, CreatorApplicationUncheckedUpdateManyWithoutReviewedByInput>
+  }
+
   export type UserCreateWithoutMemberOfInput = {
     id?: string
     username: string
@@ -22049,6 +27140,10 @@ export namespace Prisma {
     userBadges?: UserBadgesCreateNestedManyWithoutUserInput
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutMemberOfInput = {
@@ -22070,6 +27165,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutMemberOfInput = {
@@ -22090,6 +27189,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutCommunityInput
     followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
     events?: EventCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutCommunityMembersInput = {
@@ -22105,6 +27205,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
     followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
     events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutCommunityMembersInput = {
@@ -22142,6 +27243,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMemberOfInput = {
@@ -22163,6 +27268,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type CommunityUpsertWithoutCommunityMembersInput = {
@@ -22189,6 +27298,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutCommunityNestedInput
     followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
     events?: EventUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutCommunityMembersInput = {
@@ -22204,6 +27314,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
     followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
     events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type UserCreateWithoutCreatedCommunitiesInput = {
@@ -22225,6 +27336,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCommunitiesInput = {
@@ -22246,6 +27361,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCommunitiesInput = {
@@ -22265,6 +27384,8 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommunityInput = {
@@ -22279,6 +27400,8 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCommunityInput = {
@@ -22375,6 +27498,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CreatorApplicationCreateWithoutCommunityInput = {
+    id?: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCreatedApplicationsInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedApplicationsInput
+  }
+
+  export type CreatorApplicationUncheckedCreateWithoutCommunityInput = {
+    id?: string
+    userId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationCreateOrConnectWithoutCommunityInput = {
+    where: CreatorApplicationWhereUniqueInput
+    create: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type CreatorApplicationCreateManyCommunityInputEnvelope = {
+    data: CreatorApplicationCreateManyCommunityInput | CreatorApplicationCreateManyCommunityInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCreatedCommunitiesInput = {
     update: XOR<UserUpdateWithoutCreatedCommunitiesInput, UserUncheckedUpdateWithoutCreatedCommunitiesInput>
     create: XOR<UserCreateWithoutCreatedCommunitiesInput, UserUncheckedCreateWithoutCreatedCommunitiesInput>
@@ -22405,6 +27560,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCommunitiesInput = {
@@ -22426,6 +27585,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type PostUpsertWithWhereUniqueWithoutCommunityInput = {
@@ -22492,6 +27655,22 @@ export namespace Prisma {
     data: XOR<CommunityMemberUpdateManyMutationInput, CommunityMemberUncheckedUpdateManyWithoutCommunityInput>
   }
 
+  export type CreatorApplicationUpsertWithWhereUniqueWithoutCommunityInput = {
+    where: CreatorApplicationWhereUniqueInput
+    update: XOR<CreatorApplicationUpdateWithoutCommunityInput, CreatorApplicationUncheckedUpdateWithoutCommunityInput>
+    create: XOR<CreatorApplicationCreateWithoutCommunityInput, CreatorApplicationUncheckedCreateWithoutCommunityInput>
+  }
+
+  export type CreatorApplicationUpdateWithWhereUniqueWithoutCommunityInput = {
+    where: CreatorApplicationWhereUniqueInput
+    data: XOR<CreatorApplicationUpdateWithoutCommunityInput, CreatorApplicationUncheckedUpdateWithoutCommunityInput>
+  }
+
+  export type CreatorApplicationUpdateManyWithWhereWithoutCommunityInput = {
+    where: CreatorApplicationScalarWhereInput
+    data: XOR<CreatorApplicationUpdateManyMutationInput, CreatorApplicationUncheckedUpdateManyWithoutCommunityInput>
+  }
+
   export type PostCreateWithoutMediaInput = {
     id?: string
     title: string
@@ -22504,6 +27683,8 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutMediaInput = {
@@ -22518,6 +27699,8 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutMediaInput = {
@@ -22548,6 +27731,8 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutMediaInput = {
@@ -22562,6 +27747,8 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type MediaCreateWithoutPostInput = {
@@ -22609,6 +27796,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -22630,6 +27821,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -22650,6 +27845,7 @@ export namespace Prisma {
     followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
     events?: EventCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutPostsInput = {
@@ -22665,6 +27861,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
     events?: EventUncheckedCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutPostsInput = {
@@ -22754,6 +27951,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PostFlagCreateWithoutPostInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutFlaggedPostsInput
+  }
+
+  export type PostFlagUncheckedCreateWithoutPostInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostFlagCreateOrConnectWithoutPostInput = {
+    where: PostFlagWhereUniqueInput
+    create: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput>
+  }
+
+  export type PostFlagCreateManyPostInputEnvelope = {
+    data: PostFlagCreateManyPostInput | PostFlagCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookmarkCreateWithoutPostInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBookmarksInput
+  }
+
+  export type BookmarkUncheckedCreateWithoutPostInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkCreateOrConnectWithoutPostInput = {
+    where: BookmarkWhereUniqueInput
+    create: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput>
+  }
+
+  export type BookmarkCreateManyPostInputEnvelope = {
+    data: BookmarkCreateManyPostInput | BookmarkCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
   export type MediaUpsertWithWhereUniqueWithoutPostInput = {
     where: MediaWhereUniqueInput
     update: XOR<MediaUpdateWithoutPostInput, MediaUncheckedUpdateWithoutPostInput>
@@ -22812,6 +28057,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -22833,6 +28082,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type CommunityUpsertWithoutPostsInput = {
@@ -22859,6 +28112,7 @@ export namespace Prisma {
     followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
     events?: EventUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutPostsInput = {
@@ -22874,6 +28128,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
     events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type LikeUpsertWithWhereUniqueWithoutPostInput = {
@@ -22935,6 +28190,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PostBadges"> | Date | string
   }
 
+  export type PostFlagUpsertWithWhereUniqueWithoutPostInput = {
+    where: PostFlagWhereUniqueInput
+    update: XOR<PostFlagUpdateWithoutPostInput, PostFlagUncheckedUpdateWithoutPostInput>
+    create: XOR<PostFlagCreateWithoutPostInput, PostFlagUncheckedCreateWithoutPostInput>
+  }
+
+  export type PostFlagUpdateWithWhereUniqueWithoutPostInput = {
+    where: PostFlagWhereUniqueInput
+    data: XOR<PostFlagUpdateWithoutPostInput, PostFlagUncheckedUpdateWithoutPostInput>
+  }
+
+  export type PostFlagUpdateManyWithWhereWithoutPostInput = {
+    where: PostFlagScalarWhereInput
+    data: XOR<PostFlagUpdateManyMutationInput, PostFlagUncheckedUpdateManyWithoutPostInput>
+  }
+
+  export type BookmarkUpsertWithWhereUniqueWithoutPostInput = {
+    where: BookmarkWhereUniqueInput
+    update: XOR<BookmarkUpdateWithoutPostInput, BookmarkUncheckedUpdateWithoutPostInput>
+    create: XOR<BookmarkCreateWithoutPostInput, BookmarkUncheckedCreateWithoutPostInput>
+  }
+
+  export type BookmarkUpdateWithWhereUniqueWithoutPostInput = {
+    where: BookmarkWhereUniqueInput
+    data: XOR<BookmarkUpdateWithoutPostInput, BookmarkUncheckedUpdateWithoutPostInput>
+  }
+
+  export type BookmarkUpdateManyWithWhereWithoutPostInput = {
+    where: BookmarkScalarWhereInput
+    data: XOR<BookmarkUpdateManyMutationInput, BookmarkUncheckedUpdateManyWithoutPostInput>
+  }
+
   export type UserCreateWithoutLikesInput = {
     id?: string
     username: string
@@ -22954,6 +28241,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -22975,6 +28266,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -22994,6 +28289,8 @@ export namespace Prisma {
     community: CommunityCreateNestedOneWithoutPostsInput
     comments?: CommentCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutLikesInput = {
@@ -23008,6 +28305,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutLikesInput = {
@@ -23072,6 +28371,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -23093,6 +28396,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type PostUpsertWithoutLikesInput = {
@@ -23118,6 +28425,8 @@ export namespace Prisma {
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutLikesInput = {
@@ -23132,6 +28441,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type CommentUpsertWithoutLikesInput = {
@@ -23186,6 +28497,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -23207,6 +28522,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -23226,6 +28545,8 @@ export namespace Prisma {
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
@@ -23240,6 +28561,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCommentsInput = {
@@ -23362,6 +28685,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -23383,6 +28710,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type PostUpsertWithoutCommentsInput = {
@@ -23408,6 +28739,8 @@ export namespace Prisma {
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommentsInput = {
@@ -23422,6 +28755,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type CommentUpsertWithoutCommentsInput = {
@@ -23502,6 +28837,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutCommunityInput
     events?: EventCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutFollowersInput = {
@@ -23517,6 +28853,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
     events?: EventUncheckedCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutFollowersInput = {
@@ -23543,6 +28880,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutFollowsInput = {
@@ -23564,6 +28905,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutFollowsInput = {
@@ -23595,6 +28940,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutCommunityNestedInput
     events?: EventUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutFollowersInput = {
@@ -23610,6 +28956,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
     events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type UserUpsertWithoutFollowsInput = {
@@ -23642,6 +28989,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowsInput = {
@@ -23663,6 +29014,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type PostBadgesCreateWithoutBadgeInput = {
@@ -23757,6 +29112,8 @@ export namespace Prisma {
     community: CommunityCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutPostBadgesInput = {
@@ -23771,6 +29128,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutPostBadgesInput = {
@@ -23832,6 +29191,8 @@ export namespace Prisma {
     community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutPostBadgesInput = {
@@ -23846,6 +29207,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type BadgeUpsertWithoutPostBadgesInput = {
@@ -23904,6 +29267,10 @@ export namespace Prisma {
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutUserBadgesInput = {
@@ -23925,6 +29292,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutUserBadgesInput = {
@@ -23993,6 +29364,10 @@ export namespace Prisma {
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUserBadgesInput = {
@@ -24014,6 +29389,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type BadgeUpsertWithoutUserBadgesInput = {
@@ -24072,6 +29451,10 @@ export namespace Prisma {
     userBadges?: UserBadgesCreateNestedManyWithoutUserInput
     eventsWon?: EventCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPortfolioInput = {
@@ -24093,6 +29476,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPortfolioInput = {
@@ -24130,6 +29517,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
     eventsWon?: EventUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPortfolioInput = {
@@ -24151,6 +29542,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutEventsWonInput = {
@@ -24172,6 +29567,10 @@ export namespace Prisma {
     userBadges?: UserBadgesCreateNestedManyWithoutUserInput
     portfolio?: PortfolioCreateNestedOneWithoutUserInput
     memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsWonInput = {
@@ -24193,6 +29592,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
     userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
     memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsWonInput = {
@@ -24213,6 +29616,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutCommunityInput
     followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityUncheckedCreateWithoutEventsInput = {
@@ -24228,6 +29632,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
     followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
     communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+    CreatorApplication?: CreatorApplicationUncheckedCreateNestedManyWithoutCommunityInput
   }
 
   export type CommunityCreateOrConnectWithoutEventsInput = {
@@ -24265,6 +29670,10 @@ export namespace Prisma {
     userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
     portfolio?: PortfolioUpdateOneWithoutUserNestedInput
     memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsWonInput = {
@@ -24286,6 +29695,10 @@ export namespace Prisma {
     follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
     userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
     memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type CommunityUpsertWithoutEventsInput = {
@@ -24312,6 +29725,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutCommunityNestedInput
     followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutEventsInput = {
@@ -24327,6 +29741,711 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
     followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
+  }
+
+  export type PostCreateWithoutPostFlagsInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    media?: MediaCreateNestedManyWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
+    community: CommunityCreateNestedOneWithoutPostsInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutPostFlagsInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+    media?: MediaUncheckedCreateNestedManyWithoutPostInput
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    bookmarkedBy?: BookmarkUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutPostFlagsInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutPostFlagsInput, PostUncheckedCreateWithoutPostFlagsInput>
+  }
+
+  export type UserCreateWithoutFlaggedPostsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFlaggedPostsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFlaggedPostsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFlaggedPostsInput, UserUncheckedCreateWithoutFlaggedPostsInput>
+  }
+
+  export type PostUpsertWithoutPostFlagsInput = {
+    update: XOR<PostUpdateWithoutPostFlagsInput, PostUncheckedUpdateWithoutPostFlagsInput>
+    create: XOR<PostCreateWithoutPostFlagsInput, PostUncheckedCreateWithoutPostFlagsInput>
+    where?: PostWhereInput
+  }
+
+  export type PostUpdateToOneWithWhereWithoutPostFlagsInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutPostFlagsInput, PostUncheckedUpdateWithoutPostFlagsInput>
+  }
+
+  export type PostUpdateWithoutPostFlagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: MediaUpdateManyWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutPostFlagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    media?: MediaUncheckedUpdateManyWithoutPostNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type UserUpsertWithoutFlaggedPostsInput = {
+    update: XOR<UserUpdateWithoutFlaggedPostsInput, UserUncheckedUpdateWithoutFlaggedPostsInput>
+    create: XOR<UserCreateWithoutFlaggedPostsInput, UserUncheckedCreateWithoutFlaggedPostsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFlaggedPostsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFlaggedPostsInput, UserUncheckedUpdateWithoutFlaggedPostsInput>
+  }
+
+  export type UserUpdateWithoutFlaggedPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFlaggedPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserCreateWithoutBookmarksInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutBookmarksInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutBookmarksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBookmarksInput, UserUncheckedCreateWithoutBookmarksInput>
+  }
+
+  export type PostCreateWithoutBookmarkedByInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    media?: MediaCreateNestedManyWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
+    community: CommunityCreateNestedOneWithoutPostsInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    comments?: CommentCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutBookmarkedByInput = {
+    id?: string
+    title: string
+    slug: string
+    description: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    communityId: string
+    media?: MediaUncheckedCreateNestedManyWithoutPostInput
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    postBadges?: PostBadgesUncheckedCreateNestedManyWithoutPostInput
+    postFlags?: PostFlagUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutBookmarkedByInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutBookmarkedByInput, PostUncheckedCreateWithoutBookmarkedByInput>
+  }
+
+  export type UserUpsertWithoutBookmarksInput = {
+    update: XOR<UserUpdateWithoutBookmarksInput, UserUncheckedUpdateWithoutBookmarksInput>
+    create: XOR<UserCreateWithoutBookmarksInput, UserUncheckedCreateWithoutBookmarksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBookmarksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBookmarksInput, UserUncheckedUpdateWithoutBookmarksInput>
+  }
+
+  export type UserUpdateWithoutBookmarksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBookmarksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type PostUpsertWithoutBookmarkedByInput = {
+    update: XOR<PostUpdateWithoutBookmarkedByInput, PostUncheckedUpdateWithoutBookmarkedByInput>
+    create: XOR<PostCreateWithoutBookmarkedByInput, PostUncheckedCreateWithoutBookmarkedByInput>
+    where?: PostWhereInput
+  }
+
+  export type PostUpdateToOneWithWhereWithoutBookmarkedByInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutBookmarkedByInput, PostUncheckedUpdateWithoutBookmarkedByInput>
+  }
+
+  export type PostUpdateWithoutBookmarkedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: MediaUpdateManyWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutBookmarkedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    media?: MediaUncheckedUpdateManyWithoutPostNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type UserCreateWithoutCreatedApplicationsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedApplicationsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedApplicationsInput, UserUncheckedCreateWithoutCreatedApplicationsInput>
+  }
+
+  export type CommunityCreateWithoutCreatorApplicationInput = {
+    id?: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedCommunitiesInput
+    posts?: PostCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowCreateNestedManyWithoutCommunityInput
+    events?: EventCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityUncheckedCreateWithoutCreatorApplicationInput = {
+    id?: string
+    createdById: string
+    name: string
+    slug: string
+    description: string
+    image?: string | null
+    banner: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutCommunityInput
+    followers?: CommunityFollowUncheckedCreateNestedManyWithoutCommunityInput
+    events?: EventUncheckedCreateNestedManyWithoutCommunityInput
+    communityMembers?: CommunityMemberUncheckedCreateNestedManyWithoutCommunityInput
+  }
+
+  export type CommunityCreateOrConnectWithoutCreatorApplicationInput = {
+    where: CommunityWhereUniqueInput
+    create: XOR<CommunityCreateWithoutCreatorApplicationInput, CommunityUncheckedCreateWithoutCreatorApplicationInput>
+  }
+
+  export type UserCreateWithoutReviewedApplicationsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesCreateNestedManyWithoutUserInput
+    portfolio?: PortfolioCreateNestedOneWithoutUserInput
+    eventsWon?: EventCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedApplicationsInput = {
+    id?: string
+    username: string
+    email: string
+    image?: string | null
+    password: string
+    name: string
+    provider?: $Enums.CredentialProvider
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    portfolioId?: string | null
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
+    createdCommunities?: CommunityUncheckedCreateNestedManyWithoutCreatedByInput
+    follows?: CommunityFollowUncheckedCreateNestedManyWithoutUserInput
+    userBadges?: UserBadgesUncheckedCreateNestedManyWithoutUserInput
+    eventsWon?: EventUncheckedCreateNestedManyWithoutWinnerInput
+    memberOf?: CommunityMemberUncheckedCreateNestedManyWithoutUserInput
+    flaggedPosts?: PostFlagUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    createdApplications?: CreatorApplicationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+  }
+
+  export type UserUpsertWithoutCreatedApplicationsInput = {
+    update: XOR<UserUpdateWithoutCreatedApplicationsInput, UserUncheckedUpdateWithoutCreatedApplicationsInput>
+    create: XOR<UserCreateWithoutCreatedApplicationsInput, UserUncheckedCreateWithoutCreatedApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedApplicationsInput, UserUncheckedUpdateWithoutCreatedApplicationsInput>
+  }
+
+  export type UserUpdateWithoutCreatedApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: CreatorApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type CommunityUpsertWithoutCreatorApplicationInput = {
+    update: XOR<CommunityUpdateWithoutCreatorApplicationInput, CommunityUncheckedUpdateWithoutCreatorApplicationInput>
+    create: XOR<CommunityCreateWithoutCreatorApplicationInput, CommunityUncheckedCreateWithoutCreatorApplicationInput>
+    where?: CommunityWhereInput
+  }
+
+  export type CommunityUpdateToOneWithWhereWithoutCreatorApplicationInput = {
+    where?: CommunityWhereInput
+    data: XOR<CommunityUpdateWithoutCreatorApplicationInput, CommunityUncheckedUpdateWithoutCreatorApplicationInput>
+  }
+
+  export type CommunityUpdateWithoutCreatorApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCommunitiesNestedInput
+    posts?: PostUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
+    events?: EventUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+  }
+
+  export type CommunityUncheckedUpdateWithoutCreatorApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutCommunityNestedInput
+    followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
+    events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
+    communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+  }
+
+  export type UserUpsertWithoutReviewedApplicationsInput = {
+    update: XOR<UserUpdateWithoutReviewedApplicationsInput, UserUncheckedUpdateWithoutReviewedApplicationsInput>
+    create: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewedApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewedApplicationsInput, UserUncheckedUpdateWithoutReviewedApplicationsInput>
+  }
+
+  export type UserUpdateWithoutReviewedApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUpdateManyWithoutUserNestedInput
+    portfolio?: PortfolioUpdateOneWithoutUserNestedInput
+    eventsWon?: EventUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewedApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    provider?: EnumCredentialProviderFieldUpdateOperationsInput | $Enums.CredentialProvider
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
+    createdCommunities?: CommunityUncheckedUpdateManyWithoutCreatedByNestedInput
+    follows?: CommunityFollowUncheckedUpdateManyWithoutUserNestedInput
+    userBadges?: UserBadgesUncheckedUpdateManyWithoutUserNestedInput
+    eventsWon?: EventUncheckedUpdateManyWithoutWinnerNestedInput
+    memberOf?: CommunityMemberUncheckedUpdateManyWithoutUserNestedInput
+    flaggedPosts?: PostFlagUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    createdApplications?: CreatorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateManyAuthorInput = {
@@ -24401,6 +30520,42 @@ export namespace Prisma {
     role?: $Enums.Role
   }
 
+  export type PostFlagCreateManyUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkCreateManyUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationCreateManyUserInput = {
+    id?: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreatorApplicationCreateManyReviewedByInput = {
+    id?: string
+    userId: string
+    communityId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PostUpdateWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -24413,6 +30568,8 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
@@ -24427,6 +30584,8 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutAuthorInput = {
@@ -24507,6 +30666,7 @@ export namespace Prisma {
     followers?: CommunityFollowUpdateManyWithoutCommunityNestedInput
     events?: EventUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateWithoutCreatedByInput = {
@@ -24522,6 +30682,7 @@ export namespace Prisma {
     followers?: CommunityFollowUncheckedUpdateManyWithoutCommunityNestedInput
     events?: EventUncheckedUpdateManyWithoutCommunityNestedInput
     communityMembers?: CommunityMemberUncheckedUpdateManyWithoutCommunityNestedInput
+    CreatorApplication?: CreatorApplicationUncheckedUpdateManyWithoutCommunityNestedInput
   }
 
   export type CommunityUncheckedUpdateManyWithoutCreatedByInput = {
@@ -24637,6 +30798,114 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
+  export type PostFlagUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutPostFlagsNestedInput
+  }
+
+  export type PostFlagUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostFlagUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutBookmarkedByNestedInput
+  }
+
+  export type BookmarkUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    community?: CommunityUpdateOneRequiredWithoutCreatorApplicationNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedApplicationsNestedInput
+  }
+
+  export type CreatorApplicationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCreatedApplicationsNestedInput
+    community?: CommunityUpdateOneRequiredWithoutCreatorApplicationNestedInput
+  }
+
+  export type CreatorApplicationUncheckedUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    communityId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PostCreateManyCommunityInput = {
     id?: string
     title: string
@@ -24674,6 +30943,17 @@ export namespace Prisma {
     role?: $Enums.Role
   }
 
+  export type CreatorApplicationCreateManyCommunityInput = {
+    id?: string
+    userId: string
+    status?: $Enums.ApprovalStatus
+    message?: string | null
+    reason?: string | null
+    reviewedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PostUpdateWithoutCommunityInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -24686,6 +30966,8 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommunityInput = {
@@ -24700,6 +30982,8 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     postBadges?: PostBadgesUncheckedUpdateManyWithoutPostNestedInput
+    postFlags?: PostFlagUncheckedUpdateManyWithoutPostNestedInput
+    bookmarkedBy?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutCommunityInput = {
@@ -24793,6 +31077,39 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
+  export type CreatorApplicationUpdateWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCreatedApplicationsNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedApplicationsNestedInput
+  }
+
+  export type CreatorApplicationUncheckedUpdateWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreatorApplicationUncheckedUpdateManyWithoutCommunityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MediaCreateManyPostInput = {
     id?: string
     url: string
@@ -24821,6 +31138,20 @@ export namespace Prisma {
   export type PostBadgesCreateManyPostInput = {
     id?: string
     badgeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostFlagCreateManyPostInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BookmarkCreateManyPostInput = {
+    id?: string
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24921,6 +31252,48 @@ export namespace Prisma {
   export type PostBadgesUncheckedUpdateManyWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
     badgeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostFlagUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutFlaggedPostsNestedInput
+  }
+
+  export type PostFlagUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostFlagUncheckedUpdateManyWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookmarksNestedInput
+  }
+
+  export type BookmarkUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

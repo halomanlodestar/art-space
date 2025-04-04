@@ -53,8 +53,8 @@ export class PostsService {
     return post;
   }
 
-  async getPostsByCommunityId(id: string): Promise<Post[]> {
-    return this.postsRepository.getByCommunityId(id, {
+  async getPostsByCommunitySlug(slug: string): Promise<Post[]> {
+    return this.postsRepository.getByCommunityId(slug, {
       select: this.postsListSelections,
     });
   }

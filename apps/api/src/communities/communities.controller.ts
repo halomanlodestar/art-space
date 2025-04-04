@@ -39,10 +39,10 @@ export class CommunitiesController {
   }
 
   @Public()
-  @Get(':id/posts')
+  @Get(':slug/posts')
   @ApiResponseType(PostEntity, true)
-  async getPostsByCommunity(@Param('id') id: string) {
-    return await this.postsService.getPostsByCommunityId(id);
+  async getPostsByCommunity(@Param('slug') slug: string) {
+    return await this.postsService.getPostsByCommunitySlug(slug);
   }
 
   @Public()
