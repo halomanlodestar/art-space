@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "./output"
+  output   = "./output"
 }
 
 datasource db {
@@ -41,31 +41,47 @@ model User {
   name               String
   provider           CredentialProvider @default(EMAIL)
   role               Role               @default(USER)
-  communityId        String?
-  community          Community?         @relation(fields: [communityId], references: [id])
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  Post               Post[]
-  Like               Like[]
-  Comment            Comment[]
+  posts              Post[]
+  likes              Like[]
+  comments           Comment[]
   createdCommunities Community[]        @relation("createdCommunities")
   follows            CommunityFollow[]
+  userBadges         UserBadges[]
+  portfolioId        String?            @unique
+  portfolio          Portfolio?         @relation(fields: [portfolioId], references: [id])
+  eventsWon          Event[]
+  communityMember    CommunityMember[]
+}
+
+model CommunityMember {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, communityId])
 }
 
 model Community {
-  id          String            @id @default(cuid())
-  createdById String
-  createdBy   User              @relation(fields: [createdById], references: [id], map: "createdCommunities", name: "createdCommunities")
-  name        String            @unique
-  slug        String            @unique
-  description String
-  image       String?
-  banner      String
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  members     User[]
-  posts       Post[]
-  follows     CommunityFollow[]
+  id               String            @id @default(cuid())
+  createdById      String
+  createdBy        User              @relation(fields: [createdById], references: [id], map: "createdCommunities", name: "createdCommunities")
+  name             String            @unique
+  slug             String            @unique
+  description      String
+  image            String?
+  banner           String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  posts            Post[]
+  followers        CommunityFollow[]
+  events           Event[]
+  communityMembers CommunityMember[]
 }
 
 model Media {
@@ -74,23 +90,25 @@ model Media {
   type      MediaType
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Post      Post[]
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id])
 }
 
 model Post {
-  id          String    @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
-  slug        String    @unique
+  slug        String       @unique
   description String
   media       Media[]
   authorId    String
-  author      User      @relation(fields: [authorId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  author      User         @relation(fields: [authorId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   communityId String
-  community   Community @relation(fields: [communityId], references: [id])
+  community   Community    @relation(fields: [communityId], references: [id])
   likes       Like[]
   comments    Comment[]
+  postBadges  PostBadges[]
 }
 
 model Like {
@@ -130,4 +148,66 @@ model CommunityFollow {
   updatedAt   DateTime  @updatedAt
 
   @@unique([communityId, userId])
+}
+
+model Badge {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  slug        String       @unique
+  type        String
+  price       Float
+  image       String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  postBadges  PostBadges[]
+  userBadges  UserBadges[]
+}
+
+model PostBadges {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([postId, badgeId])
+}
+
+model UserBadges {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, badgeId])
+}
+
+model Portfolio {
+  id        String   @id @default(cuid())
+  userId    String
+  bio       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  image       String
+  winnerId    String?
+  winner      User?     @relation(fields: [winnerId], references: [id])
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id])
 }

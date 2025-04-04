@@ -42,6 +42,7 @@ const PostCard = ({ post: { author, ...post } }: PostCardProps) => {
         <div className={"grid grid-cols-3 gap-1"}>
           <Button variant={"ghost"} size={"icon"} className={"w-full"}>
             <Heart />
+            {post.likes}
           </Button>
           <Button variant={"ghost"} size={"icon"} className={"w-full"}>
             <MessageCircle />
