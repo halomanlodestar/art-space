@@ -16,17 +16,17 @@ export class CommunitiesRepository {
   }
 
   async getById(id: string, options?: Prisma.CommunityFindUniqueArgs) {
-    return await this.db.community.findUnique({ where: { id }, ...options });
+    return this.db.community.findUnique({ where: { id }, ...options });
   }
 
   async getBySlug(slug: string, options?: Prisma.CommunityFindUniqueArgs) {
-    return await this.db.community.findUnique({ where: { slug }, ...options });
+    return this.db.community.findUnique({ where: { slug }, ...options });
   }
 
   async create(author: SafeUser, body: CreateCommunityDto) {
     const { id: authorId } = author;
 
-    return await this.db.community.create({
+    return this.db.community.create({
       data: {
         createdById: authorId,
         banner: '',
@@ -38,10 +38,21 @@ export class CommunitiesRepository {
   }
 
   async update(id: string, data: NotNullRec<Prisma.CommunityUpdateInput>) {
-    return await this.db.community.update({ where: { id }, data });
+    return this.db.community.update({ where: { id }, data });
   }
 
   async delete(id: string) {
-    return await this.db.community.delete({ where: { id } });
+    return this.db.community.delete({ where: { id } });
+  }
+
+  async search(search: string) {
+    return this.db.community.findMany({
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+    });
   }
 }

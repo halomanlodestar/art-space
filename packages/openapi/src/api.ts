@@ -293,6 +293,12 @@ export interface SafeUserDto {
      * @type {string}
      * @memberof SafeUserDto
      */
+    'portfolioId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeUserDto
+     */
     'name': string;
     /**
      * 
@@ -330,12 +336,6 @@ export interface SafeUserDto {
      * @memberof SafeUserDto
      */
     'role': object;
-    /**
-     * 
-     * @type {string}
-     * @memberof SafeUserDto
-     */
-    'communityId': string | null;
     /**
      * 
      * @type {string}
@@ -532,11 +532,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser: async (authorization?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCurrentUser: async (authorization: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authorization' is not null or undefined
+            assertParamExists('getCurrentUser', 'authorization', authorization)
             const localVarPath = `/auth/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -594,11 +596,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refreshAccessToken: async (authorization?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        refreshAccessToken: async (authorization: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authorization' is not null or undefined
+            assertParamExists('refreshAccessToken', 'authorization', authorization)
             const localVarPath = `/auth/refresh`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -736,11 +740,11 @@ export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async getCurrentUser(authorization: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(authorization, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
@@ -759,11 +763,11 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async refreshAccessToken(authorization: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.refreshAccessToken(authorization, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.refreshAccessToken']?.[localVarOperationServerIndex]?.url;
@@ -816,11 +820,11 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        getCurrentUser(authorization: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.getCurrentUser(authorization, options).then((request) => request(axios, basePath));
         },
         /**
@@ -833,11 +837,11 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {string} [authorization] Bearer token
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        refreshAccessToken(authorization: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.refreshAccessToken(authorization, options).then((request) => request(axios, basePath));
         },
         /**
@@ -878,12 +882,12 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
 export class AuthApi extends BaseAPI {
     /**
      * 
-     * @param {string} [authorization] Bearer token
+     * @param {string} authorization Bearer token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public getCurrentUser(authorization?: string, options?: RawAxiosRequestConfig) {
+    public getCurrentUser(authorization: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).getCurrentUser(authorization, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -899,12 +903,12 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} [authorization] Bearer token
+     * @param {string} authorization Bearer token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public refreshAccessToken(authorization?: string, options?: RawAxiosRequestConfig) {
+    public refreshAccessToken(authorization: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).refreshAccessToken(authorization, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1081,15 +1085,48 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPostsByCommunity: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getPostsByCommunity', 'id', id)
-            const localVarPath = `/communities/{id}/posts`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getPostsByCommunity: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getPostsByCommunity', 'slug', slug)
+            const localVarPath = `/communities/{slug}/posts`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} search 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchCommunities: async (search: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'search' is not null or undefined
+            assertParamExists('searchCommunities', 'search', search)
+            const localVarPath = `/communities/search/{search}`
+                .replace(`{${"search"}}`, encodeURIComponent(String(search)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1210,14 +1247,26 @@ export const CommunitiesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPostsByCommunity(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPostsByCommunity(id, options);
+        async getPostsByCommunity(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPostsByCommunity(slug, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommunitiesApi.getPostsByCommunity']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} search 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchCommunities(search: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchCommunities(search, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommunitiesApi.searchCommunities']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1280,12 +1329,21 @@ export const CommunitiesApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPostsByCommunity(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.getPostsByCommunity(id, options).then((request) => request(axios, basePath));
+        getPostsByCommunity(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getPostsByCommunity(slug, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} search 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchCommunities(search: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.searchCommunities(search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1352,13 +1410,24 @@ export class CommunitiesApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommunitiesApi
      */
-    public getPostsByCommunity(id: string, options?: RawAxiosRequestConfig) {
-        return CommunitiesApiFp(this.configuration).getPostsByCommunity(id, options).then((request) => request(this.axios, this.basePath));
+    public getPostsByCommunity(slug: string, options?: RawAxiosRequestConfig) {
+        return CommunitiesApiFp(this.configuration).getPostsByCommunity(slug, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} search 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommunitiesApi
+     */
+    public searchCommunities(search: string, options?: RawAxiosRequestConfig) {
+        return CommunitiesApiFp(this.configuration).searchCommunities(search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

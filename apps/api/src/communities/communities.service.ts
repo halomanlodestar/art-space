@@ -39,7 +39,7 @@ export class CommunitiesService {
   }
 
   async findAll() {
-    return await this.communityRepository.getAll();
+    return this.communityRepository.getAll();
   }
 
   async findOne(id: string) {
@@ -53,10 +53,14 @@ export class CommunitiesService {
   }
 
   async update(id: string, updateCommunityDto: UpdateCommunityDto) {
-    return await this.communityRepository.update(id, updateCommunityDto);
+    return this.communityRepository.update(id, updateCommunityDto);
   }
 
   async remove(id: string) {
-    return await this.communityRepository.delete(id);
+    return this.communityRepository.delete(id);
+  }
+
+  async search(search: string) {
+    return this.communityRepository.search(search);
   }
 }

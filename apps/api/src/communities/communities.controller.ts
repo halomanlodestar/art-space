@@ -39,6 +39,13 @@ export class CommunitiesController {
   }
 
   @Public()
+  @Get('search/:search')
+  @ApiResponseType(CommunityEntity, true)
+  async searchCommunities(@Param('search') search: string) {
+    return this.communitiesService.search(search);
+  }
+
+  @Public()
   @Get(':slug/posts')
   @ApiResponseType(PostEntity, true)
   async getPostsByCommunity(@Param('slug') slug: string) {
