@@ -1,3 +1,5 @@
+import React from "react";
+
 export type SessionPayload = {
   accessToken: string;
   refreshToken: string;
@@ -10,6 +12,11 @@ export type SessionPayload = {
     image: string;
     communityId: string;
   };
+};
+
+export type SessionPayloadWithExpiration = SessionPayload & {
+  accessTokenExpires: number;
+  refreshTokenExpires: number;
 };
 
 export interface Author {

@@ -8,7 +8,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Public } from 'src/decorators/public.decorator';
-import { ApiBearerAuth, ApiHeaders, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { SignInDto, SignInResponseDto } from './dto/sign-in.dto';
 import { RefreshResponseDto } from './dto/refresh.dto';

@@ -955,11 +955,14 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {string} authorization Bearer token
          * @param {CreateCommunityDto} createCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCommunity: async (createCommunityDto: CreateCommunityDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createCommunity: async (authorization: string, createCommunityDto: CreateCommunityDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authorization' is not null or undefined
+            assertParamExists('createCommunity', 'authorization', authorization)
             // verify required parameter 'createCommunityDto' is not null or undefined
             assertParamExists('createCommunity', 'createCommunityDto', createCommunityDto)
             const localVarPath = `/communities`;
@@ -978,6 +981,9 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -991,12 +997,15 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCommunity: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteCommunity: async (id: string, authorization: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteCommunity', 'id', id)
+            // verify required parameter 'authorization' is not null or undefined
+            assertParamExists('deleteCommunity', 'authorization', authorization)
             const localVarPath = `/communities/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1012,6 +1021,9 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
 
 
     
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1152,13 +1164,16 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {UpdateCommunityDto} updateCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCommunity: async (id: string, updateCommunityDto: UpdateCommunityDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateCommunity: async (id: string, authorization: string, updateCommunityDto: UpdateCommunityDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateCommunity', 'id', id)
+            // verify required parameter 'authorization' is not null or undefined
+            assertParamExists('updateCommunity', 'authorization', authorization)
             // verify required parameter 'updateCommunityDto' is not null or undefined
             assertParamExists('updateCommunity', 'updateCommunityDto', updateCommunityDto)
             const localVarPath = `/communities/{id}`
@@ -1178,6 +1193,9 @@ export const CommunitiesApiAxiosParamCreator = function (configuration?: Configu
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1200,12 +1218,13 @@ export const CommunitiesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} authorization Bearer token
          * @param {CreateCommunityDto} createCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCommunity(createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createCommunity(createCommunityDto, options);
+        async createCommunity(authorization: string, createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCommunity(authorization, createCommunityDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommunitiesApi.createCommunity']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1213,11 +1232,12 @@ export const CommunitiesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteCommunity(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCommunity(id, options);
+        async deleteCommunity(id: string, authorization: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCommunity(id, authorization, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommunitiesApi.deleteCommunity']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1272,12 +1292,13 @@ export const CommunitiesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {UpdateCommunityDto} updateCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateCommunity(id: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCommunity(id, updateCommunityDto, options);
+        async updateCommunity(id: string, authorization: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCommunity(id, authorization, updateCommunityDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommunitiesApi.updateCommunity']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1294,21 +1315,23 @@ export const CommunitiesApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {string} authorization Bearer token
          * @param {CreateCommunityDto} createCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCommunity(createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.createCommunity(createCommunityDto, options).then((request) => request(axios, basePath));
+        createCommunity(authorization: string, createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.createCommunity(authorization, createCommunityDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCommunity(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.deleteCommunity(id, options).then((request) => request(axios, basePath));
+        deleteCommunity(id: string, authorization: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteCommunity(id, authorization, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1348,12 +1371,13 @@ export const CommunitiesApiFactory = function (configuration?: Configuration, ba
         /**
          * 
          * @param {string} id 
+         * @param {string} authorization Bearer token
          * @param {UpdateCommunityDto} updateCommunityDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCommunity(id: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.updateCommunity(id, updateCommunityDto, options).then((request) => request(axios, basePath));
+        updateCommunity(id: string, authorization: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.updateCommunity(id, authorization, updateCommunityDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1367,24 +1391,26 @@ export const CommunitiesApiFactory = function (configuration?: Configuration, ba
 export class CommunitiesApi extends BaseAPI {
     /**
      * 
+     * @param {string} authorization Bearer token
      * @param {CreateCommunityDto} createCommunityDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommunitiesApi
      */
-    public createCommunity(createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig) {
-        return CommunitiesApiFp(this.configuration).createCommunity(createCommunityDto, options).then((request) => request(this.axios, this.basePath));
+    public createCommunity(authorization: string, createCommunityDto: CreateCommunityDto, options?: RawAxiosRequestConfig) {
+        return CommunitiesApiFp(this.configuration).createCommunity(authorization, createCommunityDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} id 
+     * @param {string} authorization Bearer token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommunitiesApi
      */
-    public deleteCommunity(id: string, options?: RawAxiosRequestConfig) {
-        return CommunitiesApiFp(this.configuration).deleteCommunity(id, options).then((request) => request(this.axios, this.basePath));
+    public deleteCommunity(id: string, authorization: string, options?: RawAxiosRequestConfig) {
+        return CommunitiesApiFp(this.configuration).deleteCommunity(id, authorization, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1433,13 +1459,14 @@ export class CommunitiesApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
+     * @param {string} authorization Bearer token
      * @param {UpdateCommunityDto} updateCommunityDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommunitiesApi
      */
-    public updateCommunity(id: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig) {
-        return CommunitiesApiFp(this.configuration).updateCommunity(id, updateCommunityDto, options).then((request) => request(this.axios, this.basePath));
+    public updateCommunity(id: string, authorization: string, updateCommunityDto: UpdateCommunityDto, options?: RawAxiosRequestConfig) {
+        return CommunitiesApiFp(this.configuration).updateCommunity(id, authorization, updateCommunityDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

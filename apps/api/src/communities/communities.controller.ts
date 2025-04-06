@@ -19,6 +19,7 @@ import { ApiResponseType } from 'src/decorators/api-response-type.decorator';
 import { CommunityEntity } from './entities/community.entity';
 import { PostsService } from '../posts/posts.service';
 import { PostEntity } from '../posts/entities/post.entity';
+import { ApiAuth } from '../decorators/auth-header.decorator';
 
 @ApiTags('communities')
 @Controller('communities')
@@ -30,6 +31,7 @@ export class CommunitiesController {
 
   @Roles('SUDO')
   @Post()
+  @ApiAuth()
   @ApiResponseType(CommunityEntity)
   async createCommunity(
     @Body() createCommunityDto: CreateCommunityDto,
@@ -68,6 +70,7 @@ export class CommunitiesController {
 
   @Roles('COMMUNITY_ADMIN')
   @Patch('/:id')
+  @ApiAuth()
   @ApiResponseType(CommunityEntity)
   async updateCommunity(
     @Param('id') id: string,
@@ -78,6 +81,7 @@ export class CommunitiesController {
 
   @Roles('SUDO')
   @Delete('/:id')
+  @ApiAuth()
   @ApiResponseType(CommunityEntity)
   async deleteCommunity(@Param('id') id: string) {
     return await this.communitiesService.remove(id);

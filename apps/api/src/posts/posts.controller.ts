@@ -73,7 +73,6 @@ export class PostsController {
   ): Promise<IPost[]> {
     return await this.postsService.getLatestPosts(skip, take);
   }
-
   @Get('/liked')
   @ApiResponseType(PostEntity, true)
   async getUserLikedPosts(@CurrentUser() user: SafeUser): Promise<IPost[]> {

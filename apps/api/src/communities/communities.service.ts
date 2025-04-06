@@ -23,7 +23,7 @@ export class CommunitiesService {
       throw new UnauthorizedError('Unauthorized');
     }
 
-    if (role !== 'COMMUNITY_ADMIN') {
+    if (role !== "SUDO") {
       throw new ForbiddenError('You must be an admin to perform this action');
     }
 

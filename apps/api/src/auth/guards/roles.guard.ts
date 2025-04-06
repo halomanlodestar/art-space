@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { RoleEnum, SafeUser } from '@art-space/shared/types';
 import { Role } from '@art-space/database';
 
+
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
@@ -29,6 +30,8 @@ export class RolesGuard implements CanActivate {
       userRoleWeight,
     );
 
-    return RoleEnum[userRoleWeight] >= RoleEnum[requiredRoleWeight];
+    console.log(userRoleWeight >= requiredRoleWeight);
+
+    return userRoleWeight >= requiredRoleWeight;
   }
 }

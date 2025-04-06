@@ -11,35 +11,42 @@ export interface AvatarUser extends Pick<User, "image" | "name" | "username"> {}
 export interface BasePost extends Pick<Post, "slug" | "title"> {}
 
 export interface PostWithUser extends BasePost {
-	user: AvatarUser;
+  user: AvatarUser;
 }
 
 export interface PostWithLikes extends BasePost {
-	likes: number;
+  likes: number;
 }
 
 export interface PostWithComments extends BasePost {
-	comments: number;
+  comments: number;
 }
 
 export interface PostWithUserAndLikes extends PostWithUser, PostWithLikes {}
 
 export interface PostWithUserAndComments
-	extends PostWithUser,
-		PostWithComments {}
+  extends PostWithUser,
+    PostWithComments {}
 
 export interface PostWithMetadata
-	extends PostWithUser,
-		PostWithLikes,
-		PostWithComments {}
+  extends PostWithUser,
+    PostWithLikes,
+    PostWithComments {}
 
 // Enums
 
 export { MediaType, Role, CredentialProvider } from "@art-space/database";
 
-export const RoleEnum = Object.freeze({
-	SUDO: 5,
-	COMMUNITY_ADMIN: 3,
-	COMMUNITY_CREATOR: 2,
-	USER: 1,
-});
+// export enum RoleEnum {
+// 	SUDO: 5,
+// 	COMMUNITY_ADMIN: 3,
+// 	COMMUNITY_CREATOR: 2,
+// 	USER: 1,
+// })
+
+export const RoleEnum = {
+  SUDO: 5,
+  COMMUNITY_ADMIN: 3,
+  COMMUNITY_CREATOR: 2,
+  USER: 1,
+};

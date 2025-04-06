@@ -19,7 +19,7 @@ if (!apiBaseURL) {
 const apiClient = axios.create({
   baseURL: apiBaseURL,
   withCredentials: true,
-  headers: { "Content-Type": "application/json" },
+  // headers: { "Content-Type": "application/json" },
 });
 
 const apiConfig = new Configuration({
